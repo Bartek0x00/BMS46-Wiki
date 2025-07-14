@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Map Viewer</title>
+	<style>
+		table {
+			text-align: left;
+			border: 2px solid black;
+			border-collapse: collapse;
+		}
+
+		tr {
+			border: 1px solid black;
+		}
+		
+		th {
+			border: 1px solid black;
+		}
+		
+		td {
+			border: 1px solid black;
+		}
+
+		#tooltip {
+			position: absolute;
+			display: none;
+			padding: 4px;
+			background: #fff;
+			border: 1px solid #000;
+			border-radius: 4px;
+		}
+	</style>
+	<script>
+		function showError(e) {
+			alert("Error loading the map: " + e);
+			document.getElementById("canvas").style.display = "none";
+		}
+
+		function createScale([d0, d1], [r0, r1]) {
+			const slope = (r1 - r0) / (d1 - d0);
+			return v => r0 + (v - d0) * slope;
+		}
+
+		function drawGridLines(ctx, canvas, map, margin) {
+			ctx.strokeStyle = "#ccc";
+			ctx.lineWidth = 1;
+
+			map.values.forEach(x => {
+				const px = scaleX(x);
+				ctx.beginPath();
+				ctx.moveTo(px, margin);
+				ctx.lineTo(px, canvas.height - margin);
+				ctx.stroke();
+			});
+
+			map.data.forEach(y => {
+				const py = scaleY(y);
+				ctx.beginPath();
+				ctx.moveTo(margin, py);
+				ctx.lineTo(canvas.width - margin, py);
+				ctx.stroke();
+			});
+		}
+
+		function drawMainAxes(ctx, canvas, margin) {
+			ctx.strokeStyle = "#000";
+			ctx.lineWidth = 2;
+			ctx.beginPath();
+			ctx.moveTo(margin, margin);
+			ctx.lineTo(margin, canvas.height - margin);
+			ctx.lineTo(canvas.width - margin, canvas.height - margin);
+			ctx.stroke();
+		}
+
+		function drawTickLine(ctx, pos, offset, isX, isLabel) {
+			ctx.strokeStyle = "#666";
+			ctx.lineWidth = 2;
+			ctx.beginPath();
+			if (isX) {
+				ctx.moveTo(pos, canvas.height - offset + 20);
+				ctx.lineTo(pos, canvas.height - offset + 27 + isLabel * 15);
+			} else {
+				ctx.moveTo(offset - 7 - isLabel * 15, pos);
+				ctx.lineTo(offset, pos);
+			}
+			ctx.stroke();
+		}
+
+		function drawStaggeredLabels(ctx, values, scale, margin, spacing, isX) {
+			ctx.fillStyle = "#000";
+			ctx.font = "14px sans-serif";
+			ctx.textBaseline = isX ? "top" : "middle";
+			ctx.textAlign = isX ? "center" : "right";
+
+			values.forEach((val, i) => {
+				const pos = scale(val);
+				const level = (i % 2) * spacing;
+				const x = isX ? pos : margin - 15 - level * 2.25;
+				const y = isX ? canvas.height - margin + 30 + level : pos;
+				const label = val * +(isX ? mxInput.value : myInput.value);
+
+				drawTickLine(ctx, pos, margin, isX, !!level);
+				ctx.fillText(label, x, y);
+			});
+		}
+
+		function drawAxisTitles(ctx, map, canvas, margin) {
+			ctx.textAlign = "center";
+			ctx.textBaseline = "alphabetic";
+			ctx.font = "bold 16px sans-serif";
+			ctx.fillText(map.in, canvas.width / 2, canvas.height - margin + 62);
+
+			ctx.save();
+			ctx.translate(margin - 72, canvas.height / 2);
+			ctx.rotate(-Math.PI / 2);
+			ctx.fillText(map.out, 0, 0);
+			ctx.restore();
+		}
+
+		function drawAxes(ctx, canvas, map, margin) {
+			drawGridLines(ctx, canvas, map, margin);
+			drawMainAxes(ctx, canvas, margin);
+			drawStaggeredLabels(ctx, map.values, scaleX, margin + 20, 18, true);
+			drawStaggeredLabels(ctx, map.data, scaleY, margin, 15, false);
+			drawAxisTitles(ctx, map, canvas, margin);
+		}
+
+		function drawLine(ctx, pts, data) {
+			const min = Math.min(...data);
+			const max = Math.max(...data);
+			ctx.lineWidth = 3;
+
+			for (let i = 0; i < pts.length - 1; i++) {
+				const t = (data[i] - min) / (max - min);
+				ctx.strokeStyle = `hsl(${240 - 240 * t}, 100%, 50%)`;
+				ctx.beginPath();
+				ctx.moveTo(...pts[i]);
+				ctx.lineTo(...pts[i + 1]);
+				ctx.stroke();
+			}
+		}
+
+		function drawPoints(ctx, pts) {
+			for (const [x, y] of pts) {
+				ctx.beginPath();
+				ctx.arc(x, y, 4, 0, 2 * Math.PI);
+				ctx.fillStyle = "#fff";
+				ctx.strokeStyle = "#000";
+				ctx.lineWidth = 1;
+				ctx.fill();
+				ctx.stroke();
+			}
+		}
+
+		function attachTooltipHandler(canvas, map, tooltip, dots) {
+			canvas.addEventListener("mousemove", e => {
+				const x = e.offsetX;
+				const y = e.offsetY;
+				const pageX = e.pageX;
+				const pageY = e.pageY;
+
+				const d = dots.find(p => (x - p.x) ** 2 + (y - p.y) ** 2 < 16);
+
+				if (d) {
+					tooltip.style.display = "block";
+					tooltip.style.left = `${pageX + 10}px`;
+					tooltip.style.top = `${pageY + 10}px`;
+					tooltip.innerHTML = `${map.in}: ${d.rawX * +mxInput.value}<br>${map.out}: ${d.rawY * +myInput.value}`;
+				} else {
+					tooltip.style.display = "none";
+				}
+			});
+		}
+
+		function attachMultiplierHandlers(ctx, canvas, map) {
+			mxInput.addEventListener("input", () => render(ctx, canvas, map));
+			myInput.addEventListener("input", () => render(ctx, canvas, map));
+		}
+
+		function preparePoints(map) {
+			const pts = map.values.map((v, i) => [scaleX(v), scaleY(map.data[i])]);
+			const dots = pts.map(([x, y], i) => ({
+				x,
+				y,
+				rawX: map.values[i],
+				rawY: map.data[i]
+			}));
+			return { pts, dots };
+		}
+
+		function render(ctx, canvas, map) {
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+			scaleX = createScale([Math.min(...map.values), Math.max(...map.values)], [100, canvas.width - 100]);
+			scaleY = createScale([Math.min(...map.data), Math.max(...map.data)], [canvas.height - 100, 100]);
+
+			drawAxes(ctx, canvas, map, 85);
+
+			const { pts, dots } = preparePoints(map);
+			drawLine(ctx, pts, map.data);
+			drawPoints(ctx, pts);
+			attachTooltipHandler(canvas, map, tooltip, dots);
+		}
+
+		async function drawMap() {
+			try {
+				const file = new URLSearchParams(location.search).get("map");
+				const map = await fetch(file).then(r => r.json());
+
+				const canvas = document.getElementById("canvas");
+				const ctx = canvas.getContext("2d");
+				const tooltip = document.getElementById("tooltip");
+
+				window.mxInput = document.getElementById("mx");
+				window.myInput = document.getElementById("my");
+
+				attachMultiplierHandlers(ctx, canvas, map);
+				render(ctx, canvas, map);
+			} catch (e) {
+				showError(e);
+			}
+		}
+
+		drawMap();
+	</script>
+</head>
+<body>
+<table>
+<tr>
+<th>Name: </th>
+<td>name</td>
+</tr>
+<tr>
+<th>Input: </th>
+<td>rpm</td>
+</tr>
+<tr>
+<th>Output: </th>
+<td>injectiontime</td>
+</tr>
+</table>
+<div>
+<label>X modifier<input id="mx" type="number" value="1" step="0.1"></label>
+<label>Y modifier<input id="my" type="number" value="1" step="0.1"></label>
+</div>
+<canvas id="canvas" width="800" height="600"></canvas>
+<div id="tooltip"></div>
+</body>
+</html>
