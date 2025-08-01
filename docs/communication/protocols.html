@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>BMS46-Wiki</title>
+		<style>
+			html, body {
+				background-color: #252525;
+				color: white;
+				font-family: sans-serif;
+			}
+
+			h2 {
+				margin: 0;
+			}
+			
+			p {
+				font-size: 18px;
+				margin: 8px;
+			}
+
+			a {
+				color: red;
+			}
+			
+			.indent1 {
+				margin-left: 20px;
+			}
+
+			.indent2 {
+				margin-left: 60px;
+			}
+
+			.indent3 {
+				margin-left: 100px;
+			}
+
+			.indent4 {
+				margin-left: 140px;
+			}
+
+			.indent5 {
+				margin-left: 180px;
+			}
+
+			code {
+				font-family: monospace;
+				background: #121212;
+				padding-left: 6px;
+				padding-right: 6px;
+				border-radius: 4px;
+				white-space: pre;
+			}
+		</style>
+	</head>
+	<body>
+		<h1 id="title">Communication protocols found in BMS46 firmware:</h1>
+		<hr>
+		<h2 class="indent1">PROTO1: [</h2>
+		<p class="indent2"><b>handler_type:</b></p>
+		<p class="indent3"><code>short (*)(SCI_RxBuff *in, SCI_TxBuff *out)</code></p>
+		<br>
+		<p class="indent2"><b>comment:</b></p>
+		<p class="indent3"> A basic Bootloader communication protocol, probably used for debugging.</p>
+		<p class="indent3"><code>SCI_exchange_packet()</code> calls appropriate handler (found by comparing in[1] to <code>in_PID</code>) every time a new packet arrives.</p>
+		<p class="indent3">The handler gets a pointer to the received packet and a pointer to a blank packet "to be transmitted" and returns the size of the output packet in Bytes.</p>
+		<p class="indent3">The response packet will have out[1] id as <code>out_PID</code>.</p>
+		<br>
+		<p class="indent2"><b>handler_0x03: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x03</p>
+		<p class="indent3"><b>out_PID: </b>0x01</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">This handler is not implemented and returns 0 (output size)</p>
+		<p class="indent2"><b>],</b></p>
+		
+		<p class="indent2"><b>handler_0x14: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x14</p>
+		<p class="indent3"><b>out_PID: </b>0xEC</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Moves an aggregated magic bytes string to output packet.</p>
+		<p class="indent4">Creates <code>"0261204420"</code> + <code>"F000"</code> + <code>"1430940"</code> + <code>"000"</code> + <code>"4399"</code> + <code>".26\xff..."</code> + <code>"078"</code> + <code>"26RT5134"</code> + <code>"000368511"</code> on firmware version 01119700F000P2AG.</p>
+		<p class="indent4">Returns 75 (length of all strings combined)</p>
+		<p class="indent2"><b>],</b></p>
+
+		<p class="indent2"><b>handler_0x15: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x15</p>
+		<p class="indent3"><b>out_PID: </b>0xEB</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Exactly the same as handler_0x24</p>
+		<p class="indent4">Reads bytes from the given address in memory to the output packet.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[2]</code> -> size of the block</p>
+		<p class="indent5"><code>in[3]</code> -> higher byte of the address</p>
+		<p class="indent5"><code>in[4]</code> -> middle byte of the address</p>
+		<p class="indent5"><code>in[5]</code> -> lower byte of the address</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Note that the MC68336 in BMS46 has a 24bit addressing IMB.</p>
+		<p class="indent4">If the desired size (<code>in[2]</code>) is greater than 200 it moves {<code>out[1] = 2</code>, <code>out[2] = 5</code>} to output packet and returns 1 (size).
+		<p class="indent4">Normally returns the size (from <code>in[2]</code>).</p>
+		<p class="indent2"><b>],</b></p>
+
+		<p class="indent2"><b>handler_0x16: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x16</p>
+		<p class="indent3"><b>out_PID: </b>0x01</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Copies bytes from the input packet to the given address in memory.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[2]</code> -> size of the payload</p>
+		<p class="indent5"><code>in[3]</code> -> higher byte of the address</p>
+		<p class="indent5"><code>in[4]</code> -> middle byte of the address</p>
+		<p class="indent5"><code>in[5]</code> -> lower byte of the address</p>
+		<p class="indent5"><code>in[6...SIZE]</code> -> raw bytes payload to copy</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Note that the MC68336 in BMS46 has a 24bit addressing IMB.</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent4">Returns 0 (size) -> responds with a blank packet.</p>
+		<p class="indent2"><b>],</b></p>
+
+		<p class="indent2"><b>handler_0x17: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x17</p>
+		<p class="indent3"><b>out_PID: </b>0xE9</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Reads words from the LJURR table at a given idx to the output packet.</p>
+		<p class="indent4">Note that the [L]eft [J]ustified [U]nsigned [R]esult [R]egisters table contains the raw analog sensor values directly after QADC read.</p>
+		<p class="indent4">The CCW table maps idx -> channel.</p>
+		<p class="indent4">For example requesting the word at idx 14 will return the raw analog value of sensor plugged in to channel 52</p>
+		<p class="indent4">Further Reading: <a href="https://www.nxp.com/docs/en/user-guide/MC68336376UM.pdf">MC68336 manual</a> QADC section.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[2]</code> -> count of words</p>
+		<p class="indent5"><code>in[3]</code> -> index of a starting word</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent4">The higher byte of the requested word is at an even addr starting from 0x02 and the lower byte follows in the next addr</p>
+		<p class="indent4">For example when requested word is <code>LJURR[12] == 0xabcd</code> then <code>out[2] = 0xab</code> and <code>out[3] = 0xcd</code>.</p>
+		<p class="indent4">Returns count of words (<code>in[2]</code>) times 2 to get the byte size of output packet.</p>
+		<p class="indent2"><b>],</b></p>
+
+		<p class="indent2"><b>handler_0x18: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x18</p>
+		<p class="indent3"><b>out_PID: </b>0xE8</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">This handler is not implemented and returns 0 (size).</p>
+		<p class="indent2"><b>],</b></p>
+
+		<p class="indent2"><b>handler_0x19: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x19</p>
+		<p class="indent3"><b>out_PID: </b>0x01</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">This handler is not implemented and returns 0 (size).</p>
+		<p class="indent2"><b>],</b></p>
+
+		<p class="indent2"><b>handler_0x20: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x20</p>
+		<p class="indent3"><b>out_PID: </b>0xE0</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Reads at most 200 bytes from some memory region between two pointers (not selectable) to the output packet.</p>
+		<p class="indent4">Maybe it outputs the last received packet (history) or the current one (for debugging).</p>
+		<p class="indent4">Does not use the input packet.</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent4">Returns count of bytes between start_ptr and end_ptr (at most 200).</p>
+		<p class="indent2"><b>],</b></p>
+
+		<p class="indent2"><b>handler_0x21: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x21</p>
+		<p class="indent3"><b>out_PID: </b>0xDF</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Sends some commands using SPI, then reads the response from SPI to output packet</p>
+		<p class="indent4">Maybe it starts or tests SPI communication.</p>
+		<p class="indent4">Does not use the input packet.</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent4">Returns 10 (size of the SPI response).</p>
+		<p class="indent2"><b>],</b></p>
+
+		<p class="indent2"><b>handler_0x22: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x22</p>
+		<p class="indent3"><b>out_PID: </b>0xDE</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Moves 21 constant bytes to the output packet.</p>
+		<p class="indent4">The values are the same for every firmware version.</p>
+		<p class="indent4">The bytes: {</p>
+		<p class="indent5"><code>0x01</code>, <code>0x45</code>, <code>0x9A</code>,</p>
+		<p class="indent5"><code>0x03</code>, <code>0xFD</code>, <code>0x60</code>,</p>
+		<p class="indent5"><code>0x03</code>, <code>0xFD</code>, <code>0x20</code>,</p>
+		<p class="indent5"><code>0x03</code>, <code>0xFD</code>, <code>0x24</code>,</p>
+		<p class="indent5"><code>0x03</code>, <code>0xFD</code>, <code>0x38</code>,</p>
+		<p class="indent5"><code>0x03</code>, <code>0xFD</code>, <code>0x3C</code>,</p>
+		<p class="indent5"><code>0x03</code>, <code>0xFD</code>, <code>0x44</code></p>
+		<p class="indent4">}</p>
+		<p class="indent4">Does not use input packet.</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent4">Returns 21 (size).</p>
+		<p class="indent2"><b>],</b></p>
+
+		<p class="indent2"><b>handler_0x24: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x24</p>
+		<p class="indent3"><b>out_PID: </b>0xDC</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Exactly the same as handler_0x15</p>
+		<p class="indent4">Reads bytes from the given address in memory to the output packet.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[2]</code> -> size of the block</p>
+		<p class="indent5"><code>in[3]</code> -> higher byte of the address</p>
+		<p class="indent5"><code>in[4]</code> -> middle byte of the address</p>
+		<p class="indent5"><code>in[5]</code> -> lower byte of the address</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Note that the MC68336 in BMS46 has a 24bit addressing IMB.</p>
+		<p class="indent4">If the desired size (<code>in[2]</code>) is greater than 200 it moves {<code>out[1] = 2</code>, <code>out[2] = 5</code>} to output packet and returns 1 (size).
+		<p class="indent4">Normally returns the size (from <code>in[2]</code>).</p>
+		<p class="indent2"><b>],</b></p>
+
+		<p class="indent2"><b>handler_0x30: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x30</p>
+		<p class="indent3"><b>out_PID: </b>0xD0</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">This function is maybe doing some inter-chip-module testing.</p>
+		<p class="indent4">First it changes IMB setup to allow big-block moves between chips.</p>
+		<p class="indent4">Then it does a dynamic relocation of a function and calls it with this requested address.</p>
+		<p class="indent4">Runs some QADC related jobs and communicates with TPU registers.</p>
+		<p class="indent4">At the end it behaves like handler_0x15 or handler_0x24, but doesn't check the requested size.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[2]</code> -> size of the block</p>
+		<p class="indent5"><code>in[3]</code> -> higher byte of the address</p>
+		<p class="indent5"><code>in[4]</code> -> middle byte of the address</p>
+		<p class="indent5"><code>in[5]</code> -> lower byte of the address</p>
+		<p class="indent5"><code>in[6...]</code> -> bytes passed to a strange function</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Note that the MC68336 in BMS46 has a 24bit addressing IMB.</p>
+		<p class="indent4">Returns the size (from <code>in[2]</code>).</p>
+		<p class="indent2"><b>],</b></p>
+
+		<p class="indent2"><b>handler_0x40: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x40</p>
+		<p class="indent3"><b>out_PID: </b>0xC0</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Calls a given function passing pointer to next input bytes and pointer to output packet and returns it's return value.</p>
+		<p class="indent4">Maybe it is used as a thunk for testing handlers of this protocol.</p>
+		<p class="indent4">If the address requested is an address of a handler in this protocol, then it is just thunk-called from there.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[2]</code> -> higher byte of the address</p>
+		<p class="indent5"><code>in[3]</code> -> middle byte of the address</p>
+		<p class="indent5"><code>in[4]</code> -> lower byte of the address</p>
+		<p class="indent5"><code>in[5...]</code> -> payload to be passed to the designated handler</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Note that the MC68336 in BMS46 has a 24bit addressing IMB.</p>
+		<p class="indent4">Re-returns what the requested handler returned.</p>
+		<p class="indent2"><b>],</b></p>
+
+		<h2 class="indent1">]</h2>
+		<hr>
+		
+		<h2 class="indent1">PROTO2A: [</h2>
+		<p class="indent2"><b>handler_type:</b></p>
+		<p class="indent3"><code>void (*)(void)</code></p>
+		<br>
+		<p class="indent2"><b>comment:</b></p>
+		<p class="indent3">The protocol is the same as PROTO2B, but this is the Boot version that has different handlers</p>
+		<p class="indent3">A periodically scheduled Bootloader job calls the appropriate handler (found by <code>in_PID</code>) if a new received message is available.</p>
+		<p class="indent3">The max output packet size is generally 251 Bytes</p>
+		<p class="indent3">This protocol uses three global variables instead of function arguments.</p>
+		<p class="indent3">1. <code>PROTO2_in_buff</code></p>
+		<p class="indent3">2. <code>PROTO2_out_buff</code></p>
+		<p class="indent3">3. <code>PROTO2_message_size</code></p>
+		<p class="indent3">The output packet's <code>out_PID</code> (<code>out[2]</code>) is one of these four values: {</p>
+		<p class="indent4"><code>0xA0</code> -> PACKET_READY but stay standby</p>
+		<p class="indent4"><code>0xA2</code> -> SINGLE_PACKET or LAST_PACKET</p>
+		<p class="indent4"><code>0xB0</code> -> NOT_FOUND or NOTHING_TO_DO info</p>
+		<p class="indent4"><code>0xFF</code> -> CRITICAL error</p>
+		<p class="indent3">}</p>
+		<br>
+		<p class="indent2"><b>handler_0x00: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Moves an aggregated magic bytes string to the output packet.</p>
+		<p class="indent4">Creates <code>"1430940"</code> + <code>"61\xff..."</code> + <code>"4399"</code> + <code>"0010213510"</code> + <code>"F000"</code> + <code>"000368511"</code> on firmware version 01119700F000P2AG.</p>
+		<p class="indent4">The type of the response is marked as <code>0xA0</code>.</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent4">Sets <code>PROTO2_message_size = 42</code> (length of all strings combined).</p>
+		<p class="indent2"><b>]</b></p>
+
+		<p class="indent2"><b>handler_0x06: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x06</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Reads bytes from a given address (in a given memory region) to the output packet.</p>
+		<p class="indent4">If the start address belongs to the region, but the size is too big, then the output size is clamped to fit.</p>
+		<p class="indent4">If no memory region is requested (<code>0x00</code>) then:</p>
+		<p class="indent5">1. RAM_REGION is checked (<code>0xFF8000</code> - <code>0xFF9DFF</code>);</p>
+		<p class="indent5">2. ROM_REGION is checked (<code>0x000000</code> - <code>0x03FFFF</code>);</p>
+		<p class="indent5">If there is still no match, the handler returns empty output packet of type <code>0xB0</code></p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[3]</code> -> type of memory region</p>
+		<p class="indent5"><code>in[4]</code> -> higher byte of the address</p>
+		<p class="indent5"><code>in[5]</code> -> middle byte of the address</p>
+		<p class="indent5"><code>in[6]</code> -> lower byte of the address</p>
+		<p class="indent5"><code>in[7]</code> -> size of the input packet</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Note that the MC68336 in BMS46 has a 24bit addressing IMB.</p>
+		<p class="indent4">The possible ram regions (<code>in[3]</code>): {</p>
+		<p class="indent5">RAM_REGION  (<code>0xFF8000</code> - <code>0xFF9DFF</code>) -> {<code>0x04</code>},</p>
+		<p class="indent5">BOOT_REGION (<code>0x000000</code> - <code>0x03FFFF</code>) -> {<code>0x02</code> OR <code>0x06</code>},</p>
+		<p class="indent5">FULL_REGION (<code>0x000000</code> - <code>0xFFFFFF</code>) -> {<code>0x00</code> OR <code>0x0F</code>},</p>
+		<p class="indent5">INVALID_REG (<code>0x000001</code> - <code>0x000000</code>) -> {<code>0x01</code> OR <code>0x03</code> OR <code>0x05</code> OR <code>0x0E</code>}
+		<p class="indent4">}</p>
+		<p class="indent4">Note that it tries to protect ISN (<code>0x3F64</code> - <code>0x3F6F</code>) and when this addr is requested it will add an offset <code>+0x3BD4C</code> redirecting to another magic byte.</p>
+		<p class="indent4">The type of the response <code>out_PID</code> (<code>out[2]</code>) is <code>0xA0</code>.</p>
+		<p class="indent4">Sets <code>PROTO2_message_size</code> to the clamped size.</p>
+		<p class="indent2"><b>]</b></p>
+
+		<p class="indent2"><b>handler_0x07: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x07</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">This handler is bound-checking the pointer, relocating some blocks, and at the end returning the pointer if it was valid.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[3]</code> -> type of memory region</p>
+		<p class="indent5"><code>in[4]</code> -> higher byte of the address</p>
+		<p class="indent5"><code>in[5]</code> -> middle byte of the address</p>
+		<p class="indent5"><code>in[6]</code> -> lower byte of the address</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Note that the MC68336 in BMS46 has a 24bit addressing IMB.</p>
+		<p class="indent4">The possible ram regions (<code>in[3]</code>): {</p>
+		<p class="indent5">RAM_REGION  (<code>0xFF8000</code> - <code>0xFF9DFF</code>) -> {<code>0x04</code>},</p>
+		<p class="indent5">BOOT_REGION (<code>0x000000</code> - <code>0x03FFFF</code>) -> {<code>0x02</code> OR <code>0x06</code>},</p>
+		<p class="indent5">FULL_REGION (<code>0x000000</code> - <code>0xFFFFFF</code>) -> {<code>0x00</code> OR <code>0x0F</code>},</p>
+		<p class="indent5">INVALID_REG (<code>0x000001</code> - <code>0x000000</code>) -> {<code>0x01</code> OR <code>0x03</code> OR <code>0x05</code> OR <code>0x0E</code>}
+		<p class="indent4">On error (pointer not in range) returns a blank packet with type <code>out_PID</code> (<code>out[2]</code>): <code>0xB0</code>.</p>
+		<p class="indent4">Sets output packet type (<code>out[2]</code>) to <code>0xA0</code> (most of the times), or <code>0xA2</code> after handling FULL_REGION.</p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x0A: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x0A</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Takes a simple 1Byte CRC16-IBM checksum of the firmware and moves that to the output packet.</p>
+		<p class="indent4">If USER_END magic byte (<code>0x55FFAA00</code>) is invalid or inaccesible, it takes the checksum only on the critical 1st stage sector (<code>0x0000</code> - <code>0x3FFF</code>).</p>
+		<p class="indent4">If there is a magic byte mismatch, returns <code>0xFF</code> as checksum.</p>
+		<p class="indent4">Does not use the input packet.</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent4">Sets output packet type (<code>out[2]</code>) to <code>0xA0</code>.</p>
+		<p class="indent4">Sets the <code>PROTO2_message_size</code> to 1 (only 1Byte checksum).</p>
+		<p class="indent2"><b>]</b></p>
+
+		<p class="indent2"><b>handler_0x0D: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x0D</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Moves 72 constant bytes to the output packet.</p>
+		<p class="indent4">The bytes are the same for every firmware version.</p>
+		<p class="indent4">The values: {</p>
+		<p class="indent5"><code>0x00</code>, <code>0x37</code>, <code>0x3A</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0x00</code>, <code>0x80</code>, <code>0x10</code>,</p>
+		<p class="indent5"><code>0x01</code>, <code>0x44</code>, <code>0xB0</code>,</p>
+		<p class="indent5"><code>0x00</code>, <code>0x37</code>, <code>0x3C</code>,</p>
+		<p class="indent5"><code>0x00</code>, <code>0x3F</code>, <code>0xE6</code>,</p>
+		<p class="indent5"><code>0x03</code>, <code>0xFC</code>, <code>0xB0</code>,</p>
+		<p class="indent5"><code>0x03</code>, <code>0xFD</code>, <code>0x60</code>,</p>
+		<p class="indent5"><code>0x00</code>, <code>0x37</code>, <code>0x3D</code>,</p>
+		<p class="indent5"><code>0x03</code>, <code>0xFD</code>, <code>0x20</code>,</p>
+		<p class="indent5"><code>0x00</code>, <code>0x3F</code>, <code>0x20</code></p>
+		<p class="indent4">}</p>
+		<p class="indent4">Does not use the input packet.</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent4">Sets output packet type (<code>out[2]</code>) to <code>0xA0</code>.</p>
+		<p class="indent4">Sets the <code>PROTO2_message_size</code> to 72 (combined length of all magic bytes).</p>
+		<p class="indent2"><b>]</b></p>
+
+		<p class="indent2"><b>handler_0x90: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x90</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Sends a magic bytes string like handler_0x00, then checksums it, then does a lot of set/clear bit operations.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[1]</code> -> MUST be 8 (the length of the whole input packet)</p>
+		<p class="indent5"><code>in[3]</code> -> MUST be 'B' (<code>0x42</code>)</p>
+		<p class="indent5"><code>in[4]</code> -> MUST be 'M' (<code>0x4D</code>)</p>
+		<p class="indent5"><code>in[5]</code> -> MUST be 'W' (<code>0x57</code>)</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent4">Normally outputs a blank packet with type (<code>in[2]</code>) <code>0xA2</code>.</p>
+		<p class="indent4">Sometimes outputs a 1 byte (<code>0x00</code>) packet with type (<code>in[2]</code>) <code>0xA0</code>.</p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x91: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x91</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Tries to find a match for 3 adjacent values in some table.</p>
+		<p class="indent4">If there is no match: outputs a blank packet of type (<code>out[2]</code>) <code>0xB0</code>.</p>
+		<p class="indent4">If the match is found: saves the single byte payload in some variable, then outputs a blank packet of type (<code>out[2]</code>) <code>0xA0</code>.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[3]</code> -> 1st value</p>
+		<p class="indent5"><code>in[4]</code> -> 2nd value</p>
+		<p class="indent5"><code>in[5]</code> -> 3rd value</p>
+		<p class="indent5"><code>in[6]</code> -> payload</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent4">Always outputs a blank packet.</p>
+		<p class="indent4">Sets the <code>PROTO2_message_size</code> to 0.</p>
+		<p class="indent2"><b>]</b></p>
+
+		<h2 class="indent1">]</h2>
+		<hr>
+
+		<h2 class="indent1">PROTO2B: [</h2>
+		<p class="indent2"><b>handler_type:</b></p>
+		<p class="indent3"><code>void (*)(void)</code></p>
+		<br>
+		<p class="indent2"><b>comment:</b></p>
+		<p class="indent2">The protocol is the same as PROTO2A, but this is the User version that has more handlers.</p>
+		<p class="indent3">A periodically scheduled Userland job calls the appropriate handler (found by <code>in_PID</code>) if a new received message is available.</p>
+		<p class="indent3">The max output packet size is generally 96 Bytes</p>
+		<p class="indent3">This protocol uses three global variables instead of function arguments.</p>
+		<p class="indent3">1. <code>PROTO2_in_buff</code></p>
+		<p class="indent3">2. <code>PROTO2_out_buff</code></p>
+		<p class="indent3">3. <code>PROTO2_message_size</code></p>
+		<p class="indent3">The output packet's <code>out_PID</code> (<code>out[2]</code>) is one of these four values: {</p>
+		<p class="indent4"><code>0xA0</code> -> PACKET_READY but stay standby</p>
+		<p class="indent4"><code>0xA2</code> -> SINGLE_PACKET or LAST_PACKET</p>
+		<p class="indent4"><code>0xB0</code> -> NOT_FOUND or NOTHING_TO_DO info</p>
+		<p class="indent4"><code>0xFF</code> -> CRITICAL error</p>
+		<p class="indent3">}</p>
+		<br>
+	
+		<p class="indent2"><b>handler_0x00: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Moves an aggregated magic bytes string to the output packet.</p>
+		<p class="indent4">Creates <code>"1430940"</code> + <code>"61"</code> + <code>"00"</code> + <code>"A7"</code> + <code>"60"</code> + <code>"4399"</code> + <code>"0010213510"</code> + <code>"F0000"</code> + <code>"000368511"</code> on firmware version 01119700F000P2AG.</p> 
+		<p class="indent4">Does not use input packet.</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent4">Sets <code>PROTO2_message_size = 42</code> (combined length of magic bytes).</p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x04: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x04</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Moves some words to the output packet.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[3]</code> -> requested size</p>
+		<p class="indent4">}</p>
+		<p class="indent4">If requested size is greater or equal than 11, this handler returns a blank packet of type <code>0xB0</code> and size 0.</p>
+		<p class="indent4">If requested size is greater than a counter (<code>*0xff96bf</code>), this handler returns the counter <code>out[3]</code> and <code>0x00</code> Byte in <code>out[4]</code> with type <code>0xA0</code> and size <code>2</code>.</p>
+		<p class="indent4">If requested size is 0, this handler returns the counter (<code>out[3]</code>) and two words (higher byte first) (<code>out[4...7]</code>) with type <code>0xA0</code> and size 5.</p>
+		<p class="indent4">Else, move up to 38 words of data (starting from <code>0xff96d3</code> region) to the output packet of type <code>0xA0</code>.</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x05: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x05</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">The handler sets 7th bit in some unknown varialbe and returns a blank output packet.</p>
+		<p class="indent4">Does not use the input packet.</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent4">Outputs blank packet with type <code>0xA0</code> and size 0.</p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x06: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x06</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Almost the same as PROTO2A::handler_0x06, but this handler additionally avoids two other regions.</p>
+		<p class="indent4">Reads bytes from a given address (in a given memory region) to the output packet.</p>
+		<p class="indent4">If the start address belongs to the region, but the size is too big, then the output size is clamped to fit.</p>
+		<p class="indent4">If no memory region is requested (<code>0x00</code>) then:</p>
+		<p class="indent5">1. RAM_REGION is checked (<code>0xFF8000</code> - <code>0xFF9DFF</code>);</p>
+		<p class="indent5">2. ROM_REGION is checked (<code>0x000000</code> - <code>0x03FFFF</code>);</p>
+		<p class="indent5">If there is still no match, the handler returns empty output packet of type <code>0xB0</code></p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[3]</code> -> type of memory region</p>
+		<p class="indent5"><code>in[4]</code> -> higher byte of the address</p>
+		<p class="indent5"><code>in[5]</code> -> middle byte of the address</p>
+		<p class="indent5"><code>in[6]</code> -> lower byte of the address</p>
+		<p class="indent5"><code>in[7]</code> -> size of the input packet</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Note that the MC68336 in BMS46 has a 24bit addressing IMB.</p>
+		<p class="indent4">The possible ram regions (<code>in[3]</code>): {</p>
+		<p class="indent5">RAM_REGION  (<code>0xFF8000</code> - <code>0xFF9DFF</code>) -> {<code>0x04</code>},</p>
+		<p class="indent5">BOOT_REGION (<code>0x000000</code> - <code>0x03FFFF</code>) -> {<code>0x02</code> OR <code>0x06</code>},</p>
+		<p class="indent5">FULL_REGION (<code>0x000000</code> - <code>0xFFFFFF</code>) -> {<code>0x00</code> OR <code>0x0F</code>},</p>
+		<p class="indent5">INVALID_REG (<code>0x000001</code> - <code>0x000000</code>) -> {<code>0x01</code> OR <code>0x03</code> OR <code>0x05</code> OR <code>0x0E</code>}
+		<p class="indent4">}</p>
+		<p class="indent4">Note that it tries to protect ISN (<code>0x3F64</code> - <code>0x3F6F</code>) and when this addr is requested it will add an offset <code>+0x3BD4C</code> redirecting to another magic byte.</p>
+		<p class="indent4">This version also protects two other regions:</p>
+		<p class="indent5">1. ENCRYPTED_ISN (<code>0xFF95F0</code> - <code>0xFF95FB</code>) by applying offset <code>-0xff8000</code>.</p>
+		<p class="indent5">2. UNKNOWN       (<code>0xFF8670</code> - <code>0xFF867B</code>) by applying offset <code>-0xff8000</code>.</p>
+		<p class="indent4">The type of the response <code>out_PID</code> (<code>out[2]</code>) is <code>0xA0</code>.</p>
+		<p class="indent4">Sets <code>PROTO2_message_size</code> to the clamped size.</p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x07: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x07</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Almost the same as PROTO2A::handler_0x07.</p>
+		<p class="indent4">This handler is bound-checking the pointer, relocating some blocks, and at the end returning the pointer if it was valid.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[3]</code> -> type of memory region</p>
+		<p class="indent5"><code>in[4]</code> -> higher byte of the address</p>
+		<p class="indent5"><code>in[5]</code> -> middle byte of the address</p>
+		<p class="indent5"><code>in[6]</code> -> lower byte of the address</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Note that the MC68336 in BMS46 has a 24bit addressing IMB.</p>
+		<p class="indent4">The possible ram regions (<code>in[3]</code>): {</p>
+		<p class="indent5">RAM_REGION  (<code>0xFF8000</code> - <code>0xFF9DFF</code>) -> {<code>0x04</code>},</p>
+		<p class="indent5">BOOT_REGION (<code>0x000000</code> - <code>0x03FFFF</code>) -> {<code>0x02</code> OR <code>0x06</code>},</p>
+		<p class="indent5">FULL_REGION (<code>0x000000</code> - <code>0xFFFFFF</code>) -> {<code>0x00</code> OR <code>0x0F</code>},</p>
+		<p class="indent5">INVALID_REG (<code>0x000001</code> - <code>0x000000</code>) -> {<code>0x01</code> OR <code>0x03</code> OR <code>0x05</code> OR <code>0x0E</code>}
+		<p class="indent4">}</p>
+		<p class="indent4">On error (pointer not in range) returns a blank packet with type <code>out_PID</code> (<code>out[2]</code>): <code>0xB0</code>.</p>
+		<p class="indent4">Sets output packet type (<code>out[2]</code>) to <code>0xA0</code> (most of the times), or <code>0xA2</code> after handling FULL_REGION.</p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x0A: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x0A</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">This handler is the same as PROTO2A::handler_0x0A, but there are more memory region to take checksum of.</p>
+		<p class="indent4">Takes a simple 1Byte CRC16-IBM checksum of the firmware and moves that to the output packet.</p>
+		<p class="indent4">If USER_END magic byte (<code>0x55FFAA00</code>) is invalid or inaccesible, it takes the checksum only on the critical 1st stage sector (<code>0x0000</code> - <code>0x3FFF</code>).</p>
+		<p class="indent4">If there is a magic byte mismatch, returns <code>0xFF</code> as checksum.</p>
+		<p class="indent4">Does not use the input packet.</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent4">Sets output packet type (<code>out[2]</code>) to <code>0xA0</code>.</p>
+		<p class="indent4">Sets the <code>PROTO2_message_size</code> to 1 (only 1Byte checksum).</p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x0B: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x0B</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Reads some vital Vechicle info to the output packet.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[3]</code> -> type of the data</p>
+		<p class="indent4">}</p>
+		<p class="indent4">If the requested type is <code>0x03</code> then it moves 70 bytes to the output packet of type <code>0xA0</code>.</p>
+		<p class="indent5">Those 70 bytes contain some vital Vechicle raw/live data (words are stored MSB first).</p>
+		<p class="indent5">Unfortunately i don't know which bytes mean what...</p>
+		<p class="indent5">The ones i can confirm with 90% certainty are:</p>
+		<p class="indent5"><code>out[3...4]</code> (word) -> Engine RPM raw analog value.</p>
+		<p class="indent5"><code>out[5...6]</code> (word) -> Engine Load raw analog value.</p>
+		<p class="indent5"><code>out[9]</code> -> Engine Load calibrated/scaled value.</p>
+		<p class="indent5"><code>out[11]</code> -> Vechicle Speed calibrated/scaled value.</p>
+		<p class="indent5"><code>out[27...28]</code> -> Throttle position raw analog value.</p>
+		<p class="indent4">If the requested type is <code>0x04</code> then it moves 5 most vital (for the Vechicle) bitfields to the output packet of type <code>0xA0</code>.</p>
+		<p class="indent4">If the requested type is <code>0xA2</code> then it moves 2 words and 1 byte to the output packet of type <code>0xA0</code>.</p>
+		<p class="indent4">If the requested type is <code>0xA3</code> then it moves 6 bytes to the output packet of type <code>0xA0</code>.</p>
+		<p class="indent4">Else a blank output packet of type <code>0xB0</code> is returned.</p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x0C: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x0C</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Another protocol.</p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x0D: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x0D</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Almost the same as PROTO2A::handler_0x0D, but some values are different.</p>
+		<p class="indent4">Moves 72 constant bytes to the output packet.</p>
+		<p class="indent4">The bytes are the same for every firmware version.</p>
+		<p class="indent4">The values: {</p>
+		<p class="indent5"><code>0x01</code>, <code>0x45</code>, <code>0x9A</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0xFF</code>, <code>0xFF</code>, <code>0xFF</code>,</p>
+		<p class="indent5"><code>0x00</code>, <code>0x80</code>, <code>0x10</code>,</p>
+		<p class="indent5"><code>0x01</code>, <code>0x44</code>, <code>0xB0</code>,</p>
+		<p class="indent5"><code>0x01</code>, <code>0x45</code>, <code>0x9C</code>,</p>
+		<p class="indent5"><code>0x00</code>, <code>0x3F</code>, <code>0xE6</code>,</p>
+		<p class="indent5"><code>0x03</code>, <code>0xFC</code>, <code>0xB0</code>,</p>
+		<p class="indent5"><code>0x03</code>, <code>0xFD</code>, <code>0x60</code>,</p>
+		<p class="indent5"><code>0x01</code>, <code>0x45</code>, <code>0x9D</code>,</p>
+		<p class="indent5"><code>0x03</code>, <code>0xFD</code>, <code>0x20</code>,</p>
+		<p class="indent5"><code>0x00</code>, <code>0x3F</code>, <code>0x20</code></p>
+		<p class="indent4">}</p>
+		<p class="indent4">Does not use the input packet.</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent4">Sets output packet type (<code>out[2]</code>) to <code>0xA0</code>.</p>
+		<p class="indent4">Sets the <code>PROTO2_message_size</code> to 72 (combined length of all magic bytes).</p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x0E: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x0E</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Reads 3 bytes that are only ever used by this handler_0x0E and handler_0x0F.</p>
+		<p class="indent4">Maybe restoring some modification timestamp or signature.</p>
+		<p class="indent4">Moves 3 bytes to the output packet of type <code>0xA0</code>.</p>
+		<p class="indent4">Does not use the input packet.</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x0F: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x0F</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Writes 3 bytes that are only ever used by this hander_0x0F and handler_0x0E.</p>
+		<p class="indent4">Maybe setting some modification timestamp or signature.</p>
+		<p class="indent4">Expects the bytes in <code>in[3...5]</code>.</p>
+		<p class="indent4">Returns a blank packet of type <code>0xA0</code>.</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x14: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x14</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[3]</code> -> count of something</p>
+		<p class="indent4">}</p>
+		<p class="indent4">If count <code>0x00</code> is requested, then this handler counts some matching bytes (up to 76) and writes the size + 2 words to the output packet.</p>
+		<p class="indent4">the size of the packet is 5 Bytes and the type is <code>0xA0</code>.</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x1B: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x1B</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[3]</code> -> MUST be <code>0xFE</code></p>
+		<p class="indent5"><code>in[4]</code> -> index</p>
+		<p class="indent4">}</p>
+		<p class="indent4">If the index is 0x01, then this handler moves a compilation string from <code>0x14000</code> of size 96 to the output packet of type <code>0xA0</code>.</p>
+		<p class="indent4">If the index is 0x02, then this handler moves 2 ints and 7 bytes (combined size 15 Bytes) to the output packet of type <code>0xA0</code>.</p>
+		<p class="indent4">If the index is 0x14, then this handler thunk-calls handler_0x14.</p>
+		<p class="indent4">If the index is 0x20, then this handler moves 40 bytes starting from <code>0xFF96C0</code> + some other 7 bytes to the output packet of size 47 and type <code>0xA0</code>.</p>
+		<p class="indent4">If the index is 0x21, then this handler moves vital Vechicle bytes and words of combined size 51 Bytes to the output packet of type <code>0xB0</code></p>
+		<p class="indent4">Else it returns a blank packet of type <code>0xB0</code>.</p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x1C: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x1C</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Prob continuation of handler_0x1B</p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x00: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4"></p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x00: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4"></p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x00: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4"></p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x00: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4"></p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x00: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4"></p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x00: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4"></p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x00: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4"></p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x00: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4"></p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x00: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4"></p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x00: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4"></p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x00: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4"></p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x00: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4"></p>
+		<p class="indent2"><b>]</b></p>
+		
+		<p class="indent2"><b>handler_0x00: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4"></p>
+		<p class="indent2"><b>]</b></p>
+			
+		<h2 class="indent1">]</h2>
+	<body>
+</html>
