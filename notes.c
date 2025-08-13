@@ -1,7 +1,9 @@
 // PSEUDOCODE
 
+// Voltage multiplier x0.068
+
 // Engine_RPM addr 0x00FF8334
-// Engine_RPM multiplier x40
+// Engine_RPM multiplier x46.36363636
 
 // Engine_RPM Med vs High limit (6200 RPM) 0x917f
 
@@ -17,10 +19,6 @@
 
 // Engine_Intake_Air_Temp multiplier x - 40 (Celsius)
 
-//cheksums FUN_000022E8()
-// FUN_0001520e()
-
-// TODO IMPORTANT CAN-CODE FUN_00032480()
 
 typedef unsigned char byte;
 

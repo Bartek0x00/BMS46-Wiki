@@ -15,6 +15,7 @@
 			}
 			
 			p {
+				line-height: 1.45;
 				font-size: 18px;
 				margin: 8px;
 			}
@@ -43,6 +44,10 @@
 				margin-left: 180px;
 			}
 
+			.indent6 {
+				margin-left: 220px;
+			}
+
 			code {
 				font-family: monospace;
 				background: #121212;
@@ -51,20 +56,43 @@
 				border-radius: 4px;
 				white-space: pre;
 			}
+
+			u {
+				text-decoration: none;
+				background-color: grey;
+				padding: 3px;
+				border-radius: 4px;
+			}
 		</style>
 	</head>
 	<body>
 		<h1 id="title">Communication protocols found in BMS46 firmware:</h1>
 		<hr>
 		<h2 class="indent1">PROTO1: [</h2>
-		<p class="indent2"><b>handler_type:</b></p>
-		<p class="indent3"><code>short (*)(SCI_RxBuff *in, SCI_TxBuff *out)</code></p>
+		<p class="indent2"><b>comment: </b></p>
+		<p class="indent3"> A basic Bootloader communication protocol operating on 9600bps <code>SCI</code> instead of a UART, probably used for debugging.</p>
+		<p class="indent3"><code>SCI_exchange_packet()</code> calls appropriate handler (found by comparing <code>in[1]</code> (the second byte of the request) to <code>in_PID</code>) every time a new packet arrives.</p>
+		<p class="indent3">Every handler gets a pointer to the received packet (<code>in[]</code>) and a pointer to a blank packet "to be transmitted as response" (<code>out[]</code>) and returns the size of the output packet in Bytes.</p>
+		<p class="indent3">The response packet will have <code>out[1]</code> id as <code>out_PID</code>.</p>
+		<p class="indent3">Generally the maximum size of a request/response is 208 bytes.</p>
 		<br>
-		<p class="indent2"><b>comment:</b></p>
-		<p class="indent3"> A basic Bootloader communication protocol, probably used for debugging.</p>
-		<p class="indent3"><code>SCI_exchange_packet()</code> calls appropriate handler (found by comparing in[1] to <code>in_PID</code>) every time a new packet arrives.</p>
-		<p class="indent3">The handler gets a pointer to the received packet and a pointer to a blank packet "to be transmitted" and returns the size of the output packet in Bytes.</p>
-		<p class="indent3">The response packet will have out[1] id as <code>out_PID</code>.</p>
+		<p class="indent2"><b>example:</b></p>
+		<p class="indent3"><code>in[] </code>: <code style="color:red;">07</code> <code style="color:green;">15</code> <u><code style="color:orange;">05</code> <code style="color:purple;">01</code> <code style="color:blue;">4B</code> <code style="color:cyan;">7A</code></u> <code style="color:deeppink;">27</code></p>
+		<p class="indent3"><code>out[]</code>: <code style="color:red;">08</code> <code style="color:green;">EB</code> <u><code>00</code> <code>01</code> <code>02</code> <code>03</code> <code>00</code></u> <code style="color:deeppink;">E3</code></p>
+		<br>
+		<p class="indent3">- The <u><code>greyed</code></u> part is the actual body/data returned from handlers and the rest is header/footer.</p>
+		<p class="indent3">- This <code style="color:red;">0x07</code> Bytes request goes to a handler with <code>in_PID = <span style="color:green;">0x15</span></code> which reads <code><span style="color:orange;">0x05</span></code> Bytes from the address <code>0x<span style="color:purple;">01</span><span style="color:blue;">4B</span><span style="color:cyan;">7A</span></code>. The whole request is guarded by a XOR checksum <code style="color:deeppink;">0x27</code>.</p>
+		<p class="indent3">- The <code style="color:red;">0x08</code> Bytes response with <code>out_PID = <span style="color:green;">0xEB</span></code> returns these bytes which happen to be {<code>0x00</code>, <code>0x01</code>, <code>0x02</code>, <code>0x03</code>, <code>0x00</code>}. The whole response is guarded by a XOR checksum <code style="color:deeppink;">0xE3</code>.</p>
+		<p class="indent3">- When an error occurs while handling the request, the following response is generated:</p>
+		<p class="indent3"><code>out[]</code>: <code style="color:red;">04</code> <code style="color:green;">02</code> <u><code style="color:orange;">XX</code></u> <code style="color:deeppink;">YY</code></p>
+		<p class="indent4">The <code style="color:orange;">error-code</code> field is one of the following: {</p>
+		<p class="indent5"><code>GENERAL_ERR = 0x00</code>,</p>
+		<p class="indent5"><code>CHECKSUM_ERR = 0x02</code>,</p>
+		<p class="indent5"><code>TIMEOUT_ERR = 0x03</code>,</p>
+		<p class="indent5"><code>SIZE_ERR = 0x03</code>,</p>
+		<p class="indent5"><code>OUT_OF_RANGE_ERR = 0x05</code></p>
+		<p class="indent4">}</p>
+		<p class="indent4">The whole error response is guarded by a XOR checksum <code style="color:deeppink;">0xYY</code>.</p>
 		<br>
 		<p class="indent2"><b>handler_0x03: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x03</p>
@@ -86,7 +114,7 @@
 		<p class="indent3"><b>in_PID: </b>0x15</p>
 		<p class="indent3"><b>out_PID: </b>0xEB</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4">Exactly the same as handler_0x24</p>
+		<p class="indent4">Exactly the same as <code>PROTO1::handler_0x24</code></p>
 		<p class="indent4">Reads bytes from the given address in memory to the output packet.</p>
 		<p class="indent4">Expects the following structured input: {</p>
 		<p class="indent5"><code>in[2]</code> -> size of the block</p>
@@ -95,7 +123,7 @@
 		<p class="indent5"><code>in[5]</code> -> lower byte of the address</p>
 		<p class="indent4">}</p>
 		<p class="indent4">Note that the MC68336 in BMS46 has a 24bit addressing IMB.</p>
-		<p class="indent4">If the desired size (<code>in[2]</code>) is greater than 200 it moves {<code>out[1] = 2</code>, <code>out[2] = 5</code>} to output packet and returns 1 (size).
+		<p class="indent4">If the desired size (<code>in[2]</code>) is greater than 200 it returns an error packet with code <code>0x05</code> (OUT_OF_RANGE_ERR).</p>
 		<p class="indent4">Normally returns the size (from <code>in[2]</code>).</p>
 		<p class="indent2"><b>],</b></p>
 
@@ -195,7 +223,7 @@
 		<p class="indent3"><b>in_PID: </b>0x24</p>
 		<p class="indent3"><b>out_PID: </b>0xDC</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4">Exactly the same as handler_0x15</p>
+		<p class="indent4">Exactly the same as <code>PROTO1::handler_0x15</code></p>
 		<p class="indent4">Reads bytes from the given address in memory to the output packet.</p>
 		<p class="indent4">Expects the following structured input: {</p>
 		<p class="indent5"><code>in[2]</code> -> size of the block</p>
@@ -204,7 +232,7 @@
 		<p class="indent5"><code>in[5]</code> -> lower byte of the address</p>
 		<p class="indent4">}</p>
 		<p class="indent4">Note that the MC68336 in BMS46 has a 24bit addressing IMB.</p>
-		<p class="indent4">If the desired size (<code>in[2]</code>) is greater than 200 it moves {<code>out[1] = 2</code>, <code>out[2] = 5</code>} to output packet and returns 1 (size).
+		<p class="indent4">If the desired size (<code>in[2]</code>) is greater than 200 it returns an error packet with code <code>0x05</code> (OUT_OF_RANGE_ERR).</p>
 		<p class="indent4">Normally returns the size (from <code>in[2]</code>).</p>
 		<p class="indent2"><b>],</b></p>
 
@@ -216,7 +244,7 @@
 		<p class="indent4">First it changes IMB setup to allow big-block moves between chips.</p>
 		<p class="indent4">Then it does a dynamic relocation of a function and calls it with this requested address.</p>
 		<p class="indent4">Runs some QADC related jobs and communicates with TPU registers.</p>
-		<p class="indent4">At the end it behaves like handler_0x15 or handler_0x24, but doesn't check the requested size.</p>
+		<p class="indent4">At the end it behaves like <code>PROTO1::handler_0x15</code> or <code>PROTO1::handler_0x24</code> (reads result from the given address), but doesn't check the requested size.</p>
 		<p class="indent4">Expects the following structured input: {</p>
 		<p class="indent5"><code>in[2]</code> -> size of the block</p>
 		<p class="indent5"><code>in[3]</code> -> higher byte of the address</p>
@@ -232,7 +260,7 @@
 		<p class="indent3"><b>in_PID: </b>0x40</p>
 		<p class="indent3"><b>out_PID: </b>0xC0</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4">Calls a given function passing pointer to next input bytes and pointer to output packet and returns it's return value.</p>
+		<p class="indent4">Calls a given function passing this handler's parameters and returns it's return value.</p>
 		<p class="indent4">Maybe it is used as a thunk for testing handlers of this protocol.</p>
 		<p class="indent4">If the address requested is an address of a handler in this protocol, then it is just thunk-called from there.</p>
 		<p class="indent4">Expects the following structured input: {</p>
@@ -243,11 +271,13 @@
 		<p class="indent4">}</p>
 		<p class="indent4">Note that the MC68336 in BMS46 has a 24bit addressing IMB.</p>
 		<p class="indent4">Re-returns what the requested handler returned.</p>
-		<p class="indent2"><b>],</b></p>
+		<p class="indent2"><b>]</b></p>
 
 		<h2 class="indent1">]</h2>
+		<br>
 		<hr>
-		
+		<br>
+
 		<h2 class="indent1">PROTO2A: [</h2>
 		<p class="indent2"><b>handler_type:</b></p>
 		<p class="indent3"><code>void (*)(void)</code></p>
@@ -554,7 +584,31 @@
 		<p class="indent2"><b>handler_0x0C: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x0C</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4">Another protocol.</p>
+		<p class="indent4">Dispatches to an action based on requested index.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[3]</code> -> requested action index</p>
+		<p class="indent5"><code>in[4]</code> -> 1byte parameter to the action handler</p>
+		<p class="indent4">}</p>
+		<p class="indent4">The possible indices are: {</p>
+		<p class="indent5"><code>0x1F</code> -> ...</p>
+		<p class="indent5"><code>0x21</code> -> ...</p>
+		<p class="indent5"><code>0x36</code> -> ...</p>
+		<p class="indent5"><code>0x49</code> -> ...</p>
+		<p class="indent5"><code>0x4C</code> -> ...</p>
+		<p class="indent5"><code>0x4D</code> -> ...</p>
+		<p class="indent5"><code>0x4E</code> -> ...</p>
+		<p class="indent5"><code>0x51</code> -> ...</p>
+		<p class="indent5"><code>0x52</code> -> ...</p>
+		<p class="indent5"><code>0x53</code> -> ...</p>
+		<p class="indent5"><code>0x54</code> -> ...</p>
+		<p class="indent5"><code>0x58</code> -> ...</p>
+		<p class="indent5"><code>0x59</code> -> ...</p>
+		<p class="indent5"><code>0x5F</code> -> ...</p>
+		<p class="indent5"><code>0x72</code> -> ...</p>
+		<p class="indent5"><code>0x74</code> -> ...</p>
+		<p class="indent5"><code>0x91</code> -> ...</p>
+		<p class="indent4">}</p>
+		<p class="indent4">This handler returns a 2 byte output packet: <code>out[3] = in[3]</code> (requested index repeated), <code>out[4] = RET</code> (one of these two values, depending on what the dispatched handler returns)</p>
 		<p class="indent2"><b>]</b></p>
 		
 		<p class="indent2"><b>handler_0x0D: [</b></p>
@@ -647,84 +701,289 @@
 		<p class="indent4">Prob continuation of handler_0x1B</p>
 		<p class="indent2"><b>]</b></p>
 		
-		<p class="indent2"><b>handler_0x00: [</b></p>
-		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent2"><b>handler_0x22: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x22</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4"></p>
+		<p class="indent4">Requires the input <code>in[3]</code> to be equal <code>0x02</code></p>
+		<p class="indent4">Calls a function that does almost nothing.</p>
 		<p class="indent2"><b>]</b></p>
 		
-		<p class="indent2"><b>handler_0x00: [</b></p>
-		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent2"><b>handler_0x23: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x23</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4"></p>
+		<p class="indent4">Requires the input <code>in[3]</code> to be equal <code>0x02</code></p>
+		<p class="indent4">Calls a function that does almost nothing.</p>
 		<p class="indent2"><b>]</b></p>
 		
-		<p class="indent2"><b>handler_0x00: [</b></p>
-		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent2"><b>handler_0x2B: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x2B</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4"></p>
+		<p class="indent4">Requires the input <code>in[3]</code> to be equal <code>0x02</code></p>
+		<p class="indent4">Calls a function that does almost nothing.</p>
 		<p class="indent2"><b>]</b></p>
 		
-		<p class="indent2"><b>handler_0x00: [</b></p>
-		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent2"><b>handler_0x40: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x40</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4"></p>
+		<p class="indent4">This handler reads one byte from an internal memory variable.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[3]</code> -> flag (either 1 or 2 or undefined)</p>
+		<p class="indent4">}</p>
+		<p class="indent4">If the flag is 1, then value from <code>0xFF8530</code> is returned, if flag is 2, value from <code>0xFF843B</code> is returned.</p>
+		<p class="indent4">This handler sets the output size to 1 and type <code>0xA0</code> if the flag is 1 or 2 and else returns blank packet of type <code>0xB0</code>.</p>
+		<p class="indent4">Note that the same variables are used in <code>handler_0x41</code> and <code>handler_0x42</code>.</p>
 		<p class="indent2"><b>]</b></p>
 		
-		<p class="indent2"><b>handler_0x00: [</b></p>
-		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent2"><b>handler_0x41: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x41</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4"></p>
+		<p class="indent4">This handler writes one byte to an internal memory variable.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[3]</code> -> flag (either 1 or 2 or undefined)</p>
+		<p class="indent5"><code>in[4]</code> -> new value</p>
+		<p class="indent4">}</p>
+		<p class="indent4">If the flag is 1, some bitfields are checked, and then the new value is written to <code>0xFF8530</code>.</p>
+		<p class="indent4">If the flag is 2 and (98 <= new value <= 158), then the new value is written to <code>0xFF843B</code>.</p>
+		<p class="indent4">This handler returns a blank packet.</p>
+		<p class="indent4">If the write was successful, the output packet has type <code>0xA0</code>.</p>
+		<p class="indent4">If some conditions weren't met, the output packet has type <code>0xA2</code>.</p>
+		<p class="indent4">If the flag was not 1 nor 2, the output packet has type <code>0xB0</code>.</p>
+		<p class="indent4">Note that the same variables are used in <code>handler_0x40</code> and <code>handler_0x42</code>.</p>
 		<p class="indent2"><b>]</b></p>
 		
-		<p class="indent2"><b>handler_0x00: [</b></p>
-		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent2"><b>handler_0x42: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x42</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4"></p>
+		<p class="indent4">This handler moves one byte between internal memory variables.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[3]</code> -> flag (either 1 or 2 or undefined)</p>
+		<p class="indent4">}</p>
+		<p class="indent4">If the flag is 1, some bitfields are checked, and then the value is moved from <code>0xFF8530</code> to <code>0xFF9859</code>.</p>
+		<p class="indent4">If the flag is 2, the value from <code>0xFF843B</code> is clamped to range [98, 158] and copied to <code>0xFF985A</code>.</p>
+		<p class="indent4">This handler returns a blank packet.</p>
+		<p class="indent4">If the swap was successful, the output packet has type <code>0xA0</code>.</p>
+		<p class="indent4">If some conditions weren't met, the output packet has type <code>0xA2</code>.</p>
+		<p class="indent4">If the flag was not 1 nor 2, the output packet has type <code>0xB0</code>.</p>
+		<p class="indent4">Note that the same variables are used in <code>handler_0x40</code> and <code>handler_0x41</code>.</p>
 		<p class="indent2"><b>]</b></p>
 		
-		<p class="indent2"><b>handler_0x00: [</b></p>
-		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent2"><b>handler_0x43: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x43</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4"></p>
+		<p class="indent4">This handler resets some internal memory variables based on bitfields.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[3]</code> -> first bitfield</p>
+		<p class="indent5"><code>in[4]</code> -> second bitfield</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Always returns a blank packet of type <code>0xA0</code>.</p>
+		<p class="indent4">Never fails.</p>
 		<p class="indent2"><b>]</b></p>
 		
-		<p class="indent2"><b>handler_0x00: [</b></p>
-		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent2"><b>handler_0x53: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x53</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4"></p>
+		<p class="indent4">Reads a string of magic bytes.</p>
+		<p class="indent4">Does not use the input packet.</p>
+		<p class="indent4">On firmware version 01119700F000P2AG it creates <code>0x33</code> + <code>"0261204420"</code> + <code>"078"</code> + <code>"26RT5134"</code> + <code>0x03</code> + <code>0xFD</code> + <code>0x3C</code> + <code>0x03</code> + <code>0xFD</code> + <code>0x24</code> + <code>0x03</code> + <code>0xFD</code> + <code>0x44</code></p>
+		<p class="indent4">Size of the packet is 31.</p>
+		<p class="indent4">Never fails.</p>
 		<p class="indent2"><b>]</b></p>
 		
-		<p class="indent2"><b>handler_0x00: [</b></p>
-		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent2"><b>handler_0x6C: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x6C</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4"></p>
+		<p class="indent4">This handler checks some pre-conditions based on the given flag.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[3]</code> -> a flag (0 or 1 or undefined)</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Note that this function clears two bytes in the EWS every time (<code>0xFF8680</code> and <code>0xFF86AF</code>).</p>
+		<p class="indent4">The handler checks exactly these things:</p>
+		<p class="indent5">1. Is the ISN valid? Every word in ISN (0^1, 0^2, 1^2) XOR'ed must be 0:</p>
+		<p class="indent6"><code>0: ISN[0] (0x3F64 - 0x3F64)</code></p>
+		<p class="indent6"><code>1: ISN[1] (0x3F66 - 0x3F67)</code></p>
+		<p class="indent6"><code>2: ISN[2] (0x3F68 - 0x3F69)</code></p>
+		<p class="indent5">Additionaly XOR'ing the pre-hashed pairs (0^1, 0^2, 1^2) in the same way as before must equal 0:</p>
+		<p class="indent6"><code>0: (ISN[0] ^ 0x0D0B)</code></p>
+		<p class="indent6"><code>1: (ISN[1] ^ 0x1D17)</code></p>
+		<p class="indent6"><code>2: (ISN[2] ^ 0x251F)</code></p>
+		<p class="indent5">If the ISN is invalid, moves 3 to the output packet.</p>
+		<p class="indent5">2. Is the flag bigger than 1?</p>
+		<p class="indent6">This is error, return a packet of type <code>0xB0</code>.</p>
+		<p class="indent5">3. Is the EWS unlocked/valid?</p>
+		<p class="indent6">If EWS locked/invalid and the flag is different than 1, a 1 is returned in output packet.</p>
+		<p class="indent6">If EWS unlocked/valid and the flag is different than 0, a 2 is returned in output packet.</p>
+		<p class="indent5">4. Is the Engine running?</p>
+		<p class="indent6">If the engine is running return a packet of type <code>0xA2</code>.</p>
+		<p class="indent4">If the error code (or success code) is in the range [0, 3], this handler moves it to the output packet of type <code>0xA0</code>.</p>
+		<p class="indent4">If the error code (or success code) is out of range, this handler returns a blank packet with this code being the type.<p>
 		<p class="indent2"><b>]</b></p>
 		
-		<p class="indent2"><b>handler_0x00: [</b></p>
-		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent2"><b>handler_0x6D: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x6D</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4"></p>
+		<p class="indent4">This handler checks some pre-conditions based on an internal bitfield (<code>0xFF86AD</code>).</p>
+		<p class="indent4">Does not use the input packet.</p>
+		<p class="indent4">If the error code (or success code) is in the range [0, 2], this handler moves it to the output packet of type <code>0xA0</code>.</p>
+		<p class="indent4">If the error code (or success code) is out of range, this handler returns a blank packet with this code being the type.</p>
 		<p class="indent2"><b>]</b></p>
 		
-		<p class="indent2"><b>handler_0x00: [</b></p>
-		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent2"><b>handler_0x90: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x90</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4"></p>
+		<p class="indent4">Almost the same as PROTO2A::handler_0x90</p>
+		<p class="indent4">Sends a magic bytes string like handler_0x00, then checksums it, then does a lot of set/clear bit operations.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[1]</code> -> MUST be 8 (the length of the whole input packet)</p>
+		<p class="indent5"><code>in[3]</code> -> MUST be 'B' (<code>0x42</code>)</p>
+		<p class="indent5"><code>in[4]</code> -> MUST be 'M' (<code>0x4D</code>)</p>
+		<p class="indent5"><code>in[5]</code> -> MUST be 'W' (<code>0x57</code>)</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Never fails.</p>
+		<p class="indent4">Normally outputs a blank packet with type (<code>in[2]</code>) <code>0xA2</code>.</p>
+		<p class="indent4">Sometimes outputs a 1 byte (<code>0x00</code>) packet with type (<code>in[2]</code>) <code>0xA0</code>.</p>
 		<p class="indent2"><b>]</b></p>
 		
-		<p class="indent2"><b>handler_0x00: [</b></p>
-		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent2"><b>handler_0x9E: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x9E</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4"></p>
+		<p class="indent4">Always returns a blank packet of type <code>0xA0</code>.</p>
+		<p class="idnent4">Does not use the input packet.</p>
+		<p class="indent4">Never fails.</p>
 		<p class="indent2"><b>]</b></p>
 		
-		<p class="indent2"><b>handler_0x00: [</b></p>
-		<p class="indent3"><b>in_PID: </b>0x00</p>
+		<p class="indent2"><b>handler_0x9F: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x9F</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4"></p>
+		<p class="indent4">Runs some generic TPU jobs and returns a blank packet of type <code>0xA0</code>.</p>
+		<p class="indent4">Does not use the input packet.</p>
+		<p class="indent4">Never fails.</p>
 		<p class="indent2"><b>]</b></p>
-			
+		<h2 class="indent1">]</h2>
+		<br>
+		<hr>
+		<br>
+
+		<h2 class="indent1">OBD2: [</h2>
+		<p class="indent2"><b>comment:</b></p>
+		<p class="indent3">A periodically scheduled Userland job calls the appropriate handler (found by <code>in[0]</code>) if a new received message is available.</p>
+		<p class="indent3">The max output packet size is generally 11 Bytes</p>
+		<p class="indent3">The output packet's <code>out_PID</code> (<code>out</code>) is one of these four values: {</p>
+		<p class="indent4"><code>0xA0</code> -> PACKET_READY but stay standby</p>
+		<p class="indent4"><code>0xA2</code> -> SINGLE_PACKET or LAST_PACKET</p>
+		<p class="indent4"><code>0xB0</code> -> NOT_FOUND or NOTHING_TO_DO info</p>
+		<p class="indent4"><code>0xFF</code> -> CRITICAL error</p>
+		<p class="indent3">}</p>
+		<p class="indent3">This protocol implements 7 actions [1, 7].</p>
+		<br>
+		<p class="indent2"><b>show_current_data: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x01</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Moves live data variables (from J1979 [0x00-0x3F]) to the output packet.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[4]</code> -> index of the wanted variable</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Possible indices are: {</p>
+		<p class="indent5"><code>0x00</code> -> PID support status bitfield (0x01-0x20) <code>0b10111110000111111111100000010000</code></p>
+		<p class="indent5"><code>0x01</code> -> <code>out[4]</code> is from some bitfields, <code>out[5] = 0x07</code>, <code>out[4] = 0x69</code>, <code>out[5] = *0xFF980E</code></p>
+		<p class="indent5"><code>0x03</code> -> <code>out[4]</code> is from some bitfields, <code>out[5] = 0x00</code></p>
+		<p class="indent5"><code>0x04</code> -> calculated Engine_Load</p>
+		<p class="indent5"><code>0x05</code> -> Engine_Load</p>
+		<p class="indent5"><code>0x06</code> -> ...</p>
+		<p class="indent5"><code>0x07</code> -> ...</p>
+		<p class="indent5"><code>0x0C</code> -> Engine_RPM</p>
+		<p class="indent5"><code>0x0D</code> -> Vechicle_Speed</p>
+		<p class="indent5"><code>0x0E</code> -> maybe Engine_Ignition_Advance_n1</p>
+		<p class="indent5"><code>0x0F</code> -> Engine_IAT</p>
+		<p class="indent5"><code>0x10</code> -> maybe Engine_MAF</p>
+		<p class="indent5"><code>0x11</code> -> Engine_Throttle_Percentage</p>
+		<p class="indent5"><code>0x12</code> -> Commanded secondary air status <code>0x01</code> if some bit is set, else <code>0x04</code></p>
+		<p class="indent5"><code>0x13</code> -> Location of oxygen sensors - always returns Bank1_Sensor1 and Bank1_Sensor2</p>
+		<p class="indent5"><code>0x14</code> -> ...</p>
+		<p class="indent5"><code>0x15</code> -> ...</p>
+		<p class="indent5"><code>0x1C</code> -> OBD certification - always returns 0x06 EOBD (Euro OBD certified car)</p>
+		<p class="indent5"><code>0x20</code> -> PID support status bitfield (0x21-0x40) <code>0b10000000000000000000000000000000</code></p>
+		<p class="indent5"><code>0x21</code> -> Vechicle_Distance_On_MIL</p>
+		<p class="indent4">}</p>
+		<p class="indent4">The response consists of <code>out[3] = 0x41</code> (handler idx (1) + 0x40 which means successful response), <code>out[4] = in[4]</code> (wanted index), <code>out[5...]</code> (response bytes)</p>
+		<p class="indent2"><b>],</b></p>
+		
+		<p class="indent2"><b>show_freeze_frame_data: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x02</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Moves freeze frame variables to the output packet.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[4]</code> -> index of the wanted variable</p>
+		<p class="indent5"><code>in[5]</code> -> unknown byte</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Possible indices are: {</p>
+		<p class="indent5"><code>0x00</code> -> PID support status bitfield <code>0b01111110000110000000000000000000</code></p>
+		<p class="indent5"><code>0x02</code> -> DTC that caused freeze frame</p>
+		<p class="indent5"><code>0x03</code> -> Fuel System Status at freeze frame</p>
+		<p class="indent5"><code>0x04</code> -> Calculated Engine Load at freeze frame</code></p>
+		<p class="indent5"><code>0x05</code> -> Engine Coolant Temp at freeze frame</code></p>
+		<p class="indent5"><code>0x06</code> -> Short term fuel trim STFT Bank1 at freeze frame</code></p>
+		<p class="indent5"><code>0x07</code> -> Long term fuel trim LTFT Bank1 at freeze frame</code></p>
+		<p class="indent5"><code>0x0C</code> -> Engine RPM at freeze frame</p>
+		<p class="indent5"><code>0x0D</code> -> Vechicle Speed at freeze frame</p>
+		<p class="indent4">}</p>
+		<p class="indent4">The response consists of <code>out[3] = 0x42</code> (handler idx (2) + 0x40 which means successful response), <code>out[4] = in[4]</code> (wanted index), <code>out[5] = in[5]</code> (some byte repeated), <code>out[6...]</code> (response bytes)</p>
+		<p class="indent2"><b>],</b></p>
+
+		<p class="indent2"><b>show_stored_DTC: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x03</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Moves all DTCs with info to the output packets (segmented using ISO 15765-2).</p>
+		<p class="indent4">Does not use the input packet.</p>
+		<p class="indent4">The response consists of <code>out[3] = 0x43</code> (handler idx (3) + 0x40 which means successful response), <code>out[4...]</code> each DTC frame has 6 bytes.</p>
+		<p class="indent2"><b>],</b></p>
+
+		<p class="indent2"><b>clear_DTC: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x04</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Clears all DTCs and saved freeze frames.</p>
+		<p class="indent4">Does not use the input packet.</p>
+		<p class="indent4">The response consists of <code>out[3] = 0x44</code> (handler idx (4) + 0x40 which means successful response)</p>
+		<p class="indent2"><b>],</b></p>
+
+		<p class="indent2"><b>handler_0x05: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x05</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Moves some unknown (prob Vendor specific) bytes to the output packet.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[4]</code> -> index of an action</p>
+		<p class="indent5"><code>in[5]</code> -> an unknown byte that <b>MUST BE 1 OR 2</b></p>
+		<p class="indent4">}</p>
+		<p class="indent4">Possible indices are: {</p>
+		<p class="indent5"><code>0x00</code> -> PID support status bit <code>0b00000011000000000000000000000000</code></p>
+		<p class="indent5"><code>0x07</code> -> returns {<code>out[6] = VALUE</code>, <code>out[7] = 0x00</code>, <code>out[8] = 0x3D</code>} where VALUE is <code>*0xFF8525</code> if <code>in[5]</code> is 1 or <code>*0xFF863A</code> if <code>in[5]</code> is 2</p>
+		<p class="indent5"><code>0x08</code> -> returns {<code>out[6] = VALUE</code>, <code>out[7] = 0x7E</code>, <code>out[8] = 0xFF</code>} where VALUE is <code>*0xFF8526</code> if <code>in[5]</code> is 1 or <code>*0xFF863B</code> if <code>in[5]</code> is 2</p>
+		<p class="indent4">}</p>
+		<p class="indent2"><b>],</b></p>
+
+		<p class="indent2"><b>handler_0x06: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x06</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Moves some unknown (prob Vendor specific) bytes to the output packet.</p>
+		<p class="indent4">Expects the following structured input: {</p>
+		<p class="indent5"><code>in[4]</code> -> index of an action</p>
+		<p class="indent4">}</p>
+		<p class="indent4">Every index returns 7 bytes.</p>
+		<p class="indent4">Possible indices are: {</p>
+		<p class="indent5"><code>0x00</code> -> support status bit but 5 bytes this time {<code>0xFF</code>, <code>0xE4</code>, <code>0x00</code>, <code>0x00</code>, <code>0x00</code>}</p>
+		<p class="indent5"><code>0x01</code> -> ...</p>
+		<p class="indent5"><code>0x02</code> -> ... (sends two packets at once)</p>
+		<p class="indent5"><code>0x03</code> -> ...</p>
+		<p class="indent5"><code>0x06</code> -> ... (sends two packets at once)</p>
+		<p class="indent2"><b>],</b></p>
+
+		<p class="indent2"><b>show_permanent_DTC: [</b></p>
+		<p class="indent3"><b>in_PID: </b>0x07</p>
+		<p class="indent3"><b>comment:</b></p>
+		<p class="indent4">Moves all Permanent (cleared) DTCs with info to the output packets (segmented using ISO 15765-2).</p>
+		<p class="indent4">Does not use the input packet.</p>
+		<p class="indent4">The response consists of <code>out[3] = 0x47</code> (handler idx (7) + 0x40 which means successful response), <code>out[4...]</code> each DTC frame has 6 bytes.</p>
+		<p class="indent2"><b>]</b></p>
+
 		<h2 class="indent1">]</h2>
 	<body>
 </html>

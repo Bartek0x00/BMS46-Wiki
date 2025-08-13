@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>BMS46 Maps Visualizer</title>
+  <style>
+  	html, body {
+		height: 100%;
+	}
+
+    body {
+		font-family: sans-serif;
+		background-color: #282828;
+		color: white;
+		margin: 0;
+		padding: 0;
+	}
+
+    #controls {
+		padding: 10px;
+		background-color: #181A1B;
+	}
+	
+	#view-hex {
+		font-family: monospace;
+		font-size: 24px;
+		width: 90vw;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	#view-hex #bytes {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+	}
+
+	#view-hex #bytes .hex-byte {
+		white-space: nowrap;
+		cursor: pointer;
+	}
+
+	#view-hex #bytes #index {
+		margin-right: 12px;
+	}
+
+    #view-hex #legend {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 24px;
+		flex-direction: row;
+		justify-content: center;
+		margin-top: 32px;
+	}
+
+	#view-hex #legend .hex-legend {
+		cursor: pointer;
+	} 
+	
+	[data-tooltip].highlight {
+		outline: 2px solid white;
+		outline-offset: -1px;
+	}
+	
+	#view-chart-container {
+		display: flex;
+		flex-direction: column;
+		justify-content: start;
+		align-items: center;
+	}
+
+	#view-chart {
+	}
+
+	#offset-input {
+		width: 100px;
+	}
+
+	#view-chart-rotation {
+		width: 400px;
+		display: none;
+	}
+</style
+</head>
+<body>
+  <div id="controls">
+    <input type="file" id="file-input" accept="*/*" />
+	<label for="datatype-select">Data Type</label>
+	<select id="datatype-select" name="datatype-select">
+		<option value="BYTE">Byte  (unsigned 8bit)</option>
+		<option value="WORD">Word  (unsigned 16bit)</option>
+		<!--<option value="F">Float (floating 8bit)</option>-->
+	</select>
+	<label for="offset-input">Input Offset</label>
+	<input type="text" id="offset-input" name="offset-input" min="0" step="1" value="0" placeholder="Enter off (dec or hex)">
+  	<label for="viewtype-select">View Type</label>
+	<select id="viewtype-select" name="viewtype-select">
+		<option value="CHART">Chart</option>
+		<option value="HEX">Hex</option>
+	</select>
+  	<button id="process-button">Draw</button>
+  </div>
+  <div id="view-hex">
+  	<div id="bytes">
+		<div id="index"></div>
+		<div id="data"></div>
+	</div>
+	<div id="legend"></div>
+  </div>
+  <div id="view-chart-container">
+  	<div>
+  		<canvas id="view-chart"></canvas>
+  	</div>
+	<input type="range" id="view-chart-rotation" min="0" max="360" value="166">
+  </div>
+  <script type="module">
+	import * as THREE from "./three.module.js";
+	import { CSS2DRenderer, CSS2DObject } from "./CSS2DRenderer.js";
+		
+	let canvas = document.getElementById("view-chart");
+	canvas.width = 480;
+	canvas.height = 480;
+			
+	let currentRenderer = null;
+	const BYTE = 1;
+	const WORD = 2;
+	const DWORD = 4;
+	const FLOAT = 4;
+	let valueType = BYTE;
+		
+	function normalize(avg, min, max) {
+		if (max == min)
+			return 1.0;
+		return ((avg - min) / (max - min));
+	}
+		
+	function getGradientColor(norm) {
+		if (norm < 0.5) {
+			const t = norm / 0.5;
+			return new THREE.Color(0, t, 1 - t);
+		} else {
+			const t = (norm - 0.5) / 0.5;
+			return new THREE.Color(t, 1 - t, 0);
+		}
+	}
+	
+	function exitError(error) {
+		document.getElementById("file-input").value = "";
+		alert(error);
+		throw Error(error);
+	}
+
+	function get(bytes, off, len, typeSize = 1) {
+		if ((off > bytes.length) || ((bytes.length - off) < len)) {
+			const startAddr = off.toString(16).padStart(2, '0');
+			const endAddr = (off + len - 1).toString(16).padStart(2, '0');
+			
+			exitError(
+				`[INVALID MAP]\n` +
+				`Your Map is too small\n` +
+				`An overflow occured while parsing the field [0x${startAddr} - 0x${endAddr}] \n` +
+				`Check data integrity, and make sure you start from the header`
+			);
+		}
+		let view = new DataView(bytes.buffer);
+		let arr = []
+		for (let i = 0; i < len; i++) {
+			switch (typeSize) {
+				case 1:
+					arr.push(view.getUint8(off + i));
+					break;
+				case 2:
+					arr.push(view.getUint16(off + i * 2));
+					break;
+			}
+		}
+		return arr;
+	}
+    
+	function addrStringify(addr) {
+		//TODO: Add ghidra symbol name lookup
+		const hex = (addr[0] << 24) | 
+					(addr[1] << 16) | 
+					(addr[2] << 8) | 
+					(addr[3] << 0);
+
+		return ("0x" + hex.toString(16).padStart(8, '0'));
+	}
+	
+	function parseMap(bytes) {
+		var parsed = {
+			bytes: [],
+			labels: [],
+			size: [],
+			ticks: [],
+			data: []
+		};
+		var idx = 0;
+		
+		var addr = get(bytes, idx, DWORD);
+		idx += DWORD;
+		if ((addr[0] != 0x00) || (addr[1] != 0xFF))
+			exitError(
+				`[INVALID MAP]\n` +
+				`The bytes [0x00 - 0x03] do not make a valid pointer.\n` +
+				`Check data integrity, endianness and try again.`
+			);
+		parsed.labels.push(addrStringify(addr));
+
+		addr = get(bytes, idx, DWORD);
+		idx += DWORD;
+		if ((addr[0] != 0x00) || (addr[1] != 0xFF))
+			exitError(
+				`[INVALID MAP]\n` + 
+				`The bytes [0x04 - 0x07] do not make a valid pointer.\n` +
+				`Check data integrity, endianness and try again.`
+			);
+		parsed.labels.push(addrStringify(addr));
+		
+		addr = get(bytes, idx, DWORD);
+		if ((addr[0] == 0x00) && (addr[1] == 0xFF)) {
+			parsed.labels.push(addrStringify(addr));
+			idx += DWORD;
+
+			parsed.size.push(get(bytes, idx, BYTE));
+			idx += BYTE;
+
+			parsed.size.push(get(bytes, idx, BYTE));
+			idx += BYTE;
+
+			parsed.ticks.push(Array.from(get(bytes, idx, parsed.size[0] * valueType)));
+			idx += parsed.size[0] * valueType;
+
+			parsed.ticks.push(Array.from(get(bytes, idx, parsed.size[1] * valueType)));
+			idx += parsed.size[1] * valueType;
+
+			parsed.data = Array.from(get(bytes, idx, parsed.size[0] * parsed.size[1] * valueType));
+			idx += parsed.size[0] * parsed.size[1] * valueType;
+
+			parsed.bytes = Array.from(bytes.slice(0, idx));
+			return new Map3D(parsed);
+
+		} else {
+			parsed.size.push(get(bytes, idx + BYTE, BYTE));
+			idx += WORD;
+			
+			parsed.ticks.push(get(bytes, idx, parsed.size, valueType));
+			idx += parsed.size * valueType;
+
+			parsed.data = get(bytes, idx, parsed.size, valueType);
+			idx += parsed.size * valueType
+
+			parsed.bytes = Array.from(bytes.slice(0, idx));
+			return new Map2D(parsed);	
+		}
+	}
+	
+	class Map {
+		constructor(bytes) {
+			this.bytes = bytes;
+			
+			this.activeObserver = null;
+		}
+
+
+		clearView() {
+			if (this.activeObserver) {
+				this.activeObserver.unobserve(document.querySelector("#view-hex #bytes"));
+				this.activeObserver.disconnect();
+				this.activeObserver = null;
+			}
+			
+			document.getElementById("view-hex").style = "display:none;";
+		}
+
+		clearCanvas(oldCanvas) {
+			const parent = oldCanvas.parentNode;
+
+			const newCanvas = document.createElement("canvas");
+			newCanvas.id = oldCanvas.id;
+			newCanvas.width = oldCanvas.width;
+			newCanvas.height = oldCanvas.height;
+			
+			parent.removeChild(oldCanvas);
+			parent.appendChild(newCanvas);
+			
+			canvas = newCanvas;
+
+			if (currentRenderer) {
+				currentRenderer.forceContextLoss();
+				currentRenderer.dispose();
+				currentRenderer.domElement = null;
+				currentRenderer = null;
+			}
+		}
+
+		drawHexView() {	
+			const view = document.querySelector("#view-hex");
+			let currentCols = null;
+
+			const index = document.querySelector("#view-hex #bytes #index");
+			const data = document.querySelector("#view-hex #bytes #data");
+			const legend = document.querySelector("#view-hex #legend");
+
+			const redraw = () => {
+				const availableWidth = document.querySelector("#view-hex #bytes").offsetWidth;
+				const byteWidth = 48;
+			
+				let cols;
+				if (availableWidth > byteWidth * 8) {
+					cols = 8;
+				} else if (availableWidth > byteWidth * 4) {
+					cols = 4;
+				} else {
+					cols = 2;
+				}
+
+				if (cols === currentCols)
+					return;
+
+				currentCols = cols;
+
+				const rows = Math.ceil(this.bytes.length / cols);
+				
+				let data_html = "";
+				let legend_html = "";
+				let index_html = "";
+			
+				for (let r = 0; r < rows; r++) {
+					const off = r * cols;
+					index_html += `0x${off.toString(16).toUpperCase().padStart(4, '0')}:<br>`;
+				
+					for (let i = 0; i < cols; i++) {
+						const idx = off + i;
+						if (idx >= this.bytes.length)
+							break;
+	
+						const hex = this.bytes[idx].toString(16).padStart(2, '0');
+						const reg = this.regions.find(rg => idx == rg.start);
+						if (reg) {
+							data_html += `<span class="hex-byte" style="background: ${reg.color};" data-tooltip="${reg.name}">`;
+							legend_html += `<span class="hex-legend" style="background: ${reg.color};" data-tooltip="${reg.name}">${reg.name}</span>`
+						}
+
+						data_html += hex + " ";
+
+						if (this.regions.find(rg => idx == (rg.start + rg.size - 1)))
+							data_html += `</span>`;
+					}
+					data_html += "<br>";
+				}
+
+				data.innerHTML = data_html;
+				legend.innerHTML = legend_html;	
+				index.innerHTML = index_html;
+				
+				document.querySelector("#view-hex").style = "display:inline-block;";
+			}
+			
+			const bytes = document.querySelector("#view-hex #bytes");
+			//this.activeObserver = new ResizeObserver(redraw);
+			//this.activeObserver.observe(bytes);
+
+			redraw();
+
+			document.querySelectorAll("[data-tooltip]").forEach(el => {
+				el.addEventListener("mouseover", () => {
+					const key = el.getAttribute("data-tooltip");
+					document.querySelectorAll(`[data-tooltip="${key}"]`).forEach(match => {
+						match.classList.add("highlight");
+					});
+				});
+
+				el.addEventListener("mouseout", () => {
+					const key = el.getAttribute("data-tooltip");
+					document.querySelectorAll(`[data-tooltip="${key}"]`).forEach(match => {
+						match.classList.remove("highlight");
+					});
+				});
+			});
+		}
+
+		drawChartView() {
+			throw new Error("Method 'drawChartView()' must be implemented");
+		}
+	}
+
+	class Map2D extends Map {
+		constructor(parsed) {
+			super(parsed.bytes);
+			this.input 	= parsed.labels[0];
+			this.output = parsed.labels[1];
+			this.size 	= Number(parsed.size);
+			this.ticks 	= parsed.ticks[0];
+			this.data 	= parsed.data;
+
+			const reg_size = this.size * valueType;
+
+			this.regions = [
+				{ start: 0, size: 4, color: "#396D1F", name: "Input" },
+				{ start: 4, size: 4, color: "#610C38", name: "Output" },
+				{ start: 8, size: 2, color: "#CC7722", name: "Size" },
+				{ start: 10, size: reg_size, color: "#392560", name: "Ticks" },
+				{ start: 10 + reg_size, size: reg_size, color: "#52554F", name: "Data" },
+			];
+		}
+		
+		drawChartView() {
+			document.getElementById("view-chart-rotation").style = "display:none;";
+			this.clearCanvas(canvas);
+			const renderer = new THREE.WebGLRenderer({
+				canvas: canvas,
+				antialias: true
+			});
+			currentRenderer = renderer;
+
+			renderer.setSize(canvas.width, canvas.height);
+			renderer.setClearColor(0x424242);
+			
+			const scene = new THREE.Scene();
+			const camera_2d = new THREE.OrthographicCamera(
+				0, canvas.clientWidth, canvas.clientHeight, 0, 0.01, 1000
+			);
+			camera_2d.position.z = 10;
+
+			const tickWidth = 2;
+			const tickLength = 12;
+			const pointSize = 4;
+			const axisWidth = 4;
+			const axisLength = 360;
+			const usableLength = 340;
+			const axisCenter = 100;
+
+			const lineMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+			const shadowMaterial = new THREE.MeshBasicMaterial({ color: 0x646464 });
+/*
+				const drawTextSprite = (text, x, y, z, angle) => {
+				const fontSize = 24;
+				
+				const measureCtx = document.createElement("canvas").getContext("2d");
+				measureCtx.font = `${fontSize}px sans-serif`;
+				const metrics = measureCtx.measureText(text);
+				const textWidth = 80;
+				const textHeight = fontSize * 1.2;
+
+				const drawCanvas = document.createElement("canvas");
+				drawCanvas.width = textWidth;
+				drawCanvas.height = textHeight;
+				const ctx = drawCanvas.getContext("2d");
+
+				ctx.font = `${fontSize}px sans-serif`;
+				ctx.textBaseLine = "top";
+				ctx.fillStyle = "#000";
+				ctx.fillText(text, 0, 0);
+
+				const texture = new THREE.CanvasTexture(drawCanvas);
+				texture.needsUpdate = true;
+				const material = new THREE.SpriteMaterial({
+					map: texture,
+					transparent: true
+				});
+				const sprite = new THREE.Sprite(material);
+				sprite.position.set(x, y, z);
+				sprite.scale.set(10, 10, 1);
+				//scene.add(sprite);				
+*/
+/*
+				const tmp = new THREE.Mesh(
+					new THREE.PlaneGeometry(24, 24),
+					new THREE.MeshBasicMaterial({ color: 0x123456 })
+				);
+				tmp.position.set(x, y, z);
+				scene.add(tmp);
+*/
+/*
+				const ctx = document.createElement("canvas").getContext("2d");
+				ctx.font = "24px sans-serif";
+				const w = Math.ceil(ctx.measureText(text).width);
+				const h = 26;
+				ctx.canvas.width = w;
+				ctx.canvas.height = h;
+				ctx.fillStyle = "white";
+				ctx.fillText(text, 0, h);
+				
+				const tex = new THREE.CanvasTexture(ctx.canvas);
+				const mat = new THREE.SpriteMaterial({
+					map: tex,
+					transparent: true
+				});
+				const sprite = new THREE.Sprite(mat);
+
+				//sprite.scale.set(w / 100, h / 100, 1);
+				sprite.position.set(x, y, z);
+				scene.add(sprite);
+*/
+				
+			const drawLineBetweenPoints = (a, b, thickness, material) => {
+				const dx = b.x - a.x;
+				const dy = b.y - a.y;
+				const len = Math.sqrt(dx * dx + dy * dy);
+				const angle = Math.atan2(dx, dy);
+
+				const mesh = new THREE.Mesh(
+					new THREE.PlaneGeometry(thickness, len)
+						.rotateZ(-angle)
+						.translate((a.x + b.x) / 2, (a.y + b.y) / 2, 0),
+					material
+				);
+				scene.add(mesh);
+			}
+			
+			//drawTextSprite(this.input, 220, 30, 0, 0);
+			/*	
+			const bg_size = usableLength - (axisWidth / 2);
+			scene.add(new THREE.Mesh(
+				new THREE.PlaneGeometry(bg_size, bg_size)
+					.translate(axisCenter + (bg_size / 2), axisCenter + (bg_size / 2), 0),
+				new THREE.MeshBasicMaterial({ color: 0x525252 })
+			));
+			*/
+
+			drawLineBetweenPoints(
+				new THREE.Vector3(axisCenter, axisCenter - (axisWidth / 2), 0),
+				new THREE.Vector3(axisCenter, axisCenter + axisLength, 0),
+				axisWidth,
+				lineMaterial
+			);
+
+			drawLineBetweenPoints(
+				new THREE.Vector3(axisCenter - (axisWidth / 2), axisCenter, 0),
+				new THREE.Vector3(axisCenter + axisLength, axisCenter, 0),
+				axisWidth,
+				lineMaterial
+			);
+
+			const maxTick = Math.max(Math.max(...this.ticks), 0.1);
+			const maxData = Math.max(Math.max(...this.data), 0.1);
+			const minData = Math.min(...this.data);
+			
+			for (let i = 0; i < this.ticks.length; i++) {
+				const x = usableLength * (this.ticks[i] / maxTick);
+				const y = usableLength * (this.data[i] / maxData);
+				/*
+				drawLineBetweenPoints(
+					new THREE.Vector3(axisCenter + x, axisCenter + y, 0),
+					new THREE.Vector3(axisCenter + x, axisCenter + (tickLength / 2), 0),
+					tickWidth,
+					shadowMaterial
+				);
+
+				drawLineBetweenPoints(
+					new THREE.Vector3(axisCenter + (tickLength / 2), axisCenter + y, 0),
+					new THREE.Vector3(axisCenter + x, axisCenter + y, 0),
+					tickWidth,
+					shadowMaterial
+				);
+				*/
+				drawLineBetweenPoints(
+					new THREE.Vector3(axisCenter + x, axisCenter + (tickLength / 2), 0),
+					new THREE.Vector3(axisCenter + x, axisCenter - (tickLength / 2), 0), 
+					tickWidth,
+					lineMaterial
+				);
+				
+				drawLineBetweenPoints(
+					new THREE.Vector3(axisCenter - (tickLength / 2), axisCenter + y),
+					new THREE.Vector3(axisCenter + (tickLength / 2), axisCenter + y),
+					tickWidth,
+					lineMaterial
+				);	
+				
+				if (i < this.ticks.length - 1) {
+
+					const avgData = (this.data[i] + this.data[i + 1]) / 2;
+					const normData = normalize(avgData, minData, maxData);
+
+					const next_x = usableLength * (this.ticks[i + 1] / maxTick);
+					const next_y = usableLength * (this.data[i + 1] / maxData);
+
+					drawLineBetweenPoints(
+						new THREE.Vector3(axisCenter + x, axisCenter + y, 0),
+						new THREE.Vector3(axisCenter + next_x, axisCenter + next_y, 0),
+						tickWidth,
+						new THREE.MeshBasicMaterial({ color: getGradientColor(normData) })
+					);
+				}
+				const point = new THREE.Mesh(
+					new THREE.PlaneGeometry(pointSize, pointSize)
+						.translate(axisCenter + x, axisCenter + y, 0),
+					new THREE.MeshBasicMaterial({ color: 0x000000 })
+				);
+				scene.add(point)
+			}
+			
+			renderer.render(scene, camera_2d);	
+		}
+	}
+
+	class Map3D extends Map {
+		constructor(parsed) {
+			super(parsed.bytes);
+			this.input_z 	= parsed.labels[0];
+			this.input_x 	= parsed.labels[1];
+			this.output 	= parsed.labels[2];
+			this.size_z 	= Number(parsed.size[0]);
+			this.size_x 	= Number(parsed.size[1]);
+			this.ticks_z 	= parsed.ticks[0];
+			this.ticks_x 	= parsed.ticks[1];
+			this.data 		= parsed.data;
+			
+			const ticks_z_size = this.size_z * valueType;
+			const ticks_x_size = this.size_x * valueType;
+			const data_off = 14 + ticks_z_size + ticks_x_size;
+			const data_size = this.size_z * this.size_x * valueType;
+
+			this.regions = [
+				{ start: 0, size: 4, color: "#396D1F", name: "Input_Z" },
+				{ start: 4, size: 4, color: "#71000F", name: "Input_X" },
+				{ start: 8, size: 4, color: "#610C38", name: "Output_Y" },
+				{ start: 12, size: 1, color: "#E7C800", name: "Size_Z" },
+				{ start: 13, size: 1, color: "#6A5ACD", name: "Size_X" },
+				{ start: 14, size: ticks_z_size, color: "#F99006", name: "Ticks_Z" },
+				{ start: 14 + ticks_z_size, size: ticks_x_size, color: "#392560", name: "Ticks_X" },
+				{ start: data_off, size: data_size, color: "#52554F", name: "Data" }
+			]
+		}
+
+		drawChartView() {
+			const slider = document.getElementById("view-chart-rotation");
+			slider.style = "display:inline;";
+			slider.value = 166;
+
+			this.clearCanvas(canvas);
+			const renderer = new THREE.WebGLRenderer({
+				canvas: canvas,
+				antialias: true
+			});
+			currentRenderer = renderer;
+
+			renderer.setSize(canvas.width, canvas.height);
+			renderer.setClearColor(0x424242);
+			
+			const scene = new THREE.Scene();
+
+			const len = 360;
+			const usableLength = 340;
+			const pointSize = 4;
+			const aspect = canvas.width / canvas.height;
+
+			const camera_3d = new THREE.PerspectiveCamera(
+				50,
+				aspect,
+				0.1,
+				1500
+			);
+			
+			const modelCenter = new THREE.Vector3(len / 2, len / 2, len / 2);
+			
+			const tickWidth = 1.25;
+			const tickLength = 20;
+
+			const maxTickX = Math.max(Math.max(...this.ticks_x), 0.1);
+			const maxTickZ = Math.max(Math.max(...this.ticks_z), 0.1);
+			const maxData = Math.max(Math.max(...this.data), 0.1);
+			const minData = Math.min(...this.data);
+			
+			const lineMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+			const drawLineBetweenPoints = (a, b, thickness, material) => {
+				const dx = b.x - a.x;
+				const dy = b.y - a.y;
+				const dz = b.z - a.z;
+				const len = Math.sqrt((dx * dx) + (dy * dy) + (dz * dz));
+
+				const geometry = new THREE.CylinderGeometry(thickness, thickness, len, 8);
+				const mesh = new THREE.Mesh(geometry, material);
+				mesh.position.set(
+					(a.x + b.x) / 2,
+					(a.y + b.y) / 2,
+					(a.z + b.z) / 2
+				);
+				mesh.lookAt(b);
+				mesh.rotateX(Math.PI / 2);
+
+				scene.add(mesh);
+			};
+			
+			const drawBillboardText = (label, position, size) => {
+				const font = "64px Arial";
+				const padding = 20;
+
+				const measureCanvas = document.createElement("canvas");
+				const measureCtx = measureCanvas.getContext("2d");
+				measureCtx.font = font;
+				
+				const textWidth = measureCtx.measureText(label).width;
+				const canvas = document.createElement("canvas");
+				canvas.width = Math.ceil(textWidth) + padding * 2;
+				canvas.height = 64 + padding * 2;
+
+				const ctx = canvas.getContext("2d");
+				ctx.font = font;
+				ctx.textAlign = "center";
+				ctx.textBaseline = "middle";
+				ctx.fillStyle = "#ffffff";
+				ctx.fillText(label, canvas.width / 2, canvas.height / 2);
+
+				const texture = new THREE.CanvasTexture(canvas);
+				texture.minFilter = THREE.LinearFilter;
+
+				const material = new THREE.MeshBasicMaterial({
+					map: texture,
+					transparent: true
+				});
+					
+				const aspect = canvas.width / canvas.height;
+				const geometry = new THREE.PlaneGeometry(size * aspect, size);
+
+				const mesh = new THREE.Mesh(geometry, material);
+				mesh.position.copy(position);
+				mesh.onBeforeRender = (renderer, scene, camera) => {
+					mesh.quaternion.copy(camera.quaternion);
+				};
+
+				scene.add(mesh);
+			};
+			
+			const drawPlaneBetweenPoints = (p, px, pxz, pz, thickness) => {
+				const normal = new THREE.Vector3()
+					.subVectors(px, p)
+					.cross(new THREE.Vector3().subVectors(pz, p))
+					.normalize();
+
+				const off = normal.clone().multiplyScalar(thickness / 2);
+
+				const vertices = [
+					p.clone().add(off),
+					px.clone().add(off),
+					pxz.clone().add(off),
+					pz.clone().add(off),
+
+					p.clone().sub(off),
+					px.clone().sub(off),
+					pxz.clone().sub(off),
+					pz.clone().sub(off)
+				];
+
+				const indices = [
+					0, 1, 2,
+					0, 2, 3,
+
+					4, 6, 5,
+					4, 7, 6,
+
+					0, 4, 5,
+					0, 5, 1,
+
+					1, 5, 6,
+					1, 6, 2,
+
+					2, 6, 7,
+					2, 7, 3,
+					
+					3, 7, 4,
+					3, 4, 0
+				];
+
+				const geometry = new THREE.BufferGeometry();
+				geometry.setFromPoints(vertices);
+				geometry.setIndex(indices);
+				geometry.computeVertexNormals();
+
+				const center = new THREE.Vector3()
+					.add(p).add(px).add(pxz).add(pz)
+					.multiplyScalar(0.25);
+				const norm = normalize((center.y / usableLength) * maxData, minData, maxData);
+				const material = new THREE.MeshBasicMaterial({ color: getGradientColor(norm) });
+				const mesh = new THREE.Mesh(geometry, material);
+				scene.add(mesh);
+			};
+
+			const normalize = (avg, min, max) => {
+				if (max == min)
+					return 1.0;
+				return ((avg - min) / (max - min));
+			};
+			
+			const getGradientColor = (norm) => {
+				if (norm < 0.5) {
+					const t = norm / 0.5;
+					return new THREE.Color(0, t, 1 - t);
+				} else {
+					const t = (norm - 0.5) / 0.5;
+					return new THREE.Color(t, 1 - t, 0);
+				}
+			};
+			
+			drawLineBetweenPoints(
+				new THREE.Vector3(0, 0, 0),
+				new THREE.Vector3(len, 0, 0),
+				1,
+				lineMaterial
+			);
+			drawBillboardText("X", new THREE.Vector3(len * 1.075, 0, 0), 40);
+			
+			drawLineBetweenPoints(
+				new THREE.Vector3(0, 0, 0),
+				new THREE.Vector3(0, len, 0),
+				1,
+				lineMaterial
+			);
+			drawBillboardText("Y", new THREE.Vector3(0, len * 1.075, 0), 40);
+
+			drawLineBetweenPoints(
+				new THREE.Vector3(0, 0, 0),
+				new THREE.Vector3(0, 0, len),
+				1,
+				lineMaterial
+			);
+			drawBillboardText("Z", new THREE.Vector3(0, 0, len * 1.075), 40);
+
+			const raycaster = new THREE.Raycaster();
+			const mouse = new THREE.Vector2();
+			const canvas_rect = canvas.getBoundingClientRect();
+			let INTERSECTED = null;
+			
+			const onMouseMove = (event) => {
+				mouse.x = ((event.clientX - canvas_rect.left) / canvas_rect.width) * 2 - 1;
+				mouse.y = -((event.clientY - canvas_rect.top) / canvas_rect.height) * 2 + 1;
+			};			
+			
+			canvas.addEventListener("mousemove", onMouseMove, false);
+			
+			const points = [];
+
+			for (let i = 0; i < this.size_x; i++) {
+				const x = usableLength * (this.ticks_x[i] / maxTickX);
+				
+				//xTick
+				drawLineBetweenPoints(
+					new THREE.Vector3(x, 0, -(tickLength / 2)),
+					new THREE.Vector3(x, 0, (tickLength / 2)),
+					tickWidth,
+					lineMaterial
+				);
+				
+				for (let j = 0; j < this.size_z; j++) {
+					const y = usableLength * (this.data[i + (this.size_x * j)] / maxData);
+					const z = usableLength * (this.ticks_z[j] / maxTickZ);
+					
+					//zTick
+					drawLineBetweenPoints(
+						new THREE.Vector3(-(tickLength / 2), 0, z),
+						new THREE.Vector3((tickLength / 2), 0, z),
+						tickWidth,
+						lineMaterial
+					);
+					
+					//yTick
+					drawLineBetweenPoints(
+						new THREE.Vector3(-(tickLength / 2), y, -(tickLength / 2)),
+						new THREE.Vector3((tickLength / 2), y, (tickLength / 2)),
+						tickWidth,
+						lineMaterial
+					);
+					if ((i < this.size_x - 1) && (j < this.size_z - 1)) {
+						const next_x = new THREE.Vector3(
+							usableLength * (this.ticks_x[i + 1] / maxTickX),
+							usableLength * (this.data[(i + 1) + (this.size_x * j)] / maxData),
+							usableLength * (this.ticks_z[j] / maxTickZ)
+						);
+						
+						const next_z = new THREE.Vector3(
+							usableLength * (this.ticks_x[i] / maxTickX),
+							usableLength * (this.data[i + (this.size_x * (j + 1))] / maxData),
+							usableLength * (this.ticks_z[j + 1] / maxTickZ)
+						);
+					
+						const next_xz = new THREE.Vector3(
+							usableLength * (this.ticks_x[i + 1] / maxTickX),
+							usableLength * (this.data[(i + 1) + (this.size_x * (j + 1))] / maxData),
+							usableLength * (this.ticks_z[j + 1] / maxTickZ)
+						);
+						
+						drawPlaneBetweenPoints(
+							new THREE.Vector3(x, y, z),
+							next_x,
+							next_xz,
+							next_z,
+							1
+						);
+						
+					}
+					
+					const point_geom = new THREE.BoxGeometry(pointSize, pointSize, pointSize); 
+					const point = new THREE.Mesh(
+						point_geom,
+						new THREE.MeshBasicMaterial({ color: 0x000000 })
+					);
+					
+					point.position.set(x, y, z);
+					scene.add(point);
+					points.push(point);
+				}
+			}
+			
+			const radius = 800;
+			
+			const animate = () => {
+				requestAnimationFrame(animate);
+				
+				raycaster.setFromCamera(mouse, camera_3d);
+				const intersects = raycaster.intersectObjects(points);
+
+				if (intersects.length > 0) {
+					const first = intersects[0].object;
+					if (INTERSECTED !== first) {
+						if (INTERSECTED)
+							INTERSECTED.material.color.set(0x000000);
+						
+						INTERSECTED = first;
+						INTERSECTED.material.color.set(0xff0000);
+					}
+				} else {
+					if (INTERSECTED) {
+						INTERSECTED.material.color.set(0x000000);
+						INTERSECTED = null;
+					}
+				}
+				
+				const angle = parseInt(slider.value) * (Math.PI / 180);
+
+				camera_3d.position.set(
+					modelCenter.x + radius * Math.cos(angle),
+					modelCenter.y + 200,
+					modelCenter.z + radius * Math.sin(angle)
+				);
+
+				camera_3d.lookAt(modelCenter);
+				renderer.render(scene, camera_3d);
+			}
+
+			animate();
+		}
+	}
+  
+	function getBytesFromFile(file, off) {
+		/*
+		return new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.onload = () => {
+				resolve(new Uint8Array(reader.result));
+			};
+			reader.onerror = reject;
+			reader.readAsArrayBuffer(file);
+		});
+		*/
+		const MAX_SIZE = 1024;
+		const end = Math.min(file.size, off + MAX_SIZE);
+		const slice = file.slice(off, end);
+
+		return new Promise((resolve, reject) => {
+			const reader = new FileReader();
+
+			reader.onload = () => {
+				const bytes = new Uint8Array(reader.result);
+				resolve(bytes);
+			};
+
+			reader.onerror = reject;
+			reader.readAsArrayBuffer(slice);
+		});
+	}
+
+	async function process(fileInput, dataTypeSelect, offsetInput, viewTypeSelect) {
+		if (fileInput.files.length === 0)
+			return;
+
+		const file = fileInput.files[0];
+		if (!file)
+			return;
+		
+		const parseOffsetInput = (offsetInput) => {
+			const value = offsetInput.value.trim();
+
+			if (/^0x/i.test(value))
+				return parseInt(value, 16);
+
+			if (/[a-fA-F]/.test(value) && /^[0-9a-fA-F]+$/.test(value))
+				return parseInt(value, 16);
+
+			if (/^[0-9]+$/.test(value))
+				return parseInt(value, 10);
+
+			exitError(`Invalid offset: ${value}`);
+			throw new Error(`Invalid offset: ${value}`);
+		};	
+		const off = parseOffsetInput(offsetInput);
+		const bytes = await getBytesFromFile(file, off);
+
+		switch(dataTypeSelect.value) {
+			case "BYTE":
+				valueType = BYTE;
+				break;
+			case "WORD":
+				valueType = WORD;
+				break;
+			default:
+				exitError("Unknown datatype");
+				throw new Error("Unknown datatype");
+		}
+		
+		const viewChart = document.getElementById("view-chart");
+		const viewHex = document.getElementById("view-hex");
+		const slider = document.getElementById("view-chart-rotation");
+		
+		const map = parseMap(bytes);
+		switch (viewTypeSelect.value) {
+			case "HEX":
+				viewChart.style = "display:none;";
+				viewHex.style = "display:inline-block;";
+				slider.style = "display:none;";
+				map.drawHexView();
+				break;
+			case "CHART":
+				map.clearView();
+				viewChart.style = "display:inline;";
+				slider.style = "display:inline;";
+				map.drawChartView();
+				break;
+			default:
+				exitError("Unknown viewtype");
+				throw new Error("Unknown viewtype");
+		}
+	}
+	
+	document.addEventListener("DOMContentLoaded", () => {
+		const fileInput = document.getElementById("file-input");
+		const dataTypeSelect = document.getElementById("datatype-select");
+		const offsetInput = document.getElementById("offset-input");
+		const processButton = document.getElementById("process-button");
+		const viewTypeSelect = document.getElementById("viewtype-select");
+
+		processButton.addEventListener("click", () => {
+			process(fileInput, dataTypeSelect, offsetInput, viewTypeSelect);
+		});
+	});
+  </script>
+</body>
+</html>
+
