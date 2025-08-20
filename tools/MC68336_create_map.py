@@ -19,13 +19,13 @@ map2D_comments = (
 )
 
 map3D_comments = (
-	"in_y", 
+	"in_z", 
 	"in_x", 
-	"out", 
-	"y", 
+	"out_y", 
+	"z", 
 	"x", 
-	"y_values",
-	"x_values",
+	"ticks_z",
+	"ticks_x",
 	"data"
 ) 
 
@@ -87,7 +87,7 @@ def map3D(addr):
 	except CancelledException:
 		lbl_text = str(lbl_addr)
 
-	createLabel(lbl_addr, "{}_{}x{}_Map3D".format(lbl_text, y_size, x_size), True)
+	createLabel(lbl_addr, "{}_{}x{}_Byte_Map3D".format(lbl_text, y_size, x_size), True)
 
 def pointer_starts_with(addr, prefix=0x00FF):
 	mem = currentProgram.getMemory()

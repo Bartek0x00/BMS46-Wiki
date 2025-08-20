@@ -121,14 +121,29 @@
 	let canvas = document.getElementById("view-chart");
 	canvas.width = 480;
 	canvas.height = 480;
-			
+	
 	let currentRenderer = null;
 	const BYTE = 1;
 	const WORD = 2;
 	const DWORD = 4;
 	const FLOAT = 4;
 	let valueType = BYTE;
-		
+
+	let assignMap = null;
+	let assignMapPath = "../../assets/maps/maps.json";
+	
+	(async () => {
+		try {
+			const resp = await fetch(assignMapPath);
+			if (resp.ok)
+				assignMap = await resp.json();
+			else
+				console.warn(`Assignment map file not found at ${assignMapPath}`);
+		} catch (err) {
+			console.warn(`Assignment map file not found at ${assignMapPath}`);
+		}
+	})();
+
 	function normalize(avg, min, max) {
 		if (max == min)
 			return 1.0;
@@ -177,15 +192,41 @@
 		}
 		return arr;
 	}
-    
+	
 	function addrStringify(addr) {
-		//TODO: Add ghidra symbol name lookup
 		const hex = (addr[0] << 24) | 
 					(addr[1] << 16) | 
 					(addr[2] << 8) | 
 					(addr[3] << 0);
 
-		return ("0x" + hex.toString(16).padStart(8, '0'));
+		const key = hex.toString(16).padStart(6, '0');
+		const obj = assignMap[key];
+		
+		if (obj) {
+			if (obj.unit != "")
+				return obj.name + " " + obj.unit;
+			else
+				return obj.name;
+		} else
+			return "0x" + key.padStart(8, '0');
+	}
+
+	function getScaler(addr) {
+		const hex = (addr[0] << 24) |
+					(addr[1] << 16) |
+					(addr[2] << 8) |
+					(addr[3] << 0);
+
+		const key = hex.toString(16).padStart(6, '0');
+		const obj = assignMap[key];
+		
+		if (obj) {
+			if (obj.type == "byte" || obj.type == "word")
+				return value => Math.round((value * obj.factor) + obj.off);
+			else
+				return value => ((value * obj.factor) + obj.off).toFixed(2);
+		} else
+			return value => value;
 	}
 	
 	function parseMap(bytes) {
@@ -206,7 +247,7 @@
 				`The bytes [0x00 - 0x03] do not make a valid pointer.\n` +
 				`Check data integrity, endianness and try again.`
 			);
-		parsed.labels.push(addrStringify(addr));
+		parsed.labels.push(addr);
 
 		addr = get(bytes, idx, DWORD);
 		idx += DWORD;
@@ -216,11 +257,11 @@
 				`The bytes [0x04 - 0x07] do not make a valid pointer.\n` +
 				`Check data integrity, endianness and try again.`
 			);
-		parsed.labels.push(addrStringify(addr));
+		parsed.labels.push(addr);
 		
 		addr = get(bytes, idx, DWORD);
 		if ((addr[0] == 0x00) && (addr[1] == 0xFF)) {
-			parsed.labels.push(addrStringify(addr));
+			parsed.labels.push(addr);
 			idx += DWORD;
 
 			parsed.size.push(get(bytes, idx, BYTE));
@@ -427,6 +468,7 @@
 			const tickWidth = 2;
 			const tickLength = 12;
 			const pointSize = 4;
+			const pointHitboxSize = 10;
 			const axisWidth = 4;
 			const axisLength = 360;
 			const usableLength = 340;
@@ -434,67 +476,38 @@
 
 			const lineMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
 			const shadowMaterial = new THREE.MeshBasicMaterial({ color: 0x646464 });
-/*
-				const drawTextSprite = (text, x, y, z, angle) => {
-				const fontSize = 24;
-				
-				const measureCtx = document.createElement("canvas").getContext("2d");
-				measureCtx.font = `${fontSize}px sans-serif`;
-				const metrics = measureCtx.measureText(text);
-				const textWidth = 80;
-				const textHeight = fontSize * 1.2;
+			
+			const drawTextSprite = (text, position, rotation, size) => {
+				const canvas = document.createElement("canvas");
+				const ctx = canvas.getContext("2d");
 
-				const drawCanvas = document.createElement("canvas");
-				drawCanvas.width = textWidth;
-				drawCanvas.height = textHeight;
-				const ctx = drawCanvas.getContext("2d");
+				ctx.font = `${size}px Monospace`;
+				const metrics = ctx.measureText(text);
 
-				ctx.font = `${fontSize}px sans-serif`;
-				ctx.textBaseLine = "top";
-				ctx.fillStyle = "#000";
-				ctx.fillText(text, 0, 0);
+				canvas.width = metrics.width + size * 2;
+				canvas.height = size * 2;
 
-				const texture = new THREE.CanvasTexture(drawCanvas);
-				texture.needsUpdate = true;
-				const material = new THREE.SpriteMaterial({
-					map: texture,
-					transparent: true
-				});
-				const sprite = new THREE.Sprite(material);
-				sprite.position.set(x, y, z);
-				sprite.scale.set(10, 10, 1);
-				//scene.add(sprite);				
-*/
-/*
-				const tmp = new THREE.Mesh(
-					new THREE.PlaneGeometry(24, 24),
-					new THREE.MeshBasicMaterial({ color: 0x123456 })
-				);
-				tmp.position.set(x, y, z);
-				scene.add(tmp);
-*/
-/*
-				const ctx = document.createElement("canvas").getContext("2d");
-				ctx.font = "24px sans-serif";
-				const w = Math.ceil(ctx.measureText(text).width);
-				const h = 26;
-				ctx.canvas.width = w;
-				ctx.canvas.height = h;
+				ctx.font = `${size}px Monospace`;
 				ctx.fillStyle = "white";
-				ctx.fillText(text, 0, h);
-				
-				const tex = new THREE.CanvasTexture(ctx.canvas);
-				const mat = new THREE.SpriteMaterial({
-					map: tex,
-					transparent: true
-				});
-				const sprite = new THREE.Sprite(mat);
+				ctx.textAlign = "center";
+				ctx.textBaseline = "middle";
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				ctx.fillText(text, canvas.width / 2, canvas.height / 2);
 
-				//sprite.scale.set(w / 100, h / 100, 1);
-				sprite.position.set(x, y, z);
+				const texture = new THREE.CanvasTexture(canvas);
+				texture.needsUpdate = true;
+
+				const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
+				const sprite = new THREE.Sprite(material);
+
+				sprite.scale.set(canvas.width, canvas.height, 1);
+
+				sprite.position.copy(position);
+				sprite.material.rotation = rotation * (Math.PI / 180);
+
 				scene.add(sprite);
-*/
-				
+			};
+
 			const drawLineBetweenPoints = (a, b, thickness, material) => {
 				const dx = b.x - a.x;
 				const dy = b.y - a.y;
@@ -508,18 +521,32 @@
 					material
 				);
 				scene.add(mesh);
-			}
-			
-			//drawTextSprite(this.input, 220, 30, 0, 0);
-			/*	
-			const bg_size = usableLength - (axisWidth / 2);
-			scene.add(new THREE.Mesh(
-				new THREE.PlaneGeometry(bg_size, bg_size)
-					.translate(axisCenter + (bg_size / 2), axisCenter + (bg_size / 2), 0),
-				new THREE.MeshBasicMaterial({ color: 0x525252 })
-			));
-			*/
 
+				return mesh;
+			}
+
+			const hasClearance = (arr, idx, thresh) => {
+				for (let i = 0; i < idx; i++) {
+					if ((usableLength * Math.abs(arr[i] - arr[idx])) < thresh)
+						return false;
+				}
+				return true;
+			};
+			
+			drawTextSprite(
+				addrStringify(this.input),
+				new THREE.Vector3(canvas.width / 2, 20, 0),
+				0,
+				28
+			);
+
+			drawTextSprite(
+				addrStringify(this.output),
+				new THREE.Vector3(20, canvas.height / 2, 0),
+				-90,
+				28
+			);
+			
 			drawLineBetweenPoints(
 				new THREE.Vector3(axisCenter, axisCenter - (axisWidth / 2), 0),
 				new THREE.Vector3(axisCenter, axisCenter + axisLength, 0),
@@ -538,24 +565,59 @@
 			const maxData = Math.max(Math.max(...this.data), 0.1);
 			const minData = Math.min(...this.data);
 			
+			let lastSpriteX = -100;
+			let lastSpriteXDir = -1;
+			let lastSpriteY = -100;
+			
+			const raycaster = new THREE.Raycaster();
+			const mouse = new THREE.Vector2();
+			const canvas_rect = canvas.getBoundingClientRect();
+			let INTERSECTED = null;
+			let HOVER_LINE_X = null;
+			let HOVER_LINE_Y = null;
+
+			const onMouseMove = (event) => {
+				mouse.x = ((event.clientX - canvas_rect.left) / canvas_rect.width) * 2 - 1;
+				mouse.y = -((event.clientY - canvas_rect.top) / canvas_rect.height) * 2 + 1;
+			};			
+			
+			canvas.addEventListener("mousemove", onMouseMove, false);
+			
+			const points = [];
+				
 			for (let i = 0; i < this.ticks.length; i++) {
 				const x = usableLength * (this.ticks[i] / maxTick);
 				const y = usableLength * (this.data[i] / maxData);
-				/*
-				drawLineBetweenPoints(
-					new THREE.Vector3(axisCenter + x, axisCenter + y, 0),
-					new THREE.Vector3(axisCenter + x, axisCenter + (tickLength / 2), 0),
-					tickWidth,
-					shadowMaterial
-				);
+				
+				if (hasClearance(this.ticks, i, 44 * maxTick)) {
+					drawTextSprite(
+						getScaler(this.input)(this.ticks[i]),
+						new THREE.Vector3(axisCenter + x, axisCenter - 25, 0),
+						0,
+						16
+					);
+					lastSpriteX = axisCenter + x;
+				} else if (hasClearance(this.ticks, i, 22 * maxTick)) {
+					drawTextSprite(
+						getScaler(this.input)(this.ticks[i]),
+						new THREE.Vector3(axisCenter + x, axisCenter - 35 + (lastSpriteXDir * 10), 0),
+						0,
+						16
+					);
+					lastSpriteX = axisCenter + x;
+					lastSpriteXDir = -lastSpriteXDir;
+				}
 
-				drawLineBetweenPoints(
-					new THREE.Vector3(axisCenter + (tickLength / 2), axisCenter + y, 0),
-					new THREE.Vector3(axisCenter + x, axisCenter + y, 0),
-					tickWidth,
-					shadowMaterial
-				);
-				*/
+				if (hasClearance(this.data, i, 14 * maxData)) {
+					drawTextSprite(
+						getScaler(this.output)(this.data[i]),
+						new THREE.Vector3(axisCenter - 30, axisCenter + y, 0),
+						0,
+						16
+					);
+					lastSpriteY = axisCenter + y;
+				}
+
 				drawLineBetweenPoints(
 					new THREE.Vector3(axisCenter + x, axisCenter + (tickLength / 2), 0),
 					new THREE.Vector3(axisCenter + x, axisCenter - (tickLength / 2), 0), 
@@ -590,10 +652,98 @@
 						.translate(axisCenter + x, axisCenter + y, 0),
 					new THREE.MeshBasicMaterial({ color: 0x000000 })
 				);
-				scene.add(point)
+				scene.add(point);
+				points.push(point);
+
+				const hitbox = new THREE.Mesh(
+					new THREE.PlaneGeometry(pointHitboxSize, pointHitboxSize)
+						.translate(axisCenter + x, axisCenter + y, 0),
+					new THREE.MeshBasicMaterial({ visible: false })
+				);
+				scene.add(hitbox);
+				points.push(hitbox);
+				point.userData.hitbox = hitbox;
+				point.userData.center = new THREE.Vector3(
+					axisCenter + x,
+					axisCenter + y,
+					0
+				);
+				hitbox.userData.visual = point;
 			}
 			
-			renderer.render(scene, camera_2d);	
+			const animate = () => {
+				requestAnimationFrame(animate);
+				
+				raycaster.setFromCamera(mouse, camera_2d);
+				const intersects = raycaster.intersectObjects(points);
+
+				if (intersects.length > 0) {
+					const hit = intersects[0].object;
+					const first = hit.userData.visual || hit;
+
+					if (INTERSECTED !== first) {
+						if (INTERSECTED) {
+							INTERSECTED.material.color.set(0x000000);
+							
+							if (HOVER_LINE_X) {
+								scene.remove(HOVER_LINE_X);
+								HOVER_LINE_X.geometry.dispose();
+								HOVER_LINE_X.material.dispose();
+								HOVER_LINE_X = null;
+							}
+
+							if (HOVER_LINE_Y) {
+								scene.remove(HOVER_LINE_Y);
+								HOVER_LINE_Y.geometry.dispose();
+								HOVER_LINE_Y.material.dispose();
+								HOVER_LINE_Y = null;
+							}
+						}
+
+						INTERSECTED = first;
+						INTERSECTED.material.color.set(0xffffff);
+
+						const pos = INTERSECTED.userData.center;
+
+						HOVER_LINE_X = drawLineBetweenPoints(
+							pos,
+							new THREE.Vector3(pos.x, axisCenter + (tickLength / 2), 0),
+							tickWidth,
+							shadowMaterial
+						);
+
+						HOVER_LINE_Y = drawLineBetweenPoints(
+							pos,
+							new THREE.Vector3(axisCenter + (tickLength / 2), pos.y, 0),
+							tickWidth,
+							shadowMaterial
+						);
+					}
+				} else {
+					if (INTERSECTED) {
+						INTERSECTED.material.color.set(0x000000);
+						INTERSECTED = null;
+					}
+
+					if (HOVER_LINE_X) {
+						scene.remove(HOVER_LINE_X);
+						HOVER_LINE_X.geometry.dispose();
+						HOVER_LINE_X.material.dispose();
+						HOVER_LINE_X = null;
+					}
+
+					if (HOVER_LINE_Y) {
+						scene.remove(HOVER_LINE_Y);
+						HOVER_LINE_Y.geometry.dispose();
+						HOVER_LINE_Y.material.dispose();
+						HOVER_LINE_Y = null;
+					}
+
+				}	
+				renderer.render(scene, camera_2d);	
+			}
+
+			animate();
 		}
 	}
 
@@ -906,6 +1056,7 @@
 			
 			const radius = 800;
 			
+
 			const animate = () => {
 				requestAnimationFrame(animate);
 				

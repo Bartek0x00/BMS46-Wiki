@@ -8,17 +8,18 @@
 // Engine_RPM Med vs High limit (6200 RPM) 0x917f
 
 // Engine_LOAD addr 0x00FF837C
-// Engine_LOAD multiplier x(100 / 255) * 100(%)
+// Engine_LOAD multiplier x0.715
 
-// Engine_Throttle multiplier x(100 / 255) * 100(%)
+// Engine_Throttle multiplier x0.5625
 // Engine_Throttle move_toward_multiplier x(128 / 255)
 
 // Engine_Coolant_Temp addr 0x00FF832A
 // Engine_Coolant_Temp move_toward_multiplier x(48 / 255)
-// Engine_Coolant_Temp multiplier x - 40 (Celsius)
+// Engine_Coolant_Temp multiplier x0.75 - 48 (Celsius)
 
 // Engine_Intake_Air_Temp multiplier x - 40 (Celsius)
 
+// Ignition_Advance multiplier x0.75 - 22.5
 
 typedef unsigned char byte;
 
