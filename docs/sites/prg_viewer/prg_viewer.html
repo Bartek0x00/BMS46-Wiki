@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>PRG viewer</title>
+	<meta charset="utf-8">
+	<style>
+		body {
+			color: white;
+			font-family: monospace;
+			font-size: 20px;
+			background-color: #121412;
+		}
+		
+		table {
+			border-collapse: collapse;
+			margin-top: 30px;
+			margin-bottom: 30px;
+			min-width: 320px;
+			background-color: #2d2d2d;
+		}		
+		
+		th {
+			border: 2px solid white;
+			padding: 8px;
+		}
+		
+		td {
+			border: 2px solid white;
+			padding: 8px;
+		}	
+		
+		.collapsed td {
+			display: none;
+		}
+
+		.collapsed {
+			height: 1.5em;
+			overflow: hidden;
+		}
+
+		caption {
+			font-size: 24px;
+			margin-bottom: 5px;
+		}
+
+		.hideBtn {
+			cursor: pointer;
+			user-select: none;
+			position: absolute;
+			left: 7px;
+			background-color: #2d2d2d;
+		}
+
+		.hideBtn:hover {
+			background-color: #3d3d3d;
+		}
+
+	</style>
+	<script>
+		class BEST_Disassembly {
+			static OpCodeNames = new Map([
+				[0x00, "move"],
+				[0x01, "clear"],
+				[0x02, "comp"],
+				[0x03, "subb"],
+				[0x04, "adds"],
+				[0x05, "mult"],
+				[0x06, "divs"],
+				[0x07, "and"],
+				[0x08, "or"],
+				[0x09, "xor"],
+				[0x0A, "not"],
+				[0x0B, "jump"],
+				[0x0C, "jtsr"],
+				[0x0D, "ret"],
+				[0x0E, "jc"],
+				[0x0F, "jae"],
+				[0x10, "jz"],
+				[0x11, "jnz"],
+				[0x12, "jv"],
+				[0x13, "jnv"],
+				[0x14, "jmi"],
+				[0x15, "jpl"],
+				[0x16, "clrc"],
+				[0x17, "setc"],
+				[0x18, "asr"],
+				[0x19, "lsl"],
+				[0x1A, "lsr"],
+				[0x1B, "asl"],
+				[0x1C, "nop"],
+				[0x1D, "eoj"],
+				[0x1E, "push"],
+				[0x1F, "pop"],
+				[0x20, "scmp"],
+				[0x21, "scat"],
+				[0x22, "scut"],
+				[0x23, "slen"],
+				[0x24, "spaste"],
+				[0x25, "serase"],
+				[0x26, "xconnect"],
+				[0x27, "xhangup"],
+				[0x28, "xsetpar"],
+				[0x29, "xawlen"],
+				[0x2A, "xsend"],
+				[0x2B, "xsendf"],
+				[0x2C, "xrequf"],
+				[0x2D, "xstopf"],
+				[0x2E, "xkeyb"],
+				[0x2F, "xstate"],
+				[0x30, "xboot"],
+				[0x31, "xreset"],
+				[0x32, "xtype"],
+				[0x33, "xvers"],
+				[0x34, "ergb"],
+				[0x35, "ergw"],
+				[0x36, "ergd"],
+				[0x37, "ergi"],
+				[0x38, "ergr"],
+				[0x39, "ergs"],
+				[0x3A, "a2flt"],
+				[0x3B, "fadd"],
+				[0x3C, "fsub"],
+				[0x3D, "fmul"],
+				[0x3E, "fdiv"],
+				[0x3F, "ergy"],
+				[0x40, "enewset"],
+				[0x41, "etag"],
+				[0x42, "xreps"],
+				[0x43, "gettmr"],
+				[0x44, "settmr"],
+				[0x45, "sett"],
+				[0x46, "clrt"],
+				[0x47, "jt"],
+				[0x48, "jnt"],
+				[0x49, "addc"],
+				[0x4A, "subc"],
+				[0x4B, "break"],
+				[0x4C, "clrv"],
+				[0x4D, "eerr"],
+				[0x4E, "popf"],
+				[0x4F, "pushf"], 
+				[0x50, "atsp"],
+				[0x51, "swap"],
+				[0x52, "setspc"],
+				[0x53, "srevrs"],
+				[0x54, "stoken"],
+				[0x55, "parb"],
+				[0x56, "parw"],
+				[0x57, "parl"],
+				[0x58, "pars"],
+				[0x59, "fclose"],
+				[0x5A, "jg"],
+				[0x5B, "jge"],
+				[0x5C, "jl"],
+				[0x5D, "jle"],
+				[0x5E, "ja"],
+				[0x5F, "jbe"],
+				[0x60, "fopen"],
+				[0x61, "fread"],
+				[0x62, "freadln"],
+				[0x63, "fseek"],
+				[0x64, "fseekln"],
+				[0x65, "ftell"],
+				[0x66, "ftellln"],
+				[0x67, "a2fix"],
+				[0x68, "fix2flt"],
+				[0x69, "parr"],
+				[0x6A, "test"],
+				[0x6B, "wait"],
+				[0x6C, "date"],
+				[0x6D, "time"],
+				[0x6E, "xbatt"],
+				[0x6F, "tosp"],
+				[0x70, "xdownl"],
+				[0x71, "xgetport"],
+				[0x72, "xignit"],
+				[0x73, "xloopt"],
+				[0x74, "xprog"],
+				[0x75, "xraw"],
+				[0x76, "xsetport"],
+				[0x77, "xsireset"],
+				[0x78, "xstoptr"],
+				[0x79, "fix2hex"],
+				[0x7A, "fix2dez"],
+				[0x7B, "tabset"],
+				[0x7C, "tabseek"],
+				[0x7D, "tabget"],
+				[0x7E, "strcat"],
+				[0x7F, "pary"],
+				[0x80, "parn"],
+				[0x81, "ergc"],
+				[0x82, "ergl"],
+				[0x83, "tabline"],
+				[0x84, "xsendr"],
+				[0x85, "xrecv"],
+				[0x86, "xinfo"],
+				[0x87, "flt2a"],
+				[0x88, "setflt"],
+				[0x89, "cfgig"],
+				[0x8A, "cfgsg"],
+				[0x8B, "cfgis"],
+				[0x8C, "a2y"],
+				[0x8D, "xparraw"],
+				[0x8E, "hex2y"],
+				[0x8F, "strcmp"],
+				[0x90, "strlen"],
+				[0x91, "y2bcd"],
+				[0x92, "y2hex"],
+				[0x93, "shmset"],
+				[0x94, "shmget"],
+				[0x95, "ergsysi"],
+				[0x96, "flt2fix"],
+				[0x97, "iupdate"],
+				[0x98, "irange"],
+				[0x99, "iincpos"],
+				[0x9A, "tabseeku"],
+				[0x9B, "flt2y4"],
+				[0x9C, "flt2y8"],
+				[0x9D, "y42flt"],
+				[0x9E, "y82flt"],
+				[0x9F, "plink"],
+				[0xA0, "pcall"],
+				[0xA1, "fcomp"],
+				[0xA2, "plinkv"],
+				[0xA3, "ppush"],
+				[0xA4, "ppop"],
+				[0xA5, "ppushflt"],
+				[0xA6, "ppopflt"],
+				[0xA7, "ppushy"],
+				[0xA8, "ppopy"],
+				[0xA9, "pjtsr"],
+				[0xAA, "tabsetex"],
+				[0xAB, "ufix2dez"],
+				[0xAC, "generr"],
+				[0xAD, "ticks"],
+				[0xAE, "waitex"],
+				[0xAF, "xopen"],
+				[0xB0, "xclose"],
+				[0xB1, "xcloseex"],
+				[0xB2, "xswitch"],
+				[0xB3, "xsendex"],
+				[0xB4, "xrecvex"],
+				[0xB5, "ssize"],
+				[0xB6, "tabcols"],
+				[0xB7, "tabrows"]
+			]);
+
+			static disasm(rawbytes) {
+				const result = [];
+				for (let i = 0; i < rawbytes.length - 1; i++) {
+					result.push({
+						opcode: BEST_Disassembly.OpCodeNames.get(rawbytes[i]), 
+						operand: "0x" + rawbytes[i + 1].toString(16).padStart(2, "0")
+					});
+				}
+				return result;
+			}
+		}
+		
+		class BEST_ResultDesc {
+			name = "";
+			type = "";
+			comment = "";
+		}
+
+		class BEST_Job {
+			name = "";
+			comment = "";
+			results = [];
+			code = [];
+			disasm = {};
+		}
+
+		class BEST_Table {
+			name = "";
+			head = [];
+			data = [];
+		}
+
+		class BEST_Object {
+			constructor(arrayBuffer) {
+				this.buffer = arrayBuffer;
+				this.view = new DataView(this.buffer);
+				this.file_off = 0;
+				this.jobs = {};
+				this.tables = {};
+
+				// Get the first table's address
+				const tableAddr = this.readUint32(0x84);
+				
+				// Get the first table's bytes
+				const tableContent = this.readUint64(tableAddr);
+				if (!tableContent) {
+					console.log("BEST_Object(): Invalid PRG file");
+					throw Error("BEST_Object(): Invalid PRG file");
+				}
+
+				this.readInfo();
+				this.readJobs();
+				this.readJobDesc();
+				this.readTables();
+			}
+			
+			readInfo() {
+				const infoOff = this.readUint32(0x94);
+				const v = this.readAndDecrypt(3, infoOff);
+				this.version = Array.from(v).map(n => n.toString()).join('.');
+
+				const r = this.readAndDecrypt(4, infoOff + 3);
+				this.revision = Array.from(r).map(n => n.toString()).join('.');
+
+				const lc = this.readAndDecrypt(36, infoOff + 72);
+				this.lastChange = new TextDecoder("ascii").decode(lc).replace(/\0/g, "");
+			}
+
+			readJobs() {
+				const jobOff = this.readUint32(0x88);
+				const jobCount = this.readUint32(jobOff);
+				
+				let infoBuff;
+				for (let i = 0; i < jobCount; i++) {
+					infoBuff = this.readAndDecrypt(68, (jobOff + 4) + (i * 68));
+					const job = new BEST_Job();
+					job.name = String.fromCharCode(...infoBuff).split('\0')[0].toUpperCase();
+					
+					const codeOff = new DataView(infoBuff.buffer, infoBuff.byteOffset, infoBuff.byteLength).getUint32(64, true);
+					
+					let jobLen = 0;
+					for (; ; jobLen += 3) {
+						let eoj = this.readAndDecrypt(4, codeOff + jobLen);
+						
+						const bytecode = new DataView(eoj.buffer, eoj.byteOffset, 4).getUint32(0, true);
+						if (bytecode == 0x1d11001d) {
+							break;
+						}
+					}
+					
+					job.code = this.readAndDecrypt(jobLen, codeOff);
+					job.disasm = BEST_Disassembly.disasm(job.code);
+					this.jobs[job.name] = job;
+				}
+			}
+			
+			readJobDesc() {
+				const infoOff = this.readUint32(0x90);
+				const descSize = this.readUint32(infoOff);
+				let infoBuff = this.readAndDecrypt(descSize, infoOff + 4);
+				
+				let recordOffset = 0;
+				let lastOffset = 0;
+				let currentResult = {};
+				let jobName = "";
+
+				while (recordOffset < descSize) {
+					let currentByte = infoBuff[recordOffset++];
+					if (currentByte != 10)
+						continue;
+
+					const datasetSlice = infoBuff.slice(lastOffset, recordOffset);
+					let [key, value] = new TextDecoder("ascii")
+						.decode(datasetSlice)
+						.replace(/\n/g, "")
+						.trim()
+						.split(":", 2);
+
+					key = key.toUpperCase();
+					value = value.toUpperCase();
+					
+					const isNotEmpty = (obj) => {
+						return !(obj && Object.keys(obj).length === 0);
+					}
+
+					switch(key) {
+					case "JOBNAME":
+						if (isNotEmpty(currentResult))
+							this.jobs[jobName].results.push(currentResult);
+
+						currentResult = new BEST_ResultDesc();
+						jobName = value;
+						break;
+					case "JOBCOMMENT":
+						if (jobName != "")
+							this.jobs[jobName].comment = value;
+						break;
+					case "RESULT":
+						if (isNotEmpty(currentResult))
+							currentResult.name = value;
+						break;
+					case "RESULTTYPE":
+						if (isNotEmpty(currentResult))
+							currentResult.type = value;
+						break;
+					case "RESULTCOMMENT":
+						if (isNotEmpty(currentResult))
+							currentResult.comment = value;
+						break;
+					}
+					
+					lastOffset = recordOffset;
+				}
+			}
+
+			readTables() {
+				const tableOff = this.readUint32(0x84);
+				const rawCount = this.readAndDecrypt(4, tableOff);
+				let tableCount = new DataView(rawCount.buffer, rawCount.byteOffset, 4).getUint32(0, true);
+				let cellOff = tableOff + 4;
+
+				for (let i = 0; i < tableCount; i++) {
+					let tableBuffer = this.readAndDecrypt(80, (tableOff + 4) + (i * 80));
+					let table = new BEST_Table();
+					table.name = String.fromCharCode(...tableBuffer.slice(0, 64)).split("\0")[0].toUpperCase();
+					
+					const tableBufferView = new DataView(tableBuffer.buffer, tableBuffer.byteOffset, tableBuffer.byteLength);
+					let tableColOff = tableBufferView.getUint32(0x40, true);
+					let tableColCount = tableBufferView.getUint32(0x48, true);
+					let tableRowCount = tableBufferView.getUint32(0x4C, true);
+					
+					let startingCol = tableColOff;
+					for (let c = 0; c < tableColCount; c++) {
+						let k = 0;
+						let tableItemBuffer = [];
+						
+						do {
+							tableItemBuffer[k] = this.readAndDecrypt(1, startingCol + k++);
+						} while (tableItemBuffer[k - 1] != 0);
+
+						let header = String.fromCharCode(...tableItemBuffer.slice(0, k - 1)).toUpperCase();
+						table.head.push(header);
+						startingCol += k;
+					}
+					
+					for (let row = 0; row < tableRowCount; row++) {
+						table.data.push([])
+						let tableItemBuffer = [];
+						
+						for (let col = 0; col < tableColCount; col++) {
+							let k = 0;
+							do {
+								tableItemBuffer[k] = this.readAndDecrypt(1, startingCol + k++);
+							} while (tableItemBuffer[k - 1] != 0);
+
+							if (k - 1 < 0)
+								table.data[row].push("");
+							else
+								table.data[row].push(String.fromCharCode(...tableItemBuffer.slice(0, k - 1)));
+							startingCol += k;
+						}
+					}
+					
+					this.tables[table.name] = table;
+				}
+			}
+			
+			readAndDecrypt(count, off) {
+				const arr = new Uint8Array(this.buffer.slice(off, off + count));
+				for (let i = 0; i < arr.length; i++)
+					arr[i] ^= 0xF7;
+				return arr;
+			}
+			
+			readUint32(off) {
+				return this.view.getUint32(off, true);
+			}
+
+			readUint64(off) {
+				const low = this.view.getUint32(off, true);
+				const high = this.view.getUint32(off + 4, true);
+
+				return (BigInt(high) << 32n) | BigInt(low);
+			}
+		}
+		
+		function toggleHideTable(id) {
+			const table = document.getElementById(id);
+			table.classList.toggle("collapsed");
+
+			const btn = table.querySelector(".hideBtn");
+			if (table.classList.contains("collapsed")) {
+				btn.style.color = "green";
+				btn.textContent = "[+]";
+			} else {
+				btn.style.color = "red";
+				btn.textContent = "[-]";
+			}
+		}
+		
+		document.addEventListener("DOMContentLoaded", () => {
+			document.getElementById("fileInput").addEventListener("change", async (event) => {
+				document.querySelectorAll("table").forEach(table => table.remove());
+				const file = event.target.files[0];
+				if (!file)
+					return;
+
+				const buffer = await file.arrayBuffer();
+
+				const obj = new BEST_Object(buffer);
+				
+				const infoTableData = [
+					["Version", obj.version],
+					["Revision", obj.revision],
+					["Last Change", obj.lastChange],
+					["Available Tables", Object.keys(obj.tables).length],
+					["Available Jobs", Object.keys(obj.jobs).length]
+				];
+				const infoTable = document.createElement("table");
+				infoTable.id = "infoTable";
+
+				for (const [label, value] of infoTableData) {
+					let tr = document.createElement("tr");
+				
+					let th = document.createElement("th");
+					th.textContent = label;
+					th.style.textAlign = "left";
+					tr.appendChild(th);
+				
+					let td = document.createElement("td");
+					td.textContent = value;
+					tr.appendChild(td);
+
+					infoTable.appendChild(tr);
+				}
+				
+				const caption = document.createElement("caption");
+				caption.textContent = "PRG Metadata";
+				infoTable.appendChild(caption);
+
+				document.body.appendChild(infoTable);
+
+				for (const [key, table] of Object.entries(obj.tables)) {
+					const defTable = document.createElement("table");
+					defTable.id = `table-${key}`;
+
+					let tr = document.createElement("tr");
+					
+					for (const heading of table.head) {
+						let th = document.createElement("th");
+						th.textContent = heading;
+						tr.appendChild(th);
+					}
+					defTable.appendChild(tr);
+					
+					for (const row of table.data) {
+						let cell_tr = document.createElement("tr");
+						
+						for (const cell of row) {
+							let cell_td = document.createElement("td");
+							cell_td.textContent = cell;
+							cell_tr.appendChild(cell_td);
+						}
+						defTable.appendChild(cell_tr);
+					}
+					
+					const caption = document.createElement("caption");
+					caption.textContent = `Table ${table.name}`;
+
+					const hideBtn = document.createElement("span");
+					hideBtn.classList.add("hideBtn");
+					hideBtn.onclick = () => toggleHideTable(`table-${key}`);
+					hideBtn.textContent = "[-]";
+					hideBtn.style.color = "red";
+					caption.appendChild(hideBtn);
+
+					defTable.appendChild(caption);
+					document.body.appendChild(defTable);
+				}
+				
+				//console.log(obj.jobs["RAM_LESEN"].disasm);
+				//console.log(obj.tables["BITS"].data);
+			});
+		});
+	</script>
+</head>
+<body>
+	<input type="file" id="fileInput">
+</body>
+</html>

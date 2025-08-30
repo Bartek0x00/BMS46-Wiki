@@ -21,6 +21,17 @@
 
 // Ignition_Advance multiplier x0.75 - 22.5
 
+// EDIABAS JOB RESULT {
+//   OKAY = 0xA0,
+//   BUSY = 0xA1,
+//   ERROR_ECU_REJECTED = 0xA2,
+//   ERROR_ECU_PARAMETER = 0xB0,
+//   ERROR_ECU_FUNCTION = 0xB1,
+//   ERROR_ECU_NUMBER = 0xB2,
+//   ERROR_ECU_NACK = 0xFF,
+//   ERROR_ECU_UNKNOWN_STATUSBYTE = 0x00
+// }
+
 typedef unsigned char byte;
 
 union Reg {
