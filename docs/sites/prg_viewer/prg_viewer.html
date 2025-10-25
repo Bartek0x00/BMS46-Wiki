@@ -15,7 +15,7 @@
 			border-collapse: collapse;
 			margin-top: 30px;
 			margin-bottom: 30px;
-			min-width: 320px;
+			min-width: 500px;
 			background-color: #2d2d2d;
 		}		
 		
@@ -244,14 +244,154 @@
 				[0xB6, "tabcols"],
 				[0xB7, "tabrows"]
 			]);
+			
+			static OperandMode = new Map([
+				[0x0, "None"],
+				[0x1, "RegS"],
+				[0x2, "RegAB"],
+				[0x3, "RegI"],
+				[0x4, "RegL"],
+				[0x5, "Imm8"],
+				[0x6, "Imm16"],
+				[0x7, "Imm32"],
+				[0x8, "ImmStr"],
+				[0x9, "IdxImm"],
+				[0xA, "IdxReg"],
+				[0xB, "IdxRegImm"],
+				[0xC, "IdxImmLenImm"],
+				[0xD, "IdxImmLenReg"],
+				[0xE, "IdxRegLenImm"],
+				[0xF, "IdxRegLenReg"]
+			]);
+
+			static RegisterName = new Map([
+				[0x00, "RB0"],
+				[0x01, "RB1"],
+				[0x02, "RB2"],
+				[0x03, "RB3"],
+				[0x04, "RB4"],
+				[0x05, "RB5"],
+				[0x06, "RB6"],
+				[0x07, "RB7"],
+				[0x08, "RB8"],
+				[0x09, "RB9"],
+				[0x0A, "RB10"],
+				[0x0B, "RB11"],
+				[0x0C, "RB12"],
+				[0x0D, "RB13"],
+				[0x0E, "RB14"],
+				[0x0F, "RB15"],
+				[0x10, "RW0"],
+				[0x11, "RW1"],
+				[0x12, "RW2"],
+				[0x13, "RW3"],
+				[0x14, "RW4"],
+				[0x15, "RW5"],
+				[0x16, "RW6"],
+				[0x17, "RW7"],
+				[0x18, "RL0"],
+				[0x19, "RL1"],
+				[0x1A, "RL2"],
+				[0x1B, "RL3"],
+				[0x1C, "RS0"],
+				[0x1D, "RS1"],
+				[0x1E, "RS2"],
+				[0x1F, "RS3"],
+				[0x20, "RS4"],
+				[0x21, "RS5"],
+				[0x22, "RS6"],
+				[0x23, "RS7"],
+				[0x24, "RF0"],
+				[0x25, "RF1"],
+				[0x26, "RF2"],
+				[0x27, "RF3"],
+				[0x28, "RF4"],
+				[0x29, "RF5"],
+				[0x2A, "RF6"],
+				[0x2B, "RF7"],
+				[0x2C, "RS8"],
+				[0x2D, "RS9"],
+				[0x2E, "RS10"],
+				[0x2F, "RS11"],
+				[0x30, "RS12"],
+				[0x31, "RS13"],
+				[0x32, "RS14"],
+				[0x33, "RS15"],
+				[0x80, "RB16"],
+				[0x81, "RB17"],
+				[0x82, "RB18"],
+				[0x83, "RB19"],
+				[0x84, "RB20"],
+				[0x85, "RB21"],
+				[0x86, "RB22"],
+				[0x87, "RB23"],
+				[0x88, "RB24"],
+				[0x89, "RB25"],
+				[0x8A, "RB26"],
+				[0x8B, "RB27"],
+				[0x8C, "RB28"],
+				[0x8D, "RB29"],
+				[0x8E, "RB30"],
+				[0x8F, "RB31"],
+				[0x90, "RW8"],
+				[0x91, "RW9"],
+				[0x92, "RW10"],
+				[0x93, "RW11"],
+				[0x94, "RW12"],
+				[0x95, "RW13"],
+				[0x96, "RW14"],
+				[0x97, "RW15"],
+				[0x98, "RL4"],
+				[0x99, "RL5"],
+				[0x9A, "RL6"],
+				[0x9B, "RL7"]
+			]);
+			
+			static read_operand(mode, data, idx, is_lhs) {
+				switch (mode) {
+				case "RegS":
+				case "RegAB":
+				case "RegI":
+				case "RegL":
+					return BEST_Disassembly.RegisterName.get(data[idx + 2]);
+					break;
+				case "Imm8":
+					return "0x" + data[idx + 2].toString(16);
+					break;
+				case "Imm16":
+					return "0x" + data[idx + 2].toString(16) + data[idx + 3].toString(16);
+					break;
+				case "Imm32":
+					return "0x" + data[idx + 2].toString(16) + data[idx + 3].toString(16) + data[idx + 4].toString(16) + data[idx + 5].toString(16);
+					break;
+				case "ImmStr":
+					const immStrLen = data[idx + 2] | data[idx + 3];
+					return data.slice(idx + 4, idx + 4 + immStrLen);
+					break;
+				default:
+					return "";
+					break;
+				}
+			}
 
 			static disasm(rawbytes) {
 				const result = [];
 				for (let i = 0; i < rawbytes.length - 1; i++) {
-					result.push({
-						opcode: BEST_Disassembly.OpCodeNames.get(rawbytes[i]), 
-						operand: "0x" + rawbytes[i + 1].toString(16).padStart(2, "0")
-					});
+					const instr = BEST_Disassembly.OpCodeNames.get(rawbytes[i]);
+					const opmode0 = BEST_Disassembly.OperandMode.get((rawbytes[i + 1] & 0xF0) >> 4);
+					const opmode1 = BEST_Disassembly.OperandMode.get((rawbytes[i + 1] & 0x0F));
+					
+					const lhs = BEST_Disassembly.read_operand(opmode0, rawbytes, i + 1, true);
+					const rhs = BEST_Disassembly.read_operand(opmode1, rawbytes, i + 1, false);
+
+					switch (instr) {
+					default:
+						result.push({
+							opcode: instr, 
+							operand: "0x" + rawbytes[i + 1].toString(16).padStart(2, "0")
+						});
+						break;
+					}
 				}
 				return result;
 			}
@@ -266,7 +406,7 @@
 		class BEST_Job {
 			name = "";
 			comment = "";
-			results = [];
+			result = [];
 			code = [];
 			disasm = {};
 		}
@@ -297,7 +437,7 @@
 
 				this.readInfo();
 				this.readJobs();
-				this.readJobDesc();
+				//this.readJobDesc();
 				this.readTables();
 			}
 			
@@ -324,16 +464,19 @@
 					job.name = String.fromCharCode(...infoBuff).split('\0')[0].toUpperCase();
 					
 					const codeOff = new DataView(infoBuff.buffer, infoBuff.byteOffset, infoBuff.byteLength).getUint32(64, true);
-					
+
 					let jobLen = 0;
-					for (; ; jobLen += 3) {
+					
+					//console.log(`Start: ${"0x" + codeOff.toString(16)}`);
+					for (; ; jobLen += 1) {
 						let eoj = this.readAndDecrypt(4, codeOff + jobLen);
-						
+
 						const bytecode = new DataView(eoj.buffer, eoj.byteOffset, 4).getUint32(0, true);
-						if (bytecode == 0x1d11001d) {
+						if (bytecode == 0x1d001d) {
 							break;
 						}
 					}
+					//console.log(`End: ${"0x" + (jobLen + codeOff).toString(16)}`);
 					
 					job.code = this.readAndDecrypt(jobLen, codeOff);
 					job.disasm = BEST_Disassembly.disasm(job.code);
@@ -364,7 +507,6 @@
 						.split(":", 2);
 
 					key = key.toUpperCase();
-					value = value.toUpperCase();
 					
 					const isNotEmpty = (obj) => {
 						return !(obj && Object.keys(obj).length === 0);
@@ -373,10 +515,10 @@
 					switch(key) {
 					case "JOBNAME":
 						if (isNotEmpty(currentResult))
-							this.jobs[jobName].results.push(currentResult);
+							this.jobs[jobName].result = currentResult;
 
 						currentResult = new BEST_ResultDesc();
-						jobName = value;
+						jobName = value.toUpperCase();
 						break;
 					case "JOBCOMMENT":
 						if (jobName != "")
@@ -384,7 +526,7 @@
 						break;
 					case "RESULT":
 						if (isNotEmpty(currentResult))
-							currentResult.name = value;
+							currentResult.name = value.toUpperCase();
 						break;
 					case "RESULTTYPE":
 						if (isNotEmpty(currentResult))
@@ -520,9 +662,17 @@
 
 					infoTable.appendChild(tr);
 				}
-				
+
 				const caption = document.createElement("caption");
 				caption.textContent = "PRG Metadata";
+				
+				const hideBtn = document.createElement("span");
+				hideBtn.classList.add("hideBtn");
+				hideBtn.onclick = () => toggleHideTable(`infoTable`);
+				hideBtn.textContent = "[-]";
+				hideBtn.style.color = "red";
+
+				caption.appendChild(hideBtn);
 				infoTable.appendChild(caption);
 
 				document.body.appendChild(infoTable);
@@ -565,8 +715,105 @@
 					document.body.appendChild(defTable);
 				}
 				
-				//console.log(obj.jobs["RAM_LESEN"].disasm);
-				//console.log(obj.tables["BITS"].data);
+				for (const [key, job] of Object.entries(obj.jobs)) {
+					const jobTable = document.createElement("table");
+					jobTable.id = `job-${key}`;
+
+					let tr = document.createElement("tr");
+
+					let th = document.createElement("th");
+					th.textContent = "Name";
+					th.style.textAlign = "left";
+					tr.appendChild(th);
+
+					let td = document.createElement("td");
+					td.textContent = job.name;
+					tr.appendChild(td);
+					
+					jobTable.appendChild(tr);
+					tr = document.createElement("tr");
+
+					th = document.createElement("th");
+					th.style.textAlign = "left";
+					th.textContent = "Comment";
+					tr.appendChild(th);
+
+					td = document.createElement("td");
+					td.textContent = job.comment;
+					tr.appendChild(td);
+
+					jobTable.appendChild(tr);
+
+					tr = document.createElement("tr");
+
+					th = document.createElement("th");
+					th.style.textAlign = "left";
+					th.textContent = "Disasm";
+					tr.appendChild(th);
+
+					td = document.createElement("td");
+					
+					for (let i = 0; i < job.disasm.length; i++) {
+						const disasmLine = job.disasm[i];
+						td.textContent += `${disasmLine.opcode} ${disasmLine.operand}\n`;
+						td.style.whiteSpace = "pre-line";
+					}
+					tr.appendChild(td);
+					
+					jobTable.appendChild(tr);
+/*
+						tr = document.createElement("tr");
+						
+						th = document.createElement("th");
+						th.style.textAlign = "left";
+						th.textContent = `ResultName_${resultCount}`;
+						tr.appendChild(th);
+
+						td = document.createElement("td");
+						td.textContent = result.name;
+						tr.appendChild(td);
+
+						jobTable.appendChild(tr);
+
+						tr = document.createElement("tr");
+
+						th = document.createElement("th");
+						th.style.textAlign = "left";
+						th.textContent = `ResultType_${resultCount}`;
+						tr.appendChild(th);
+
+						td = document.createElement("td");
+						td.textContent = result.type;
+						tr.appendChild(td);
+
+						jobTable.appendChild(tr);
+
+						tr = document.createElement("tr");
+
+						th = document.createElement("th");
+						th.style.textAlign = "left";
+						th.textContent = `ResultComment_${resultCount}`;
+						tr.appendChild(th);
+
+						td = document.createElement("td");
+						td.textContent = result.comment;
+						tr.appendChild(td);
+
+						jobTable.appendChild(tr);
+*/
+					const caption = document.createElement("caption");
+					caption.textContent = `Job ${job.name}`;
+
+					const hideBtn = document.createElement("span");
+					hideBtn.classList.add("hideBtn");
+					hideBtn.onclick = () => toggleHideTable(`job-${key}`);
+					hideBtn.textContent = "[-]";
+					hideBtn.style.color = "red";
+					caption.appendChild(hideBtn);
+
+					jobTable.appendChild(caption);
+					document.body.appendChild(jobTable);
+				}
 			});
 		});
 	</script>

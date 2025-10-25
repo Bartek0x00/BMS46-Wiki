@@ -2,6 +2,8 @@
 
 // Voltage multiplier x0.068
 
+// Prob ECU Clock 0.046ms per tick
+
 // Engine_RPM addr 0x00FF8334
 // Engine_RPM multiplier x46.36363636
 

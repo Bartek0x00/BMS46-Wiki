@@ -291,10 +291,14 @@
 		<p class="indent3">2. <code>PROTO2_out_buff</code></p>
 		<p class="indent3">3. <code>PROTO2_message_size</code></p>
 		<p class="indent3">The output packet's <code>out_PID</code> (<code>out[2]</code>) is one of these four values: {</p>
-		<p class="indent4"><code>0xA0</code> -> PACKET_READY but stay standby</p>
-		<p class="indent4"><code>0xA2</code> -> SINGLE_PACKET or LAST_PACKET</p>
-		<p class="indent4"><code>0xB0</code> -> NOT_FOUND or NOTHING_TO_DO info</p>
-		<p class="indent4"><code>0xFF</code> -> CRITICAL error</p>
+		<p class="indent4"><code>0xA0</code> -> OKAY</p>
+		<p class="indent4"><code>0xA1</code> -> BUSY</p>
+		<p class="indent4"><code>0xA2</code> -> ERROR_ECU_REJECTED</p>
+		<p class="indent4"><code>0xB0</code> -> ERROR_ECU_PARAMETER</p>
+		<p class="indent4"><code>0xB1</code> -> ERROR_ECU_FUNCTION</p>
+		<p class="indent4"><code>0xB2</code> -> ERROR_ECU_NUMBER</p>
+		<p class="indent4"><code>0xFF</code> -> ERROR_ECU_NACK</p>
+		<p class="indent4"><code>0x00</code> -> ERROR_ECU_UNKNOWN_STATUSBYTE</p>
 		<p class="indent3">}</p>
 		<br>
 		<p class="indent2"><b>handler_0x00: [</b></p>
@@ -452,10 +456,14 @@
 		<p class="indent3">2. <code>PROTO2_out_buff</code></p>
 		<p class="indent3">3. <code>PROTO2_message_size</code></p>
 		<p class="indent3">The output packet's <code>out_PID</code> (<code>out[2]</code>) is one of these four values: {</p>
-		<p class="indent4"><code>0xA0</code> -> PACKET_READY but stay standby</p>
-		<p class="indent4"><code>0xA2</code> -> SINGLE_PACKET or LAST_PACKET</p>
-		<p class="indent4"><code>0xB0</code> -> NOT_FOUND or NOTHING_TO_DO info</p>
-		<p class="indent4"><code>0xFF</code> -> CRITICAL error</p>
+		<p class="indent4"><code>0xA0</code> -> OKAY</p>
+		<p class="indent4"><code>0xA1</code> -> BUSY</p>
+		<p class="indent4"><code>0xA2</code> -> ERROR_ECU_REJECTED</p>
+		<p class="indent4"><code>0xB0</code> -> ERROR_ECU_PARAMETER</p>
+		<p class="indent4"><code>0xB1</code> -> ERROR_ECU_FUNCTION</p>
+		<p class="indent4"><code>0xB2</code> -> ERROR_ECU_NUMBER</p>
+		<p class="indent4"><code>0xFF</code> -> ERROR_ECU_NACK</p>
+		<p class="indent4"><code>0x00</code> -> ERROR_ECU_UNKNOWN_STATUSBYTE</p>
 		<p class="indent3">}</p>
 		<br>
 	
@@ -868,10 +876,14 @@
 		<p class="indent3">A periodically scheduled Userland job calls the appropriate handler (found by <code>in[0]</code>) if a new received message is available.</p>
 		<p class="indent3">The max output packet size is generally 11 Bytes</p>
 		<p class="indent3">The output packet's <code>out_PID</code> (<code>out</code>) is one of these four values: {</p>
-		<p class="indent4"><code>0xA0</code> -> PACKET_READY but stay standby</p>
-		<p class="indent4"><code>0xA2</code> -> SINGLE_PACKET or LAST_PACKET</p>
-		<p class="indent4"><code>0xB0</code> -> NOT_FOUND or NOTHING_TO_DO info</p>
-		<p class="indent4"><code>0xFF</code> -> CRITICAL error</p>
+		<p class="indent4"><code>0xA0</code> -> OKAY</p>
+		<p class="indent4"><code>0xA1</code> -> BUSY</p>
+		<p class="indent4"><code>0xA2</code> -> ERROR_ECU_REJECTED</p>
+		<p class="indent4"><code>0xB0</code> -> ERROR_ECU_PARAMETER</p>
+		<p class="indent4"><code>0xB1</code> -> ERROR_ECU_FUNCTION</p>
+		<p class="indent4"><code>0xB2</code> -> ERROR_ECU_NUMBER</p>
+		<p class="indent4"><code>0xFF</code> -> ERROR_ECU_NACK</p>
+		<p class="indent4"><code>0x00</code> -> ERROR_ECU_UNKNOWN_STATUSBYTE</p>
 		<p class="indent3">}</p>
 		<p class="indent3">This protocol implements 7 actions [1, 7].</p>
 		<br>
