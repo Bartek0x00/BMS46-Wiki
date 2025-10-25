@@ -437,7 +437,7 @@
 
 				this.readInfo();
 				this.readJobs();
-				//this.readJobDesc();
+				this.readJobDesc();
 				this.readTables();
 			}
 			
@@ -761,7 +761,7 @@
 					tr.appendChild(td);
 					
 					jobTable.appendChild(tr);
-/*
+
 						tr = document.createElement("tr");
 						
 						th = document.createElement("th");
@@ -800,7 +800,7 @@
 						tr.appendChild(td);
 
 						jobTable.appendChild(tr);
-*/
+
 					const caption = document.createElement("caption");
 					caption.textContent = `Job ${job.name}`;
 
