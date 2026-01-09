@@ -2,10 +2,11 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>BMS46-Wiki</title>
 		<style>
 			html, body {
-				background-color: #252525;
+				background-color: #254035;
 				color: white;
 				font-family: sans-serif;
 			}
@@ -21,7 +22,8 @@
 			}
 
 			a {
-				color: red;
+				color: blue;
+				font-weight: bold;
 			}
 			
 			.indent1 {
@@ -278,9 +280,9 @@
 		<p class="indent3">A periodically scheduled Bootloader job calls the appropriate handler (found by <code>in_PID</code>) if a new received message is available.</p>
 		<p class="indent3">The max output packet size is generally 251 Bytes</p>
 		<p class="indent3">This protocol uses three global variables instead of function arguments.</p>
-		<p class="indent3">1. <code>PROTO2_in_buff</code></p>
-		<p class="indent3">2. <code>PROTO2_out_buff</code></p>
-		<p class="indent3">3. <code>PROTO2_message_size</code></p>
+		<p class="indent3">1. <code>PROTO2a::in_buff</code></p>
+		<p class="indent3">2. <code>PROTO2a::out_buff</code></p>
+		<p class="indent3">3. <code>PROTO2a::message_size</code></p>
 		<p class="indent3">The output packet's <code>out_PID</code> (<code>out[2]</code>) is one of these four values: {</p>
 		<p class="indent4"><code>0xA0</code> -&gt; <code>OKAY</code></p>
 		<p class="indent4"><code>0xA1</code> -&gt; <code>BUSY</code></p>
@@ -300,7 +302,7 @@
 		<p class="indent4">Creates <code>"1430940"</code> + <code>"61\xff..."</code> + <code>"4399"</code> + <code>"0010213510"</code> + <code>"F000"</code> + <code>"000368511"</code> on firmware version "01119700F000P2AG".</p>
 		<p class="indent4">The type of the response is <code>OKAY</code>.</p>
 		<p class="indent4">Never fails.</p>
-		<p class="indent4">Sets <code>PROTO2_message_size = 42</code> (length of all strings combined).</p>
+		<p class="indent4">Sets <code>PROTO2a::message_size = 42</code> (length of all strings combined).</p>
 		<p class="indent2"><b>],</b></p>
 
 		<p class="indent2"><b>read_bytes: [</b></p>
@@ -320,7 +322,7 @@
 		<p class="indent5"><code>in[7]</code> -&gt; size of the input packet</p>
 		<p class="indent4">}</p>
 		<p class="indent4">Note that the MC68336 in BMS46 has a 24bit addressing IMB.</p>
-		<p class="indent4">The possible ram regions (<code>in[3]</code>): {</p>
+		<p class="indent4">The possible memory regions (<code>in[3]</code>): {</p>
 		<p class="indent5">RAM_REGION  (<code>0xFF8000</code> - <code>0xFF9DFF</code>) -&gt; {<code>0x04</code>},</p>
 		<p class="indent5">BOOT_REGION (<code>0x000000</code> - <code>0x03FFFF</code>) -&gt; {<code>0x02</code> OR <code>0x06</code>},</p>
 		<p class="indent5">FULL_REGION (<code>0x000000</code> - <code>0xFFFFFF</code>) -&gt; {<code>0x00</code> OR <code>0x0F</code>},</p>
@@ -328,7 +330,7 @@
 		<p class="indent4">}</p>
 		<p class="indent4">Note that it tries to protect ISN (<code>0x3F64</code> - <code>0x3F6F</code>) and when this addr is requested it will add an offset <code>+0x3BD4C</code> redirecting to another magic byte.</p>
 		<p class="indent4">The type of the response is <code>OKAY</code>.</p>
-		<p class="indent4">Sets <code>PROTO2_message_size</code> to the clamped size.</p>
+		<p class="indent4">Sets <code>PROTO2a::message_size</code> to the clamped size.</p>
 		<p class="indent2"><b>],</b></p>
 
 		<p class="indent2"><b>write_bytes: [</b></p>
@@ -343,7 +345,7 @@
 		<p class="indent5"><code>in[6]</code> -&gt; lower byte of the address</p>
 		<p class="indent4">}</p>
 		<p class="indent4">Note that the MC68336 in BMS46 has a 24bit addressing IMB.</p>
-		<p class="indent4">The possible ram regions (<code>in[3]</code>): {</p>
+		<p class="indent4">The possible memory regions (<code>in[3]</code>): {</p>
 		<p class="indent5">RAM_REGION  (<code>0xFF8000</code> - <code>0xFF9DFF</code>) -&gt; {<code>0x04</code>},</p>
 		<p class="indent5">BOOT_REGION (<code>0x000000</code> - <code>0x03FFFF</code>) -&gt; {<code>0x02</code> OR <code>0x06</code>},</p>
 		<p class="indent5">FULL_REGION (<code>0x000000</code> - <code>0xFFFFFF</code>) -&gt; {<code>0x00</code> OR <code>0x0F</code>},</p>
@@ -362,7 +364,7 @@
 		<p class="indent4">Does not use the input packet.</p>
 		<p class="indent4">Never fails.</p>
 		<p class="indent4">Sets output packet type (<code>out[2]</code>) to <code>OKAY</code>.</p>
-		<p class="indent4">Sets the <code>PROTO2_message_size</code> to 1 (only 1Byte checksum).</p>
+		<p class="indent4">Sets the <code>PROTO2a::message_size</code> to 1 (only 1Byte checksum).</p>
 		<p class="indent2"><b>],</b></p>
 
 		<p class="indent2"><b>get_addresses: [</b></p>
@@ -401,7 +403,7 @@
 		<p class="indent4">Does not use the input packet.</p>
 		<p class="indent4">Never fails.</p>
 		<p class="indent4">Sets output packet type (<code>out[2]</code>) to <code>OKAY</code>.</p>
-		<p class="indent4">Sets the <code>PROTO2_message_size</code> to 72 (combined length of all magic bytes).</p>
+		<p class="indent4">Sets the <code>PROTO2a::message_size</code> to 72 (combined length of all magic bytes).</p>
 		<p class="indent2"><b>],</b></p>
 
 		<p class="indent2"><b>seed_key: [</b></p>
@@ -434,7 +436,7 @@
 		<p class="indent4">If there is no match: outputs a blank packet of type <code>ERROR_ECU_PARAMETER</code>.</p>
 		<p class="indent4">If the match is found: set the access level</p>
 		<p class="indent4">On success returns a blank packet of type <code>OKAY</code>.</p>
-		<p class="indent4">Sets the <code>PROTO2_message_size</code> to 0.</p>
+		<p class="indent4">Sets the <code>PROTO2a::message_size</code> to 0.</p>
 		<p class="indent2"><b>],</b></p>
 
 		<h2 class="indent1">],</h2>
@@ -448,9 +450,9 @@
 		<p class="indent2">The protocol is the same as PROTO2a, but this is the User version that has more handlers.</p>
 		<p class="indent3">A periodically scheduled Userland job calls the appropriate handler (found by <code>in_PID</code>) if a new received message is available.</p>
 		<p class="indent3">This protocol uses three global variables instead of function arguments.</p>
-		<p class="indent3">1. <code>PROTO2_in_buff</code></p>
-		<p class="indent3">2. <code>PROTO2_out_buff</code></p>
-		<p class="indent3">3. <code>PROTO2_message_size</code></p>
+		<p class="indent3">1. <code>PROTO2b::in_buff</code></p>
+		<p class="indent3">2. <code>PROTO2b::out_buff</code></p>
+		<p class="indent3">3. <code>PROTO2b::message_size</code></p>
 		<p class="indent3">The output packet's <code>out_PID</code> (<code>out[2]</code>) is one of these four values: {</p>
 		<p class="indent4"><code>0xA0</code> -&gt; <code>OKAY</code></p>
 		<p class="indent4"><code>0xA1</code> -&gt; <code>BUSY</code></p>
@@ -471,8 +473,8 @@
 		<p class="indent4">Creates <code>"1430940"</code> + <code>"61"</code> + <code>"00"</code> + <code>"A7"</code> + <code>"60"</code> + <code>"4399"</code> + <code>"0010213510"</code> + <code>"F0000"</code> + <code>"000368511"</code> on firmware version 01119700F000P2AG.</p> 
 		<p class="indent4">Does not use input packet.</p>
 		<p class="indent4">Never fails.</p>
-		<p class="indent4">Sets <code>PROTO2_message_size = 42</code> (combined length of magic bytes).</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent4">Sets <code>PROTO2b::message_size = 42</code> (combined length of magic bytes).</p>
+		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>show_stored_DTC: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x04</p>
@@ -486,7 +488,7 @@
 		<p class="indent4">If the requested size is greater than the current <code>DTC_saved_count</code>, a <code>0x00</code> byte is moved to <code>out[4]</code> and this handler returns with success.</p>
 		<p class="indent4">If the requested size is 0, then two last DTCs are returned, first in {<code>out[4]</code> (hi_byte), <code>out[5]</code> (lo_byte)} and the second in {<code>out[6]</code> (hi_byte), <code>out[7]</code> (lo_byte)}</p>
 		<p class="indent4">Else (when the requested size is in range (0, <code>DTC_saved_count</code>] it returns all saved DTCs, hi_byte first.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>clear_stored_DTC: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x05</p>
@@ -495,7 +497,7 @@
 		<p class="indent4">Does not use the input packet.</p>
 		<p class="indent4">Never fails.</p>
 		<p class="indent4">Outputs blank packet with type <code>OKAY</code> and size 0.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>read_bytes: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x06</p>
@@ -526,8 +528,8 @@
 		<p class="indent5">1. ENCRYPTED_ISN (<code>0xFF95F0</code> - <code>0xFF95FB</code>) by applying offset <code>-0xff8000</code>.</p>
 		<p class="indent5">2. UNKNOWN       (<code>0xFF8670</code> - <code>0xFF867B</code>) by applying offset <code>-0xff8000</code>.</p>
 		<p class="indent4">The type of the response <code>out_PID</code> (<code>out[2]</code>) is <code>OKAY</code>.</p>
-		<p class="indent4">Sets <code>PROTO2_message_size</code> to the clamped size.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent4">Sets <code>PROTO2b::message_size</code> to the clamped size.</p>
+		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>write_bytes: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x07</p>
@@ -549,7 +551,7 @@
 		<p class="indent4">}</p>
 		<p class="indent4">On error (pointer not in range) returns a blank packet with type <code>out_PID</code> (<code>out[2]</code>): <code>ERROR_ECU_PARAMETER</code>.</p>
 		<p class="indent4">Sets output packet type to <code>OKAY</code> (most of the times), or <code>ERROR_ECU_REJECTED</code> when not found.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>get_checksum: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x0A</p>
@@ -562,8 +564,8 @@
 		<p class="indent4">Does not use the input packet.</p>
 		<p class="indent4">Never fails.</p>
 		<p class="indent4">Sets output packet type to <code>OKAY</code>.</p>
-		<p class="indent4">Sets the <code>PROTO2_message_size</code> to 1 (only 1Byte checksum).</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent4">Sets the <code>PROTO2b::message_size</code> to 1 (only 1Byte checksum).</p>
+		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>read_vehicle_data: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x0B</p>
@@ -626,7 +628,7 @@
 		<p class="indent4">} - message_size = <code>6</code> bytes</p>
 		<p class="indent4">On success, a packet of type <code>OKAY</code> is returned</p>
 		<p class="indent4">Else a blank output packet of type <code>ERROR_ECU_PARAMETER</code> is returned.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>actuation_control: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x0C</p>
@@ -714,17 +716,17 @@
 		<p class="indent5">}</p>
 		<p class="indent4">}</p>
 		<p class="indent4">This handler returns a 2 byte output packet: <code>out[3] = in[3]</code> (requested actuator index repeated), <code>out[4] = RET</code> (one of the result values, depending on what the dispatched handler returns)</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
-		<p class="indent2"><b>handler_0x0D: [</b></p>
+		<p class="indent2"><b>get_addresses: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x0D</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4">Almost the same as PROTO2a::handler_0x0D, but some values are different.</p>
+		<p class="indent4">Almost the same as <code>PROTO2a::get_addresses</code>, but some values are different.</p>
 		<p class="indent4">Moves 24 in-memory pointers to the output packet.</p>
-		<p class="indent4">Used by Ediabas job "AIF_LESEN"</p>
+		<p class="indent4">Used by Ediabas job <code>"AIF_LESEN"</code></p>
 		<p class="indent4">The pointers are the same for every firmware version.</p>
 		<p class="indent4">Values shown here are for the firmware version "01119700F000P2AG"</p>
-		<p class="indent4">The values: {</p>
+		<p class="indent4">The values: <code>out[0-71]</code> {</p>
 		<p class="indent5"><code>0x01459A</code> -&gt; <code>""</code>,</p>
 		<p class="indent5"><code>0xFFFFFF</code>,</p>
 		<p class="indent5"><code>0xFFFFFF</code>,</p>
@@ -752,47 +754,47 @@
 		<p class="indent4">}</p>
 		<p class="indent4">Does not use the input packet.</p>
 		<p class="indent4">Never fails.</p>
-		<p class="indent4">Sets output packet type (<code>out[2]</code>) to <code>0xA0</code>.</p>
-		<p class="indent4">Sets the <code>PROTO2_message_size</code> to 72 (combined length of all magic bytes).</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent4">Sets output packet type to <code>OKAY</code>.</p>
+		<p class="indent4">Sets the <code>PROTO2b::message_size</code> to 72 (combined length of all magic bytes).</p>
+		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>handler_0x0E: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x0E</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4">Reads 3 bytes that are only ever used by this handler_0x0E and handler_0x0F.</p>
+		<p class="indent4">Reads 3 bytes that are only ever used by this handler and <code>PROTO2b::handler_0x0F</code>.</p>
 		<p class="indent4">Maybe restoring some modification timestamp or signature.</p>
-		<p class="indent4">Moves 3 bytes to the output packet of type <code>0xA0</code>.</p>
+		<p class="indent4">Moves 3 bytes to the output packet of type <code>OKAY</code>.</p>
 		<p class="indent4">Does not use the input packet.</p>
 		<p class="indent4">Never fails.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>handler_0x0F: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x0F</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4">Writes 3 bytes that are only ever used by this hander_0x0F and handler_0x0E.</p>
+		<p class="indent4">Writes 3 bytes that are only ever used by this hander and <code>PROTO2b::handler_0x0E</code>.</p>
 		<p class="indent4">Maybe setting some modification timestamp or signature.</p>
 		<p class="indent4">Expects the bytes in <code>in[3...5]</code>.</p>
-		<p class="indent4">Returns a blank packet of type <code>0xA0</code>.</p>
+		<p class="indent4">Returns a blank packet of type <code>OKAY</code>.</p>
 		<p class="indent4">Never fails.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>handler_0x14: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x14</p>
 		<p class="indent3"><b>comment:</b></p>
 		<p class="indent4">Expects the following structured input: {</p>
-		<p class="indent5"><code>in[3]</code> -> count of something</p>
+		<p class="indent5"><code>in[3]</code> -&gt; count of something</p>
 		<p class="indent4">}</p>
 		<p class="indent4">If count <code>0x00</code> is requested, then this handler counts some matching bytes (up to 76) and writes the size + 2 words to the output packet.</p>
-		<p class="indent4">the size of the packet is 5 Bytes and the type is <code>0xA0</code>.</p>
+		<p class="indent4">the size of the packet is 5 Bytes and the type is <code>OKAY</code>.</p>
 		<p class="indent4">Never fails.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>handler_0x1B: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x1B</p>
 		<p class="indent3"><b>comment:</b></p>
 		<p class="indent4">Expects the following structured input: {</p>
-		<p class="indent5"><code>in[3]</code> -> MUST be <code>0xFE</code></p>
-		<p class="indent5"><code>in[4]</code> -> index</p>
+		<p class="indent5"><code>in[3]</code> -&gt; MUST be <code>0xFE</code></p>
+		<p class="indent5"><code>in[4]</code> -&gt; index</p>
 		<p class="indent4">}</p>
 		<p class="indent4">If the index is 0x01, then this handler moves a compilation string from <code>0x14000</code> of size 96 to the output packet of type <code>0xA0</code>.</p>
 		<p class="indent4">If the index is 0x02, then this handler moves 2 ints and 7 bytes (combined size 15 Bytes) to the output packet of type <code>0xA0</code>. This is used by Ediabas Job "SP_ZAEHL".</p>
@@ -800,7 +802,7 @@
 		<p class="indent4">If the index is 0x20, then this handler moves 40 bytes starting from <code>0xFF96C0</code> + some other 7 bytes to the output packet of size 47 and type <code>0xA0</code>.</p>
 		<p class="indent4">If the index is 0x21, then this handler moves vital Vechicle bytes and words of combined size 51 Bytes to the output packet of type <code>0xB0</code></p>
 		<p class="indent4">Else it returns a blank packet of type <code>0xB0</code>.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>handler_0x1C: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x1C</p>
@@ -808,73 +810,82 @@
 		<p class="indent4">Like handler_0x1B, but read config data not real time values.</p>
 		<p class="indent4">0x07 -&gt; read adjustments</p>
 		<p class="indent4">0x09 -&gt; read adaptations</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>handler_0x22: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x22</p>
 		<p class="indent3"><b>comment:</b></p>
 		<p class="indent4">Requires the input <code>in[3]</code> to be equal <code>0x02</code></p>
 		<p class="indent4">Calls a function that does almost nothing.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>handler_0x23: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x23</p>
 		<p class="indent3"><b>comment:</b></p>
 		<p class="indent4">Requires the input <code>in[3]</code> to be equal <code>0x02</code></p>
 		<p class="indent4">Calls a function that does almost nothing.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>handler_0x2B: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x2B</p>
 		<p class="indent3"><b>comment:</b></p>
 		<p class="indent4">Requires the input <code>in[3]</code> to be equal <code>0x02</code></p>
 		<p class="indent4">Calls a function that does almost nothing.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
-		<p class="indent2"><b>handler_0x40: [</b></p>
+		<p class="indent2"><b>read_Lambda_adjustment: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x40</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4">This handler is used for reading CO system and Idle speed adaptations.</p>
+		<p class="indent4">This handler is used for reading Lambda adjustments.</p>
 		<p class="indent4">Expects the following structured input: {</p>
-		<p class="indent5"><code>in[3]</code> -> flag (either 1 or 2 or undefined)</p>
+		<p class="indent5"><code>in[3]</code>: {</p>
+		<p class="indent6"><code>0x01</code> -&gt; <code>LAMBDA1</code></p>
+		<p class="indent6"><code>0x02</code> -&gt; <code>LAMBDA2</code></p>
+		<p class="indent5">}</p>
 		<p class="indent4">}</p>
-		<p class="indent4">If the flag is 1, then value from <code>0xFF8530</code> is returned, if flag is 2, value from <code>0xFF843B</code> is returned.</p>
-		<p class="indent4">This handler sets the output size to 1 and type <code>0xA0</code> if the flag is 1 or 2 and else returns blank packet of type <code>0xB0</code>.</p>
-		<p class="indent4">Note that the same variables are used in <code>handler_0x41</code> and <code>handler_0x42</code>.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent4">If the <code>in[3]</code> was not a Lambda number it returns a packet of type <code>ERROR_ECU_PARAMETER</code>.</p>
+		<p class="indent4">On success returns packet of type <code>OKAY</code>.</p>
+		<p class="indent2"><b>],</b></p>
 		
-		<p class="indent2"><b>handler_0x41: [</b></p>
+		<p class="indent2"><b>write_Lambda_adjustment: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x41</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4">This handler is used for writing new CO system and Idle speed adaptation.</p>
+		<p class="indent4">This handler is used for writing new Lambda adjustments.</p>
 		<p class="indent4">Expects the following structured input: {</p>
-		<p class="indent5"><code>in[3]</code> -> flag (either 1 or 2 or undefined)</p>
-		<p class="indent5"><code>in[4]</code> -> new value</p>
+		<p class="indent5"><code>in[3]</code>: {</p>
+		<p class="indent6"><code>0x01</code> -&gt; <code>LAMBDA1</code></p>
+		<p class="indent6"><code>0x02</code> -&gt; <code>LAMBDA2</code></p>
+		<p class="indent5">}</p>
+		<p class="indent5"><code>in[4]</code> -&gt; <code>new_value</code></p>
 		<p class="indent4">}</p>
-		<p class="indent4">If the flag is 1, some bitfields are checked, and then the new value is written to <code>0xFF8530</code>.</p>
-		<p class="indent4">If the flag is 2 and (98 <= new value <= 158), then the new value is written to <code>0xFF843B</code>.</p>
-		<p class="indent4">This handler returns a blank packet.</p>
-		<p class="indent4">If the write was successful, the output packet has type <code>0xA0</code>.</p>
-		<p class="indent4">If some conditions weren't met, the output packet has type <code>0xA2</code>.</p>
-		<p class="indent4">If the flag was not 1 nor 2, the output packet has type <code>0xB0</code>.</p>
-		<p class="indent4">Note that the same variables are used in <code>handler_0x40</code> and <code>handler_0x42</code>.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent4">If <code>in[3]</code> was not a Lambda number it returns a packet of type <code>ERROR_ECU_PARAMETER</code>.</p>
+		<p class="indent4">If <code>in[3]</code> was <code>LAMBDA1</code>:</p>
+		<p class="indent5">If Engine is not at Idle speed or Catalyser is available, returns a blank packet of type <code>ERROR_ECU_REJECTED</code></p>
+		<p class="indent5">Else sets <code>Target_Engine_Lambda1_Adjustment</code> to the <code>new_value</code></p>
+		<p class="indent4">If <code>in[3]</code> was <code>LAMBDA2</code>:</p>
+		<p class="indent5">If Engine is not at Idle speed or <code>new_value</code> is greater than <code>0x9E</code> or it's less than <code>0x62</code>, returns a blank packet of type <code>ERROR_ECU_REJECTED</code></p>
+		<p class="indent5">Else sets <code>Target_Engine_Lambda2_Adjustment</code> to the <code>new_value</code></p>
+		<p class="indent4">Returns a blank packet of type <code>OKAY</code> on success</p>
+		<p class="indent2"><b>],</b></p>
 		
-		<p class="indent2"><b>handler_0x42: [</b></p>
+		<p class="indent2"><b>apply_Lambda_adjustment: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x42</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4">This handler is used for programming CO system and Idle speed adjustments.</p>
+		<p class="indent4">This handler is used for programming Lambda adjustments.</p>
 		<p class="indent4">Expects the following structured input: {</p>
-		<p class="indent5"><code>in[3]</code> -> flag (either 1 or 2 or undefined)</p>
+		<p class="indent5"><code>in[3]</code>: {</p>
+		<p class="indent6"><code>0x01</code> -&gt; <code>LAMBDA1</code></p>
+		<p class="indent6"><code>0x02</code> -&gt; <code>LAMBDA2</code></p>
+		<p class="indent5">}</[>
 		<p class="indent4">}</p>
-		<p class="indent4">If the flag is 1, some bitfields are checked, and then the value is moved from <code>0xFF8530</code> to <code>0xFF9859</code>.</p>
-		<p class="indent4">If the flag is 2, the value from <code>0xFF843B</code> is clamped to range [98, 158] and copied to <code>0xFF985A</code>.</p>
-		<p class="indent4">This handler returns a blank packet.</p>
-		<p class="indent4">If the swap was successful, the output packet has type <code>0xA0</code>.</p>
-		<p class="indent4">If some conditions weren't met, the output packet has type <code>0xA2</code>.</p>
-		<p class="indent4">If the flag was not 1 nor 2, the output packet has type <code>0xB0</code>.</p>
-		<p class="indent4">Note that the same variables are used in <code>handler_0x40</code> and <code>handler_0x41</code>.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent4">If <code>in[3]</code> was not a Lambda number it returns a packet of type <code>ERROR_ECU_PARAMETER</code></p>
+		<p class="indent4">If <code>in[3]</code> was <code>LAMBDA1</code>:</p>
+		<p class="indent5">If the Catalyser is available, returns a blank packet of type <code>ERROR_ECU_REJECTED</code></p>
+		<p class="indent5">Else applies the <code>Target_Engine_Lambda1_Adjustment</code> set with <code>PROTO2b::write_Lambda_adjustment</code></p>
+		<p class="indent4">If <code>in[3]</code> was <code>LAMBDA2</code>:</p>
+		<p class="indent5">The <code>Target_Engine_Lambda2_Adjustment</code> is clamped to fit and then applied</p>
+		<p class="indent4">On success, this handler returns a blank packet of type <code>OKAY</code></p>
+		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>handler_0x43: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x43</p>
@@ -882,29 +893,39 @@
 		<p class="indent4">This handler clears some adaptations</p>
 		<p class="indent4">It's used by the Ediabas Job "ADAP_SELEKTIV_ZURUECK"</p>
 		<p class="indent4">Expects the following structured input: {</p>
-		<p class="indent5"><code>in[3]</code> -> first bitfield</p>
-		<p class="indent5"><code>in[4]</code> -> second bitfield</p>
+		<p class="indent5"><code>in[3]</code> -&gt; first bitfield</p>
+		<p class="indent5"><code>in[4]</code> -&gt; second bitfield</p>
 		<p class="indent4">}</p>
 		<p class="indent4">Always returns a blank packet of type <code>0xA0</code>.</p>
 		<p class="indent4">Never fails.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
-		<p class="indent2"><b>handler_0x53: [</b></p>
+		<p class="indent2"><b>get_addresses2: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x53</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4">Reads a string of magic bytes.</p>
+		<p class="indent4">Moves 31 magic-bytes with in-memory pointers to the output packet</p>
 		<p class="indent4">Does not use the input packet.</p>
-		<p class="indent4">On firmware version 01119700F000P2AG it creates <code>0x33</code> + <code>"0261204420"</code> + <code>"078"</code> + <code>"26RT5134"</code> + <code>0x03</code> + <code>0xFD</code> + <code>0x3C</code> + <code>0x03</code> + <code>0xFD</code> + <code>0x24</code> + <code>0x03</code> + <code>0xFD</code> + <code>0x44</code></p>
+		<p class="indent4">The pointers are the same for every firmware version</p>
+		<p class="indent4">Values presented are for the firmware version 01119700F000P2AG</p>
+		<p class="indent4">The values: <code>in[0-30]</code> {</p>
+		<p class="indent5"><code>0x33</code> -&gt; '3',</p>
+		<p class="indent5"><code>"0261204420"</code>,</p>
+		<p class="indent5"><code>"078"</code>,</p>
+		<p class="indent5"><code>"26RT5134"</code>,</p>
+		<p class="indent5"><code>0x03FD3C</code> -&gt; "26RT5134",</p>
+		<p class="indent5"><code>0x03FD24</code> -&gt; ".26",</p>
+		<p class="indent5"><code>0x03FD44</code> -&gt; "\t000368511"</p>
+		<p class="indent4">}</p>
 		<p class="indent4">Size of the packet is 31.</p>
 		<p class="indent4">Never fails.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
-		<p class="indent2"><b>handler_0x6C: [</b></p>
+		<p class="indent2"><b>write_EWS_state: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x6C</p>
 		<p class="indent3"><b>comment:</b></p>
 		<p class="indent4">This handler checks some pre-conditions based on the given flag.</p>
 		<p class="indent4">Expects the following structured input: {</p>
-		<p class="indent5"><code>in[3]</code> -> a flag (0 or 1 or undefined)</p>
+		<p class="indent5"><code>in[3]</code> -&gt; a flag (0 or 1 or undefined)</p>
 		<p class="indent4">}</p>
 		<p class="indent4">Note that this function clears two bytes in the EWS every time (<code>0xFF8680</code> and <code>0xFF86AF</code>).</p>
 		<p class="indent4">The handler checks exactly these things:</p>
@@ -926,52 +947,54 @@
 		<p class="indent6">If the engine is running return a packet of type <code>0xA2</code>.</p>
 		<p class="indent4">If the error code (or success code) is in the range [0, 3], this handler moves it to the output packet of type <code>0xA0</code>.</p>
 		<p class="indent4">If the error code (or success code) is out of range, this handler returns a blank packet with this code being the type.<p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
-		<p class="indent2"><b>handler_0x6D: [</b></p>
+		<p class="indent2"><b>read_EWS_state: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x6D</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4">Read settings from EWS (settings can be configured with <code>PROTO2b::handler_0x6C</code>).</p>
+		<p class="indent4">Read state from EWS (state can be configured with <code>PROTO2b::write_EWS_state</code>).</p>
 		<p class="indent4">This handler checks some pre-conditions based on an internal bitfield (<code>0xFF86AD</code>).</p>
 		<p class="indent4">Does not use the input packet.</p>
 		<p class="indent4">If the error code (or success code) is in the range [0, 2], this handler moves it to the output packet of type <code>0xA0</code>.</p>
 		<p class="indent4">If the error code (or success code) is out of range, this handler returns a blank packet with this code being the type.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
-		<p class="indent2"><b>handler_0x90: [</b></p>
+		<p class="indent2"><b>seed_key: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x90</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4">Almost the same as PROTO2a::handler_0x90</p>
+		<p class="indent4">Almost the same as <code>PROTO2a::seed_key</code></p>
 		<p class="indent4">Sends a magic bytes string like handler_0x00, then checksums it, then does a lot of set/clear bit operations.</p>
 		<p class="indent4">Expects the following structured input: {</p>
-		<p class="indent5"><code>in[1]</code> -> MUST be 8 (the length of the whole input packet)</p>
-		<p class="indent5"><code>in[3]</code> -> MUST be 'B' (<code>0x42</code>)</p>
-		<p class="indent5"><code>in[4]</code> -> MUST be 'M' (<code>0x4D</code>)</p>
-		<p class="indent5"><code>in[5]</code> -> MUST be 'W' (<code>0x57</code>)</p>
+		<p class="indent5"><code>in[1]</code> -&gt; MUST be 8 (the length of the whole input packet)</p>
+		<p class="indent5"><code>in[3]</code> -&gt; MUST be 'B' (<code>0x42</code>)</p>
+		<p class="indent5"><code>in[4]</code> -&gt; MUST be 'M' (<code>0x4D</code>)</p>
+		<p class="indent5"><code>in[5]</code> -&gt; MUST be 'W' (<code>0x57</code>)</p>
 		<p class="indent4">}</p>
 		<p class="indent4">Never fails.</p>
 		<p class="indent4">Normally outputs a blank packet with type (<code>in[2]</code>) <code>0xA2</code>.</p>
 		<p class="indent4">Sometimes outputs a 1 byte (<code>0x00</code>) packet with type (<code>in[2]</code>) <code>0xA0</code>.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
-		<p class="indent2"><b>handler_0x9E: [</b></p>
+		<p class="indent2"><b>receive_diagnose: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x9E</p>
 		<p class="indent3"><b>comment:</b></p>
 		<p class="indent4">Receive the diagnose (or auto-test).</p>
 		<p class="indent4">This handler is called by Ediabas Job "DIAGNOSE_ERHALTEN"</p>
-		<p class="idnent4">Does not use the input packet.</p>
+		<p class="indent4">Does not use the input packet.</p>
+		<p class="indent4">Does nothing, just returns a blank packet of type <code>OKAY</code></p>
 		<p class="indent4">Never fails.</p>
-		<p class="indent2"><b>]</b></p>
+		<p class="indent2"><b>],</b></p>
 		
-		<p class="indent2"><b>handler_0x9F: [</b></p>
+		<p class="indent2"><b>end_diagnose: [</b></p>
 		<p class="indent3"><b>in_PID: </b>0x9F</p>
 		<p class="indent3"><b>comment:</b></p>
-		<p class="indent4">Ends diagnosing session (or auto-test).</p>
+		<p class="indent4">Ends diagnostic session (or auto-test).</p>
 		<p class="indent4">This handler is called by Ediabas Job "DIAGNOSE_ENDE"</p>
 		<p class="indent4">Does not use the input packet.</p>
+		<p class="indent4">It seems it's redundant as the same cleanup would be done anyways</p>
 		<p class="indent4">Never fails.</p>
 		<p class="indent2"><b>]</b></p>
-		<h2 class="indent1">]</h2>
+		<h2 class="indent1">],</h2>
 		<br>
 		<hr>
 		<br>
