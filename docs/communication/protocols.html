@@ -9,16 +9,20 @@
 				background-color: #254035;
 				color: white;
 				font-family: sans-serif;
+				max-width: 100ch;
+				margin: auto;
+				padding: 1.0rem;
 			}
 
 			h2 {
 				margin: 0;
+				font-size: 1.5rem;
 			}
 			
 			p {
 				line-height: 1.45;
-				font-size: 18px;
-				margin: 8px;
+				font-size: 1.125rem;
+				margin: 0.5rem;
 			}
 
 			a {
@@ -27,31 +31,31 @@
 			}
 			
 			.indent1 {
-				margin-left: 20px;
+				margin-left: 0.50rem;
 			}
 
 			.indent2 {
-				margin-left: 60px;
+				margin-left: 2.50rem;
 			}
 
 			.indent3 {
-				margin-left: 100px;
+				margin-left: 5.00rem;
 			}
 
 			.indent4 {
-				margin-left: 140px;
+				margin-left: 7.50rem;
 			}
 
 			.indent5 {
-				margin-left: 180px;
+				margin-left: 10.00rem;
 			}
 
 			.indent6 {
-				margin-left: 220px;
+				margin-left: 12.50rem;
 			}
 
 			.indent7 {
-				margin-left: 260px;
+				margin-left: 15.00rem;
 			}
 
 			code {
@@ -419,7 +423,7 @@
 		<p class="indent4">}</p>
 		<p class="indent4">Never fails.</p>
 		<p class="indent4">Normally outputs a blank packet with type <code>ERROR_ECU_REJECTED</code>.</p>
-		<p class="indent4">Sometimes outputs a 1 byte (<code>0x00</code>) packet with type (<code>in[2]</code>) <code>0xA0</code>.</p>
+		<p class="indent4">Sometimes outputs a 1 byte (<code>0x00</code>) packet with type <code>OKAY</code>.</p>
 		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>auth_key: [</b></p>
@@ -508,7 +512,7 @@
 		<p class="indent4">If no memory region is requested (<code>0x00</code>) then:</p>
 		<p class="indent5">1. RAM_REGION is checked (<code>0xFF8000</code> - <code>0xFF9DFF</code>);</p>
 		<p class="indent5">2. ROM_REGION is checked (<code>0x000000</code> - <code>0x03FFFF</code>);</p>
-		<p class="indent5">If there is still no match, the handler returns empty output packet of type <code>0xB0</code></p>
+		<p class="indent5">If there is still no match, the handler returns empty output packet of type <code>ERROR_ECU_PARAMETER</code></p>
 		<p class="indent4">Expects the following structured input: {</p>
 		<p class="indent5"><code>in[3]</code> -&gt; type of memory region</p>
 		<p class="indent5"><code>in[4]</code> -&gt; higher byte of the address</p>
@@ -648,71 +652,54 @@
 		<p class="indent4">}</p>
 		<p class="indent4">The possible indices are: {</p>
 		<p class="indent5"><code>0x1F</code> (<code>LAMBDA2_HEATER</code>): {</p>
-		<p class="indent6">handler: <code>ActuationResult control_Lambda2_heater(byte pwm_duty)</code></p>
-		<p class="indent6">comment: If the Lambda2 is not accessible or not equipped it returns <code>INVALID_PIN</code>, if the Lambda2 dewpoint is exceeded or the <code>pwm_duty</code> is greater than 51, it returns <code>INVALID_CONDITIONS</code>, else it sets the PWM worker duty cycle to <code>pwm_duty</code> with the multiplier <code>(pwm_duty * 3120) / 255</code></p>
+		<p class="indent6">If the Lambda2 is not accessible or not equipped it returns <code>INVALID_PIN</code>, if the Lambda2 dewpoint is exceeded or <code>in[4]</code> is greater than 51, it returns <code>INVALID_CONDITIONS</code>, else it sets the PWM worker duty cycle to <code>in[4]</code> with the multiplier <code>(in[4] * 3120) / 255</code></p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x21</code> (<code>LAMBDA1_HEATER</code>): {</p>
-		<p class="indent6">handler: <code>ActuationResult control_Lambda1_heater(byte pwm_duty)</code></p>
-		<p class="indent6">comment: If the Lambda1 is not accessible or not equipped it returns <code>INVALID_PIN</code>, if the Lambda1 dewpoint is exceeded or the <code>pwm_duty</code> is greater than 51, it returns <code>INVALID_CONDITIONS</code>, else it sets the PWM worker duty cycle to <code>pwm_duty</code> with the multiplier <code>(pwm_duty * 3120) / 255</code></p>
+		<p class="indent6">If the Lambda1 is not accessible or not equipped it returns <code>INVALID_PIN</code>, if the Lambda1 dewpoint is exceeded or <code>in[4]</code> is greater than 51, it returns <code>INVALID_CONDITIONS</code>, else it sets the PWM worker duty cycle to <code>in[4]</code> with the multiplier <code>(in[4] * 3120) / 255</code></p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x36</code> (<code>INTAKE_FLAP</code>): {</p>
-		<p class="indent6">handler: <code>ActuationResult control_Intake_Flap(byte is_open)</code></p>
-		<p class="indent6">comment: If the IntakeFlap is not accessible it returns <code>INVALID_PIN</code>, if the <code>is_open</code> is <code>0x00</code> it <span style="color:red;"><b>OPENS</b></span> the flap, if it's <code>0xFF</code> it <span style="color:red;"><b>CLOSES</b></span> the flap. Else it returns <code>INVALID_DUTY_CYCLE</code></p>
+		<p class="indent6">If the IntakeFlap is not accessible it returns <code>INVALID_PIN</code>, if the <code>in[4]</code> is <code>0x00</code> it <span style="color:red;"><b>OPENS</b></span> the flap, if it's <code>0xFF</code> it <span style="color:red;"><b>CLOSES</b></span> the flap. Else it returns <code>INVALID_DUTY_CYCLE</code></p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x49</code> (??): {</p>
-		<p class="indent6">handler: ??</p>
-		<p class="indent6">comment: It never fails</p>
+		<p class="indent6">It never fails</p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x4C</code> (??): {</p>
-		<p class="indent6">handler: ??</p>
-		<p class="indent6">comment: It never fails</p>
+		<p class="indent6">It never fails</p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x4D</code> (??): {</p>
-		<p class="indent6">handler: ??</p>
-		<p class="indent6">comment: It never fails</p>
+		<p class="indent6">It never fails</p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x4E</code> (<code>DISA</code>): {</p>
-		<p class="indent6">handler: <code>ActuationResult control_DISA(byte is_open)</code></p>
-		<p class="indent6">comment: If the <code>is_open</code> is <code>0x00</code>, it commands the DISA valve to <span style="color:red;"><b>OPEN</b></span>, if it's <code>0xFF</code> it <span style="color:red;"><b>CLOSES</b></span> the DISA, else returns <code>INVALID_DUTY_CYCLE</code></p>
+		<p class="indent6">If <code>in[4]</code> is <code>0x00</code>, it commands the DISA valve to <span style="color:red;"><b>OPEN</b></span>, if it's <code>0xFF</code> it <span style="color:red;"><b>CLOSES</b></span> the DISA, else returns <code>INVALID_DUTY_CYCLE</code></p>
 		<p class="indent5"><code>0x51</code> (<code>INJECTION_CYL4</code>): {</p>
-		<p class="indent6">handler: <code>ActuationResult control_injector_CYL4(byte setpoint)</code></p>
-		<p class="indent6">comment: If the <code>setpoint</code> is <code>0x00</code>, it enables fuel cutoff, else checks running conditions and either enables maximum injection or returns <code>INVALID_CONDITIONS</code></p>
+		<p class="indent6">If the <code>in[4]</code> is <code>0x00</code>, it enables fuel cutoff, else checks running conditions and either enables maximum injection or returns <code>INVALID_CONDITIONS</code></p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x52</code> (<code>INJECTION_CYL3</code>): {</p>
-		<p class="indent6">handler: <code>ActuationResult control_injector_CYL3(byte setpoint)</code></p>
-		<p class="indent6">comment: If the <code>setpoint</code> is <code>0x00</code>, it enables fuel cutoff, else checks running conditions and either enables maximum injection or returns <code>INVALID_CONDITIONS</code></p>
+		<p class="indent6">If the <code>in[4]</code> is <code>0x00</code>, it enables fuel cutoff, else checks running conditions and either enables maximum injection or returns <code>INVALID_CONDITIONS</code></p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x53</code> (<code>INJECTION_CYL2</code>): {</p>
-		<p class="indent6">handler: <code>ActuationResult control_injector_CYL2(byte setpoint)</code></p>
-		<p class="indent6">comment: If the <code>setpoint</code> is <code>0x00</code>, it enables fuel cutoff, else checks running conditions and either enables maximum injection or returns <code>INVALID_CONDITIONS</code></p>
+		<p class="indent6">If the <code>in[4]</code> is <code>0x00</code>, it enables fuel cutoff, else checks running conditions and either enables maximum injection or returns <code>INVALID_CONDITIONS</code></p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x54</code> (<code>INJECTION_CYL1</code>): {</p>
-		<p class="indent6">handler: <code>ActuationResult control_injector_CYL1(byte setpoint)</code></p>
-		<p class="indent6">comment: If the <code>setpoint</code> is <code>0x00</code>, it enables fuel cutoff, else checks running conditions and either enables maximum injection or returns <code>INVALID_CONDITIONS</code></p>
+		<p class="indent6">If the <code>in[4]</code> is <code>0x00</code>, it enables fuel cutoff, else checks running conditions and either enables maximum injection or returns <code>INVALID_CONDITIONS</code></p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x58</code> (??): {</p>
-		<p class="indent6">handler: ??</p>
-		<p class="indent6">comment: ??</p>
+		<p class="indent6">??</p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x59</code> (??): {</p>
-		<p class="indent6">handler: ??</p>
-		<p class="indent6">comment: ??</p>
+		<p class="indent6">??</p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x5F</code> (<code>FUEL_PUMP</code>): {</p>
-		<p class="indent6">handler: <code>ActuationResult control_Fuel_Pump(byte is_enabled)</code></p>
-		<p class="indent6">comment: If the <code>is_enabled</code> is other than <code>0xFF</code> it returns <code>INVALID_DUTY_CYCLE</code>, if the Vehicle Speed is not 0 or the Fuel Pump cannot be controlled, return <code>INVALID_CONDITIONS</code>, else check additional conditions and power up the Fuel Pump</p>
+		<p class="indent6">If <code>in[4]</code> is other than <code>0xFF</code> it returns <code>INVALID_DUTY_CYCLE</code>, if the Vehicle Speed is not 0 or the Fuel Pump cannot be controlled, return <code>INVALID_CONDITIONS</code>, else check additional conditions and power up the Fuel Pump</p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x72</code> (<code>AC_COMPRESSOR</code>): {</p>
-		<p class="indent6">handler: <code>ActuationResult control_AC_compressor(byte is_enabled)</code></p>
-		<p class="indent6">comment: If the <code>is_enabled</code> is <code>0xFF</code> it <span style="color:red;"><b>STOPS</b></span> the AC compressor, if it's <code>0x00</code> it <span style="color:red;"><b>STARTS</b></span> the compressor, else it returns <code>INVALID_DUTY_CYCLE</code></p>
+		<p class="indent6">If <code>in[4]</code> is <code>0xFF</code> it <span style="color:red;"><b>STOPS</b></span> the AC compressor, if it's <code>0x00</code> it <span style="color:red;"><b>STARTS</b></span> the compressor, else it returns <code>INVALID_DUTY_CYCLE</code></p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x74</code> (<code>SECONDARY_AIR_VALVE</code>): {</p>
-		<p class="indent6">handler: <code>ActuationResult control_Secondary_Air_Valve(byte is_enabled)</code></p>
-		<p class="indent6">comment: If the Secondary Air Valve is not accessible or not equipped it returns <code>INVALID_PIN</code>, if the <code>is_enabled</code> is <code>0xFF</code> it <span style="color:red;"><b>CLOSES</b></span> the SA Valve, if it's <code>0x00</code> it <span style="color:red;"><b>OPENS</b></span> the valve, else it returns <code>INVALID_DUTY_CYCLE</code></p>
+		<p class="indent6">If the Secondary Air Valve is not accessible or not equipped it returns <code>INVALID_PIN</code>, if the <code>in[4]</code> is <code>0xFF</code> it <span style="color:red;"><b>CLOSES</b></span> the SA Valve, if it's <code>0x00</code> it <span style="color:red;"><b>OPENS</b></span> the valve, else it returns <code>INVALID_DUTY_CYCLE</code></p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x91</code> (<code>MIL</code>): {</p>
-		<p class="indent6">handler: <code>ActuationResult control_MIL(byte is_enabled)</code></p>
-		<p class="indent6">comment: If the vehicle can't access MIL, it returns <code>INVALID_CONDITIONS</code>, if the <code>is_enabled</code> is <code>0x00</code> it clears the MIL flag, if the <code>is_enabled</code> is <code>0xFF</code> it lights up the MIL, else it returns <code>INVALID_DUTY_CYCLE</code></p>
+		<p class="indent6">If the vehicle can't access MIL, it returns <code>INVALID_CONDITIONS</code>, if the <code>in[4]</code> is <code>0x00</code> it clears the MIL flag, if the <code>in[4]</code> is <code>0xFF</code> it lights up the MIL, else it returns <code>INVALID_DUTY_CYCLE</code></p>
 		<p class="indent5">}</p>
 		<p class="indent4">}</p>
 		<p class="indent4">This handler returns a 2 byte output packet: <code>out[3] = in[3]</code> (requested actuator index repeated), <code>out[4] = RET</code> (one of the result values, depending on what the dispatched handler returns)</p>
@@ -796,12 +783,12 @@
 		<p class="indent5"><code>in[3]</code> -&gt; MUST be <code>0xFE</code></p>
 		<p class="indent5"><code>in[4]</code> -&gt; index</p>
 		<p class="indent4">}</p>
-		<p class="indent4">If the index is 0x01, then this handler moves a compilation string from <code>0x14000</code> of size 96 to the output packet of type <code>0xA0</code>.</p>
-		<p class="indent4">If the index is 0x02, then this handler moves 2 ints and 7 bytes (combined size 15 Bytes) to the output packet of type <code>0xA0</code>. This is used by Ediabas Job "SP_ZAEHL".</p>
+		<p class="indent4">If the index is 0x01, then this handler moves a compilation string from <code>0x14000</code> of size 96 to the output packet of type <code>OKAY</code>.</p>
+		<p class="indent4">If the index is 0x02, then this handler moves 2 ints and 7 bytes (combined size 15 Bytes) to the output packet of type <code>OKAY</code>. This is used by Ediabas Job "SP_ZAEHL".</p>
 		<p class="indent4">If the index is 0x14, then this handler thunk-calls handler_0x14.</p>
-		<p class="indent4">If the index is 0x20, then this handler moves 40 bytes starting from <code>0xFF96C0</code> + some other 7 bytes to the output packet of size 47 and type <code>0xA0</code>.</p>
-		<p class="indent4">If the index is 0x21, then this handler moves vital Vechicle bytes and words of combined size 51 Bytes to the output packet of type <code>0xB0</code></p>
-		<p class="indent4">Else it returns a blank packet of type <code>0xB0</code>.</p>
+		<p class="indent4">If the index is 0x20, then this handler moves 40 bytes starting from <code>0xFF96C0</code> + some other 7 bytes to the output packet of size 47 and type <code>OKAY</code>.</p>
+		<p class="indent4">If the index is 0x21, then this handler moves vital Vechicle bytes and words of combined size 51 Bytes to the output packet of type <code>ERROR_ECU_PARAMETER</code></p>
+		<p class="indent4">Else it returns a blank packet of type <code>ERROR_ECU_PARAMETER</code>.</p>
 		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>handler_0x1C: [</b></p>
@@ -861,10 +848,10 @@
 		<p class="indent4">If <code>in[3]</code> was not a Lambda number it returns a packet of type <code>ERROR_ECU_PARAMETER</code>.</p>
 		<p class="indent4">If <code>in[3]</code> was <code>LAMBDA1</code>:</p>
 		<p class="indent5">If Engine is not at Idle speed or Catalyser is available, returns a blank packet of type <code>ERROR_ECU_REJECTED</code></p>
-		<p class="indent5">Else sets <code>Target_Engine_Lambda1_Adjustment</code> to the <code>new_value</code></p>
+		<p class="indent5">Else sets <code>Target_Lambda1_Adjustment</code> to the <code>new_value</code></p>
 		<p class="indent4">If <code>in[3]</code> was <code>LAMBDA2</code>:</p>
 		<p class="indent5">If Engine is not at Idle speed or <code>new_value</code> is greater than <code>0x9E</code> or it's less than <code>0x62</code>, returns a blank packet of type <code>ERROR_ECU_REJECTED</code></p>
-		<p class="indent5">Else sets <code>Target_Engine_Lambda2_Adjustment</code> to the <code>new_value</code></p>
+		<p class="indent5">Else sets <code>Target_Lambda2_Adjustment</code> to the <code>new_value</code></p>
 		<p class="indent4">Returns a blank packet of type <code>OKAY</code> on success</p>
 		<p class="indent2"><b>],</b></p>
 		
@@ -881,9 +868,9 @@
 		<p class="indent4">If <code>in[3]</code> was not a Lambda number it returns a packet of type <code>ERROR_ECU_PARAMETER</code></p>
 		<p class="indent4">If <code>in[3]</code> was <code>LAMBDA1</code>:</p>
 		<p class="indent5">If the Catalyser is available, returns a blank packet of type <code>ERROR_ECU_REJECTED</code></p>
-		<p class="indent5">Else applies the <code>Target_Engine_Lambda1_Adjustment</code> set with <code>PROTO2b::write_Lambda_adjustment</code></p>
+		<p class="indent5">Else applies the <code>Target_Lambda1_Adjustment</code> set with <code>PROTO2b::write_Lambda_adjustment</code></p>
 		<p class="indent4">If <code>in[3]</code> was <code>LAMBDA2</code>:</p>
-		<p class="indent5">The <code>Target_Engine_Lambda2_Adjustment</code> is clamped to fit and then applied</p>
+		<p class="indent5">The <code>Target_Lambda2_Adjustment</code> is clamped to fit and then applied</p>
 		<p class="indent4">On success, this handler returns a blank packet of type <code>OKAY</code></p>
 		<p class="indent2"><b>],</b></p>
 		
@@ -896,7 +883,7 @@
 		<p class="indent5"><code>in[3]</code> -&gt; first bitfield</p>
 		<p class="indent5"><code>in[4]</code> -&gt; second bitfield</p>
 		<p class="indent4">}</p>
-		<p class="indent4">Always returns a blank packet of type <code>0xA0</code>.</p>
+		<p class="indent4">Always returns a blank packet of type <code>OKAY</code>.</p>
 		<p class="indent4">Never fails.</p>
 		<p class="indent2"><b>],</b></p>
 		
@@ -908,13 +895,13 @@
 		<p class="indent4">The pointers are the same for every firmware version</p>
 		<p class="indent4">Values presented are for the firmware version 01119700F000P2AG</p>
 		<p class="indent4">The values: <code>in[0-30]</code> {</p>
-		<p class="indent5"><code>0x33</code> -&gt; '3',</p>
+		<p class="indent5"><code>0x33</code> -&gt; <code>'3'</code>,</p>
 		<p class="indent5"><code>"0261204420"</code>,</p>
 		<p class="indent5"><code>"078"</code>,</p>
 		<p class="indent5"><code>"26RT5134"</code>,</p>
-		<p class="indent5"><code>0x03FD3C</code> -&gt; "26RT5134",</p>
-		<p class="indent5"><code>0x03FD24</code> -&gt; ".26",</p>
-		<p class="indent5"><code>0x03FD44</code> -&gt; "\t000368511"</p>
+		<p class="indent5"><code>0x03FD3C</code> -&gt; <code>"26RT5134"</code>,</p>
+		<p class="indent5"><code>0x03FD24</code> -&gt; <code>".26"</code>,</p>
+		<p class="indent5"><code>0x03FD44</code> -&gt; <code>"\t000368511"</code></p>
 		<p class="indent4">}</p>
 		<p class="indent4">Size of the packet is 31.</p>
 		<p class="indent4">Never fails.</p>
@@ -930,22 +917,22 @@
 		<p class="indent4">Note that this function clears two bytes in the EWS every time (<code>0xFF8680</code> and <code>0xFF86AF</code>).</p>
 		<p class="indent4">The handler checks exactly these things:</p>
 		<p class="indent5">1. Is the ISN valid? Every word in ISN (0^1, 0^2, 1^2) XOR'ed must be 0:</p>
-		<p class="indent6"><code>0: ISN[0] (0x3F64 - 0x3F64)</code></p>
-		<p class="indent6"><code>1: ISN[1] (0x3F66 - 0x3F67)</code></p>
-		<p class="indent6"><code>2: ISN[2] (0x3F68 - 0x3F69)</code></p>
+		<p class="indent6"><code>0: ISN[0]</code> <code>(0x3F64 - 0x3F64)</code></p>
+		<p class="indent6"><code>1: ISN[1]</code> <code>(0x3F66 - 0x3F67)</code></p>
+		<p class="indent6"><code>2: ISN[2]</code> <code>(0x3F68 - 0x3F69)</code></p>
 		<p class="indent5">Additionaly XOR'ing the pre-hashed pairs (0^1, 0^2, 1^2) in the same way as before must equal 0:</p>
 		<p class="indent6"><code>0: (ISN[0] ^ 0x0D0B)</code></p>
 		<p class="indent6"><code>1: (ISN[1] ^ 0x1D17)</code></p>
 		<p class="indent6"><code>2: (ISN[2] ^ 0x251F)</code></p>
 		<p class="indent5">If the ISN is invalid, moves 3 to the output packet.</p>
 		<p class="indent5">2. Is the flag bigger than 1?</p>
-		<p class="indent6">This is error, return a packet of type <code>0xB0</code>.</p>
+		<p class="indent6">This is error, return a packet of type <code>ERROR_ECU_PARAMETER</code>.</p>
 		<p class="indent5">3. Is the EWS unlocked/valid?</p>
 		<p class="indent6">If EWS locked/invalid and the flag is different than 1, a 1 is returned in output packet.</p>
 		<p class="indent6">If EWS unlocked/valid and the flag is different than 0, a 2 is returned in output packet.</p>
 		<p class="indent5">4. Is the Engine running?</p>
-		<p class="indent6">If the engine is running return a packet of type <code>0xA2</code>.</p>
-		<p class="indent4">If the error code (or success code) is in the range [0, 3], this handler moves it to the output packet of type <code>0xA0</code>.</p>
+		<p class="indent6">If the engine is running return a packet of type <code>ERROR_ECU_REJECTED</code>.</p>
+		<p class="indent4">If the error code (or success code) is in the range [0, 3], this handler moves it to the output packet of type <code>OKAY</code>.</p>
 		<p class="indent4">If the error code (or success code) is out of range, this handler returns a blank packet with this code being the type.<p>
 		<p class="indent2"><b>],</b></p>
 		
@@ -955,7 +942,7 @@
 		<p class="indent4">Read state from EWS (state can be configured with <code>PROTO2b::write_EWS_state</code>).</p>
 		<p class="indent4">This handler checks some pre-conditions based on an internal bitfield (<code>0xFF86AD</code>).</p>
 		<p class="indent4">Does not use the input packet.</p>
-		<p class="indent4">If the error code (or success code) is in the range [0, 2], this handler moves it to the output packet of type <code>0xA0</code>.</p>
+		<p class="indent4">If the error code (or success code) is in the range [0, 2], this handler moves it to the output packet of type <code>OKAY</code>.</p>
 		<p class="indent4">If the error code (or success code) is out of range, this handler returns a blank packet with this code being the type.</p>
 		<p class="indent2"><b>],</b></p>
 		
@@ -971,8 +958,8 @@
 		<p class="indent5"><code>in[5]</code> -&gt; MUST be 'W' (<code>0x57</code>)</p>
 		<p class="indent4">}</p>
 		<p class="indent4">Never fails.</p>
-		<p class="indent4">Normally outputs a blank packet with type (<code>in[2]</code>) <code>0xA2</code>.</p>
-		<p class="indent4">Sometimes outputs a 1 byte (<code>0x00</code>) packet with type (<code>in[2]</code>) <code>0xA0</code>.</p>
+		<p class="indent4">Normally outputs a blank packet with type <code>ERROR_ECU_REJECTED</code>.</p>
+		<p class="indent4">Sometimes outputs a 1 byte (<code>0x00</code>) packet with type <code>OKAY</code>.</p>
 		<p class="indent2"><b>],</b></p>
 		
 		<p class="indent2"><b>receive_diagnose: [</b></p>
@@ -1012,7 +999,12 @@
 		<p class="indent5"><code>in[4]</code> -&gt; index of the wanted variable</p>
 		<p class="indent4">}</p>
 		<p class="indent4">Possible indices are: {</p>
-		<p class="indent5"><code>0x00</code> -&gt; PID support status bitfield (0x01-0x20) <code>0b10111110000111111111100000010000</code></p>
+		<p class="indent5"><code>0x00</code>: {</p>
+		<p class="indent6"><code>out[5]</code> -&gt; <code>0xBE</code></p>
+		<p class="indent6"><code>out[6]</code> -&gt; <code>0x1F</code></p>
+		<p class="indent6"><code>out[7]</code> -&gt; <code>0xF8</code></p>
+		<p class="indent6"><code>out[8]</code> -&gt; <code>0x10</code></p>
+		<p class="indent5">}</p>
 		<p class="indent5"><code>0x01</code>: {</p>
 		<p class="indent6"><code>out[5]:[7-7]</code> -&gt; <code>is_MIL_on</code></p>
 		<p class="indent6"><code>out[5]:[0-6]</code> -&gt; <code>DTC_saved_count</code></p>
@@ -1053,10 +1045,14 @@
 		<p class="indent6"><code>out[6]</code> -&gt; <code>0xFF</code></p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x1C</code> -&gt; <code>out[5]</code> -&gt; <code>0x06</code> (<code>EOBD</code>)</p>
-		<p class="indent5"><code>0x20</code> -&gt; PID support status bitfield (0x21-0x40) <code>0b10000000000000000000000000000000</code></p>
+		<p class="indent5"><code>0x20</code>: {</p>
+		<p class="indent6"><code>out[5]</code> -&gt; <code>0x80</code></p>
+		<p class="indent6"><code>out[6]</code> -&gt; <code>0x00</code></p>
+		<p class="indent6"><code>out[7]</code> -&gt; <code>0x00</code></p>
+		<p class="indent6"><code>out[8]</code> -&gt; <code>0x00</code></p>
+		<p class="indent5">}</p>
 		<p class="indent5"><code>0x21</code>: {</p>
-		<p class="indent6"><code>out[5]</code> -&gt; <code>Vehicle_Distance_On_MIL &gt;&gt; 8</code> (hi_byte),</p>
-		<p class="indent6"><code>out[6]</code> -&gt; <code>Vehicle_Distance_On_MIL &amp;&amp; 255</code> (lo_byte)</p>
+		<p class="indent6"><code>out[5-6]</code> -&gt; <code>Vehicle_Distance_On_MIL</code> (hi_byte first),</p>
 		<p class="indent5">}</p>
 		<p class="indent4">}</p>
 		<p class="indent4">The response consists of <code>out[3] = 0x41</code> (handler idx (1) + 0x40 which means successful response), <code>out[4] = in[4]</code> (wanted index), <code>out[5...]</code> (response bytes)</p>
@@ -1071,10 +1067,14 @@
 		<p class="indent5"><code>in[5]</code> -&gt; frame index (only one frame so this is unused)</p>
 		<p class="indent4">}</p>
 		<p class="indent4">Possible indices are: {</p>
-		<p class="indent5"><code>0x00</code> -&gt; PID support status bitfield <code>0b01111110000110000000000000000000</code></p>
+		<p class="indent5"><code>0x00</code>: {</p>
+		<p class="indent6"><code>out[6]</code> -&gt; <code>0x7E</code></p>
+		<p class="indent6"><code>out[7]</code> -&gt; <code>0x18</code></p>
+		<p class="indent6"><code>out[8]</code> -&gt; <code>0x00</code></p>
+		<p class="indent6"><code>out[9]</code> -&gt; <code>0x00</code></p>
+		<p class="indent5">}</p>
 		<p class="indent5"><code>0x02</code>: {</p>
-		<p class="indent6"><code>out[6]</code> -&gt; <code>BCD_encoded_FreezeFrame_DTC &gt;&gt; 8</code> (hi_byte or 0x00 if no DTC),</p>
-		<p class="indent6"><code>out[7]</code> -&gt; <code>BCD_encoded_FreezeFrame_DTC &amp;&amp; 255</code> (lo_byte or 0x00 if no DTC)</p>
+		<p class="indent6"><code>out[6-7]</code> -&gt; <code>BCD_encoded_FreezeFrame_DTC</code> (hi_byte first or 0x00 if no DTC)</p>
 		<p class="indent5">}</p>
 		<p class="indent5"><code>0x03</code>: {</p>
 		<p class="indent6"><code>out[6]</code> -&gt; <code>FreezeFrame_FuelSystem1_Status</code>,</p>
@@ -1084,10 +1084,7 @@
 		<p class="indent5"><code>0x05</code> -&gt; <code>out[6]</code> -&gt; <code>FreezeFrame_Engine_Coolant_Temp</code></p>
 		<p class="indent5"><code>0x06</code> -&gt; <code>out[6]</code> -&gt; <code>FreezeFrame_Engine_STFT_Bank1</code></p>
 		<p class="indent5"><code>0x07</code> -&gt; <code>out[6]</code> -&gt; <code>FreezeFrame_Engine_LTFT_Bank1</code></p>
-		<p class="indent5"><code>0x0C</code>: {</p>
-		<p class="indent6"><code>out[6]</code> -&gt; <code>FreezeFrame_Engine_RPM &gt;&gt; 8</code> (hi_byte),</p>
-		<p class="indent6"><code>out[7]</code> -&gt; <code>FreezeFrame_Engine_RPM &amp;&amp; 255</code> (lo_byte)</p>
-		<p class="indent5">}</p>
+		<p class="indent5"><code>0x0C</code> -&gt; <code>out[6-7]</code> -&gt; <code>FreezeFrame_Engine_RPM</code> (hi_byte first),</p>
 		<p class="indent5"><code>0x0D</code> -&gt; <code>out[6]</code> -&gt; <code>FreezeFrame_Vehicle_Speed</code></p>
 		<p class="indent4">}</p>
 		<p class="indent4">The response consists of <code>out[3] = 0x42</code> (handler idx (2) + 0x40 which means successful response), <code>out[4] = in[4]</code> (wanted index), <code>out[5] = in[5]</code> (frame index repeated), <code>out[6...]</code> (response bytes)</p>
@@ -1121,7 +1118,12 @@
 		<p class="indent5">}</p>
 		<p class="indent4">}</p>
 		<p class="indent4">Possible indices are: {</p>
-		<p class="indent5"><code>0x00</code> -&gt; PID support status bit <code>0b00000011000000000000000000000000</code></p>
+		<p class="indent5"><code>0x00</code>: {</p>
+		<p class="indent6"><code>out[6]</code> -&gt; <code>0x03</code></p>
+		<p class="indent6"><code>out[7]</code> -&gt; <code>0x00</code></p>
+		<p class="indent6"><code>out[8]</code> -&gt; <code>0x00</code></p>
+		<p class="indent6"><code>out[9]</code> -&gt; <code>0x00</code></p>
+		<p class="indent5">}</p>
 		<p class="indent5"><code>0x07</code>: {</p>
 		<p class="indent6"><code>out[6]</code> -&gt; <code>Test7_LambdaX_Result</code> (depends on <code>in[5]</code>),</p>
 		<p class="indent6"><code>out[7]</code> -&gt; <code>0x00</code> 0.00V (<code>Test7_Lambda_Min_Result</code>),</p>
