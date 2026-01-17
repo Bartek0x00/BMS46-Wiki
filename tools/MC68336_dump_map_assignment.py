@@ -58,9 +58,21 @@ def find_symbols():
 
 outPath = None
 
+def update_json(json):
+    listing = currentProgram.getListing()
+    symbol_table = currentProgram.getSymbolTable()
+    for key in sorted(json):
+        addr = toAddr(key)
+        symbol = symbol_table.getPrimarySymbol(addr)
+        label = symbol.getName()
+        if label != json[key]["name"]:
+            new_label = askString("New name for symbol " + "0x" + str(key), json[key]["name"] + " -> ", label)
+            print(json[key]["name"] + " -> " + new_label)
+            json[key]["name"] = new_label
+
 def read_json():
     global outPath
-    outPath = askFile("Select location of maps.json", "Load")
+    outPath = askFile("Select location of variables.json", "Load")
     with open(outPath.absolutePath, "r") as f:
         return json.load(f)
 
@@ -70,6 +82,9 @@ def save_json(data):
         json.dump(data, f, indent=4)
 
 def main():
-    save_json(find_symbols())
+    #save_json(find_symbols())
+    variables = read_json()
+    update_json(variables)
+    save_json(variables)
 
 main()
