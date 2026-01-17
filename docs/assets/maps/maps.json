@@ -22,10 +22,10 @@
     }, 
     "ff8316": {
         "type": "byte", 
-        "off": 0.0, 
-        "unit": "", 
-        "name": "BYTE_00ff8316", 
-        "factor": 1.0
+        "off": -48, 
+        "unit": "C", 
+        "name": "temp engin", 
+        "factor": 0.75
     }, 
     "ff8317": {
         "type": "byte", 
@@ -36,10 +36,10 @@
     }, 
     "ff8322": {
         "type": "byte", 
-        "off": 0.0, 
-        "unit": "", 
-        "name": "BYTE_00ff8322", 
-        "factor": 1.0
+        "off":-48, 
+        "unit": "C", 
+        "name": "air temperature", 
+        "factor": 0.75
     }, 
     "ff8328": {
         "type": "word", 
@@ -53,7 +53,7 @@
         "off": 0.0, 
         "unit": "[V]", 
         "name": "Engine_Alternator", 
-        "factor": 0.068
+        "factor": 0,094309
     }, 
     "ff832c": {
         "type": "byte", 
@@ -821,9 +821,9 @@
     "ff848e": {
         "type": "byte", 
         "off": 0.0, 
-        "unit": "", 
-        "name": "BYTE_00ff848e", 
-        "factor": 1.0
+        "unit": "grad DK", 
+        "name": "throttle angle", 
+        "factor": 0,390625
     }, 
     "ff8499": {
         "type": "byte", 
@@ -1136,9 +1136,9 @@
     "ff8586": {
         "type": "byte", 
         "off": 0.0, 
-        "unit": "", 
-        "name": "BYTE_00ff8586", 
-        "factor": 1.0
+        "unit": "Nm", 
+        "name": "Torque", 
+        "factor": 2
     }, 
     "ff8587": {
         "type": "byte", 
@@ -1346,23 +1346,23 @@
     "ff8656": {
         "type": "byte", 
         "off": 0.0, 
-        "unit": "", 
-        "name": "BYTE_00ff8656", 
-        "factor": 1.0
+        "unit": "%", 
+        "name": "throttle opening percentage", 
+        "factor": 0,390625
     }, 
     "ff8657": {
         "type": "byte", 
         "off": 0.0, 
-        "unit": "", 
-        "name": "BYTE_00ff8657", 
-        "factor": 1.0
+        "unit": "ms", 
+        "name": "pedal response time", 
+        "factor": 0.05
     }, 
     "ff8658": {
         "type": "byte", 
         "off": 0.0, 
-        "unit": "", 
-        "name": "BYTE_00ff8658", 
-        "factor": 1.0
+        "unit": "Kg/h", 
+        "name": "mass air flow rate", 
+        "factor":0.5
     }, 
     "ff8754": {
         "type": "word", 
