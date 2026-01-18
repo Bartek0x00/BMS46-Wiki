@@ -1,4 +1,4 @@
-# Dumps all variables from maps to a json
+# Dumps all variables to a json
 #@author Bartek0x00
 #@category Visualisation
 
@@ -79,7 +79,7 @@ def read_json():
 def save_json(data):
     global outPath
     with open(outPath.absolutePath, "w") as f:
-        json.dump(data, f, indent=4)
+        json.dump(data, f, indent=4, sort_keys=True)
 
 def main():
     #save_json(find_symbols())

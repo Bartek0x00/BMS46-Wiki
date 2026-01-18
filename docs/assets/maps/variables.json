@@ -20,6 +20,20 @@
         "type": "word",
         "unit": ""
     },
+    "ff8312": {
+        "factor": 1.0,
+        "name": "Engine_Coolant_Temp_Raw",
+        "off": 0.0,
+        "type": "word",
+        "unit": ""
+    },
+    "ff8314": {
+        "factor": 1.0,
+        "name": "Engine_Coolant_Temp_Word2",
+        "off": 0.0,
+        "type": "word",
+        "unit": ""
+    },
     "ff8316": {
         "factor": 0.75,
         "name": "Engine_Coolant_Temp",
@@ -34,12 +48,40 @@
         "type": "byte",
         "unit": ""
     },
+    "ff831e": {
+        "factor": 1.0,
+        "name": "Engine_IAT_Raw",
+        "off": 0.0,
+        "type": "word",
+        "unit": ""
+    },
+    "ff8320": {
+        "factor": 1.0,
+        "name": "Engine_IAT_Word",
+        "off": 0.0,
+        "type": "word",
+        "unit": ""
+    },
     "ff8322": {
         "factor": 0.75,
         "name": "Engine_IAT",
         "off": -48.0,
         "type": "byte",
         "unit": "[deg C]"
+    },
+    "ff8324": {
+        "factor": 1.0,
+        "name": "WORD_00ff8324",
+        "off": 0.0,
+        "type": "word",
+        "unit": ""
+    },
+    "ff8326": {
+        "factor": 1.0,
+        "name": "WORD_00ff8326",
+        "off": 0.0,
+        "type": "word",
+        "unit": ""
     },
     "ff8328": {
         "factor": 1.0,

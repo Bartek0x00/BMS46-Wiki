@@ -19,13 +19,13 @@ map2D_comments = (
 )
 
 map3D_comments = (
-	"in_z", 
 	"in_x", 
+	"in_z", 
 	"out_y", 
-	"z", 
 	"x", 
-	"ticks_z",
+	"z", 
 	"ticks_x",
+	"ticks_z",
 	"data"
 ) 
 

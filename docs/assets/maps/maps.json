@@ -1,0 +1,2144 @@
+{
+    "008164": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "DISA_Enable", 
+        "partial_file_off": "0154", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00817e": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "DISA_Disable", 
+        "partial_file_off": "016e", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008198": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008198", 
+        "partial_file_off": "0188", 
+        "size_x": 10, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0081b6": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000081b6", 
+        "partial_file_off": "01a6", 
+        "size_x": 10, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0081d4": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000081d4", 
+        "partial_file_off": "01c4", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0081fe": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000081fe", 
+        "partial_file_off": "01ee", 
+        "size_x": 13, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00823c": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000823c", 
+        "partial_file_off": "022c", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008260": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008260", 
+        "partial_file_off": "0250", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00828a": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "0000828a", 
+        "partial_file_off": "027a", 
+        "size_x": 6, 
+        "size_z": 5, 
+        "summary": ""
+    }, 
+    "0082c2": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "000082c2", 
+        "partial_file_off": "02b2", 
+        "size_x": 4, 
+        "size_z": 3, 
+        "summary": ""
+    }, 
+    "0082e4": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "000082e4", 
+        "partial_file_off": "02d4", 
+        "size_x": 3, 
+        "size_z": 4, 
+        "summary": ""
+    }, 
+    "008322": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00008322", 
+        "partial_file_off": "0312", 
+        "size_x": 4, 
+        "size_z": 2, 
+        "summary": ""
+    }, 
+    "008344": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008344", 
+        "partial_file_off": "0334", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00835a": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000835a", 
+        "partial_file_off": "034a", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00836c": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "0000836c", 
+        "partial_file_off": "035c", 
+        "size_x": 8, 
+        "size_z": 8, 
+        "summary": ""
+    }, 
+    "0083ca": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "000083ca", 
+        "partial_file_off": "03ba", 
+        "size_x": 8, 
+        "size_z": 8, 
+        "summary": ""
+    }, 
+    "008428": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00008428", 
+        "partial_file_off": "0418", 
+        "size_x": 8, 
+        "size_z": 8, 
+        "summary": ""
+    }, 
+    "008486": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008486", 
+        "partial_file_off": "0476", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008498": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00008498", 
+        "partial_file_off": "0488", 
+        "size_x": 4, 
+        "size_z": 4, 
+        "summary": ""
+    }, 
+    "0084c8": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "000084c8", 
+        "partial_file_off": "04b8", 
+        "size_x": 4, 
+        "size_z": 4, 
+        "summary": ""
+    }, 
+    "0084f4": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000084f4", 
+        "partial_file_off": "04e4", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008524": {
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "00008524", 
+        "partial_file_off": "0514", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00855a": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000855a", 
+        "partial_file_off": "054a", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00858a": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000858a", 
+        "partial_file_off": "057a", 
+        "size_x": 3, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00859a": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000859a", 
+        "partial_file_off": "058a", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0085ee": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000085ee", 
+        "partial_file_off": "05de", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008604": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008604", 
+        "partial_file_off": "05f4", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00861a": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "AAT_Correction", 
+        "partial_file_off": "060a", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00862c": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "0000862c", 
+        "partial_file_off": "061c", 
+        "size_x": 6, 
+        "size_z": 6, 
+        "summary": ""
+    }, 
+    "00866a": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "0000866a", 
+        "partial_file_off": "065a", 
+        "size_x": 6, 
+        "size_z": 7, 
+        "summary": ""
+    }, 
+    "0086c0": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000086c0", 
+        "partial_file_off": "06b0", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0086d2": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000086d2", 
+        "partial_file_off": "06c2", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0086e4": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000086e4", 
+        "partial_file_off": "06d4", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0086f6": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000086f6", 
+        "partial_file_off": "06e6", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008708": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00008708", 
+        "partial_file_off": "06f8", 
+        "size_x": 4, 
+        "size_z": 7, 
+        "summary": ""
+    }, 
+    "00873e": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000873e", 
+        "partial_file_off": "072e", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008750": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008750", 
+        "partial_file_off": "0740", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008762": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008762", 
+        "partial_file_off": "0752", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008774": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008774", 
+        "partial_file_off": "0764", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008786": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "Lambda1", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 8, 
+        "summary": ""
+    }, 
+    "0087d2": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "Lambda2", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 8, 
+        "summary": ""
+    }, 
+    "00882e": {
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "0000882e", 
+        "partial_file_off": "081e", 
+        "size_x": 18, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008880": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008880", 
+        "partial_file_off": "0870", 
+        "size_x": 5, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0088a0": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000088a0", 
+        "partial_file_off": "0890", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0088b6": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000088b6", 
+        "partial_file_off": "08a6", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0088c8": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000088c8", 
+        "partial_file_off": "08b8", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0088da": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000088da", 
+        "partial_file_off": "08ca", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0088ec": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000088ec", 
+        "partial_file_off": "08dc", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0088fe": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000088fe", 
+        "partial_file_off": "08ee", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008914": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008914", 
+        "partial_file_off": "0904", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00892a": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000892a", 
+        "partial_file_off": "091a", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008940": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008940", 
+        "partial_file_off": "0930", 
+        "size_x": 3, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008950": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00008950", 
+        "partial_file_off": "0940", 
+        "size_x": 4, 
+        "size_z": 6, 
+        "summary": ""
+    }, 
+    "008980": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00008980", 
+        "partial_file_off": "0970", 
+        "size_x": 6, 
+        "size_z": 7, 
+        "summary": ""
+    }, 
+    "0089c6": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000089c6", 
+        "partial_file_off": "09b6", 
+        "size_x": 5, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0089da": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000089da", 
+        "partial_file_off": "09ca", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0089fc": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000089fc", 
+        "partial_file_off": "09ec", 
+        "size_x": 7, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008a14": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008a14", 
+        "partial_file_off": "0a04", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008a2a": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008a2a", 
+        "partial_file_off": "0a1a", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008a40": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008a40", 
+        "partial_file_off": "0a30", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008a62": {
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "00008a62", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008a7c": {
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "00008a7c", 
+        "partial_file_off": "0a6c", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008a96": {
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "00008a96", 
+        "partial_file_off": "0a86", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008ab0": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008ab0", 
+        "partial_file_off": "0aa0", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008ac2": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008ac2", 
+        "partial_file_off": "0ab2", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008ad4": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008ad4", 
+        "partial_file_off": "0ac4", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008ae6": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008ae6", 
+        "partial_file_off": "0ad6", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008b0c": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008b0c", 
+        "partial_file_off": "0afc", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008b22": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008b22", 
+        "partial_file_off": "0b12", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008b34": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008b34", 
+        "partial_file_off": "0b24", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008b4a": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008b4a", 
+        "partial_file_off": "0b3a", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008b60": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008b60", 
+        "partial_file_off": "0b50", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008b76": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008b76", 
+        "partial_file_off": "0b66", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008b92": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "Lambda1_Heating", 
+        "partial_file_off": "0b82", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008ba4": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "Lambda2_Heating", 
+        "partial_file_off": "0b94", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008bcc": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008bcc", 
+        "partial_file_off": "0bbc", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008be2": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008be2", 
+        "partial_file_off": "0bd2", 
+        "size_x": 2, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008bf0": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008bf0", 
+        "partial_file_off": "0be0", 
+        "size_x": 2, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008bfe": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008bfe", 
+        "partial_file_off": "0bee", 
+        "size_x": 2, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008c0c": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008c0c", 
+        "partial_file_off": "0bfc", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008c22": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008c22", 
+        "partial_file_off": "0c12", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008c34": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008c34", 
+        "partial_file_off": "0c24", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008c4a": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008c4a", 
+        "partial_file_off": "0c3a", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008c5c": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008c5c", 
+        "partial_file_off": "0c4c", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008c72": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00008c72", 
+        "partial_file_off": "0c62", 
+        "size_x": 4, 
+        "size_z": 4, 
+        "summary": ""
+    }, 
+    "008c98": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00008c98", 
+        "partial_file_off": "0c88", 
+        "size_x": 6, 
+        "size_z": 6, 
+        "summary": ""
+    }, 
+    "008cd8": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008cd8", 
+        "partial_file_off": "0cc8", 
+        "size_x": 2, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008ce6": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008ce6", 
+        "partial_file_off": "0cd6", 
+        "size_x": 5, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008cfa": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008cfa", 
+        "partial_file_off": "0cea", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008d10": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008d10", 
+        "partial_file_off": "0d00", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008d26": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008d26", 
+        "partial_file_off": "0d16", 
+        "size_x": 5, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008d3a": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008d3a", 
+        "partial_file_off": "0d2a", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008d54": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008d54", 
+        "partial_file_off": "0d44", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008d6e": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008d6e", 
+        "partial_file_off": "0d5e", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008d88": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008d88", 
+        "partial_file_off": "0d78", 
+        "size_x": 3, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008d98": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008d98", 
+        "partial_file_off": "0d88", 
+        "size_x": 10, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008db6": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008db6", 
+        "partial_file_off": "0da6", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008dcc": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00008dcc", 
+        "partial_file_off": "0dbc", 
+        "size_x": 7, 
+        "size_z": 7, 
+        "summary": ""
+    }, 
+    "008e1a": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00008e1a", 
+        "partial_file_off": "0e0a", 
+        "size_x": 7, 
+        "size_z": 7, 
+        "summary": ""
+    }, 
+    "008e68": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00008e68", 
+        "partial_file_off": "0e58", 
+        "size_x": 6, 
+        "size_z": 6, 
+        "summary": ""
+    }, 
+    "008ea6": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008ea6", 
+        "partial_file_off": "0e96", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008ebc": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008ebc", 
+        "partial_file_off": "0eac", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008ed2": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008ed2", 
+        "partial_file_off": "0ec2", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008f02": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "Desired_Injection", 
+        "partial_file_off": "0ef2", 
+        "size_x": 8, 
+        "size_z": 8, 
+        "summary": ""
+    }, 
+    "008f62": {
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "00008f62", 
+        "partial_file_off": "0f52", 
+        "size_x": 10, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008f94": {
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "00008f94", 
+        "partial_file_off": "0f84", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008fb8": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00008fb8", 
+        "partial_file_off": "0fa8", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "008fce": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00008fce", 
+        "partial_file_off": "0fbe", 
+        "size_x": 3, 
+        "size_z": 4, 
+        "summary": ""
+    }, 
+    "008ff0": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "Lambda2_Running", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 7, 
+        "summary": "0fe0"
+    }, 
+    "009036": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009036", 
+        "partial_file_off": "1026", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009048": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009048", 
+        "partial_file_off": "1038", 
+        "size_x": 3, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009058": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "Injection_Partial", 
+        "partial_file_off": "1048", 
+        "size_x": 12, 
+        "size_z": 12, 
+        "summary": ""
+    }, 
+    "00910e": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000910e", 
+        "partial_file_off": "10fe", 
+        "size_x": 3, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00912c": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "0000912c", 
+        "partial_file_off": "111c", 
+        "size_x": 6, 
+        "size_z": 8, 
+        "summary": ""
+    }, 
+    "00918e": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000918e", 
+        "partial_file_off": "117e", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0091a4": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "000091a4", 
+        "partial_file_off": "1194", 
+        "size_x": 10, 
+        "size_z": 6, 
+        "summary": ""
+    }, 
+    "0091fe": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "000091fe", 
+        "partial_file_off": "11ee", 
+        "size_x": 10, 
+        "size_z": 6, 
+        "summary": ""
+    }, 
+    "009258": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00009258", 
+        "partial_file_off": "1248", 
+        "size_x": 10, 
+        "size_z": 6, 
+        "summary": ""
+    }, 
+    "0092c8": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000092c8", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0092da": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "000092da", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 6, 
+        "summary": ""
+    }, 
+    "009336": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00009336", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 6, 
+        "summary": ""
+    }, 
+    "009374": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009374", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009394": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009394", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0093a6": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000093a6", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0093b8": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "Injection_Full_Throttle", 
+        "partial_file_off": "", 
+        "size_x": 16, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0093e2": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000093e2", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0093f8": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000093f8", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00940e": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "Correction_Injection_Length", 
+        "partial_file_off": "", 
+        "size_x": 5, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009422": {
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "00009422", 
+        "partial_file_off": "", 
+        "size_x": 10, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009454": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "Injection_Partial_Throttle", 
+        "partial_file_off": "", 
+        "size_x": 16, 
+        "size_z": 12, 
+        "summary": ""
+    }, 
+    "00953e": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "Injection_Closed_Throttle", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 3, 
+        "summary": ""
+    }, 
+    "009568": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00009568", 
+        "partial_file_off": "", 
+        "size_x": 8, 
+        "size_z": 8, 
+        "summary": ""
+    }, 
+    "0095c6": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000095c6", 
+        "partial_file_off": "", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009600": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009600", 
+        "partial_file_off": "", 
+        "size_x": 17, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00962c": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000962c", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009642": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009642", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009658": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009658", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00966e": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000966e", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009684": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00009684", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 8, 
+        "summary": ""
+    }, 
+    "0096d0": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "000096d0", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 8, 
+        "summary": ""
+    }, 
+    "00971c": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000971c", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009732": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009732", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00974a": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000974a", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009760": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009760", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009776": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009776", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00978c": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000978c", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0097ca": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000097ca", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0097dc": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000097dc", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0097ee": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000097ee", 
+        "partial_file_off": "", 
+        "size_x": 5, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009802": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00009802", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 4, 
+        "summary": ""
+    }, 
+    "009828": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00009828", 
+        "partial_file_off": "", 
+        "size_x": 10, 
+        "size_z": 6, 
+        "summary": ""
+    }, 
+    "009882": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009882", 
+        "partial_file_off": "", 
+        "size_x": 5, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009896": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00009896", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 4, 
+        "summary": ""
+    }, 
+    "0098bc": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "000098bc", 
+        "partial_file_off": "", 
+        "size_x": 3, 
+        "size_z": 3, 
+        "summary": ""
+    }, 
+    "0098da": {
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "000098da", 
+        "partial_file_off": "", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009904": {
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "00009904", 
+        "partial_file_off": "", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00992e": {
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "0000992e", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009950": {
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "00009950", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009984": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009984", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009996": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009996", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0099a8": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "000099a8", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0099e2": {
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "000099e2", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009a10": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009a10", 
+        "partial_file_off": "", 
+        "size_x": 16, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009a3a": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009a3a", 
+        "partial_file_off": "", 
+        "size_x": 5, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009a62": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009a62", 
+        "partial_file_off": "", 
+        "size_x": 11, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009a82": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009a82", 
+        "partial_file_off": "", 
+        "size_x": 11, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009aa2": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009aa2", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009ab8": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009ab8", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009ace": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009ace", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009ae0": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "MAF", 
+        "partial_file_off": "", 
+        "size_x": 11, 
+        "size_z": 10, 
+        "summary": ""
+    }, 
+    "009b72": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00009b72", 
+        "partial_file_off": "", 
+        "size_x": 11, 
+        "size_z": 7, 
+        "summary": ""
+    }, 
+    "009be0": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00009be0", 
+        "partial_file_off": "", 
+        "size_x": 11, 
+        "size_z": 7, 
+        "summary": ""
+    }, 
+    "009c4e": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00009c4e", 
+        "partial_file_off": "", 
+        "size_x": 11, 
+        "size_z": 7, 
+        "summary": ""
+    }, 
+    "009cbc": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00009cbc", 
+        "partial_file_off": "", 
+        "size_x": 9, 
+        "size_z": 4, 
+        "summary": ""
+    }, 
+    "009cfc": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00009cfc", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 4, 
+        "summary": ""
+    }, 
+    "009d22": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "00009d22", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 6, 
+        "summary": ""
+    }, 
+    "009d60": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009d60", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009d78": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009d78", 
+        "partial_file_off": "", 
+        "size_x": 16, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009da2": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009da2", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009db4": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009db4", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009dc6": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009dc6", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009dd8": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009dd8", 
+        "partial_file_off": "", 
+        "size_x": 5, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009e0c": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009e0c", 
+        "partial_file_off": "", 
+        "size_x": 3, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009e1c": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "Knock1", 
+        "partial_file_off": "", 
+        "size_x": 12, 
+        "size_z": 4, 
+        "summary": ""
+    }, 
+    "009e6a": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "Knock2", 
+        "partial_file_off": "", 
+        "size_x": 12, 
+        "size_z": 4, 
+        "summary": ""
+    }, 
+    "009eb8": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "Knock3", 
+        "partial_file_off": "", 
+        "size_x": 12, 
+        "size_z": 4, 
+        "summary": ""
+    }, 
+    "009f06": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "Knock4", 
+        "partial_file_off": "", 
+        "size_x": 12, 
+        "size_z": 4, 
+        "summary": ""
+    }, 
+    "009f54": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009f54", 
+        "partial_file_off": "", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009f6e": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "Ignition_Closed_Throttle", 
+        "partial_file_off": "", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009f88": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009f88", 
+        "partial_file_off": "", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009fa2": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009fa2", 
+        "partial_file_off": "", 
+        "size_x": 10, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009fc0": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009fc0", 
+        "partial_file_off": "", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009fda": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009fda", 
+        "partial_file_off": "", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "009ff4": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "00009ff4", 
+        "partial_file_off": "", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a00e": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a00e", 
+        "partial_file_off": "", 
+        "size_x": 16, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a038": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a038", 
+        "partial_file_off": "", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a052": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a052", 
+        "partial_file_off": "", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a06c": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a06c", 
+        "partial_file_off": "", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a086": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a086", 
+        "partial_file_off": "", 
+        "size_x": 12, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a0a8": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a0a8", 
+        "partial_file_off": "", 
+        "size_x": 12, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a0ca": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a0ca", 
+        "partial_file_off": "", 
+        "size_x": 16, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a0f4": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a0f4", 
+        "partial_file_off": "", 
+        "size_x": 16, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a11e": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a11e", 
+        "partial_file_off": "", 
+        "size_x": 16, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a148": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a148", 
+        "partial_file_off": "", 
+        "size_x": 12, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a16a": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "0000a16a", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 6, 
+        "summary": ""
+    }, 
+    "00a19a": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "0000a19a", 
+        "partial_file_off": "", 
+        "size_x": 16, 
+        "size_z": 7, 
+        "summary": ""
+    }, 
+    "00a230": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "0000a230", 
+        "partial_file_off": "", 
+        "size_x": 8, 
+        "size_z": 8, 
+        "summary": ""
+    }, 
+    "00a28e": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "Fallback_Injection", 
+        "partial_file_off": "", 
+        "size_x": 16, 
+        "size_z": 12, 
+        "summary": ""
+    }, 
+    "00a37c": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a37c", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a392": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a392", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a3ba": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a3ba", 
+        "partial_file_off": "", 
+        "size_x": 16, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a3e4": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a3e4", 
+        "partial_file_off": "", 
+        "size_x": 16, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a40e": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a40e", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a420": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a420", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a432": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a432", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a444": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a444", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a456": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a456", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a468": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a468", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a47a": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a47a", 
+        "partial_file_off": "", 
+        "size_x": 2, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a4a2": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a4a2", 
+        "partial_file_off": "", 
+        "size_x": 8, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a4bc": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a4bc", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a4d2": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a4d2", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a4e8": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a4e8", 
+        "partial_file_off": "", 
+        "size_x": 3, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a4f8": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a4f8", 
+        "partial_file_off": "", 
+        "size_x": 3, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a508": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "0000a508", 
+        "partial_file_off": "", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "00a51a": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "Ignition_Advance_High", 
+        "partial_file_off": "", 
+        "size_x": 16, 
+        "size_z": 6, 
+        "summary": ""
+    }, 
+    "00a59e": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "0000a59e", 
+        "partial_file_off": "", 
+        "size_x": 16, 
+        "size_z": 14, 
+        "summary": ""
+    }, 
+    "00a6aa": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "0000a6aa", 
+        "partial_file_off": "", 
+        "size_x": 12, 
+        "size_z": 4, 
+        "summary": ""
+    }, 
+    "00a6f8": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "0000a6f8", 
+        "partial_file_off": "", 
+        "size_x": 12, 
+        "size_z": 9, 
+        "summary": ""
+    }, 
+    "00a788": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "0000a788", 
+        "partial_file_off": "", 
+        "size_x": 10, 
+        "size_z": 3, 
+        "summary": ""
+    }, 
+    "00a7c2": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "0000a7c2", 
+        "partial_file_off": "", 
+        "size_x": 10, 
+        "size_z": 7, 
+        "summary": ""
+    }, 
+    "00a828": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "Ignition_Advance_Normal", 
+        "partial_file_off": "", 
+        "size_x": 16, 
+        "size_z": 14, 
+        "summary": ""
+    }, 
+    "00a934": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "Dwell_Angle", 
+        "partial_file_off": "", 
+        "size_x": 7, 
+        "size_z": 12, 
+        "summary": ""
+    }, 
+    "00a9b0": {
+        "datatype": "Byte", 
+        "dim": "3D", 
+        "name": "0000a9b0", 
+        "partial_file_off": "", 
+        "size_x": 8, 
+        "size_z": 3, 
+        "summary": ""
+    }, 
+    "00ae62": {
+        "datatype": "Byte", 
+        "dim": "2D", 
+        "name": "PeakAirflow_WOT", 
+        "partial_file_off": "", 
+        "size_x": 6, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "0150f2": {
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "Coolant_Temp", 
+        "partial_file_off": "", 
+        "size_x": 13, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "015130": {
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "in_LJURR_16", 
+        "partial_file_off": "", 
+        "size_x": 11, 
+        "size_z": 1, 
+        "summary": ""
+    }, 
+    "015166": {
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "Engine_IAT", 
+        "partial_file_off": "", 
+        "size_x": 10, 
+        "size_z": 1, 
+        "summary": ""
+    }
+}
