@@ -6,7 +6,7 @@
         "partial_file_off": "0154", 
         "size_x": 8, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Engine_RPM based threshold needed to activate DISA in normal run (disabled/closed -> enabled/open)"
     }, 
     "00817e": {
         "datatype": "Byte", 
@@ -15,7 +15,7 @@
         "partial_file_off": "016e", 
         "size_x": 8, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Engine_RPM based threshold needed to deactivate DISA in normal run (enabled/open -> disabled/closed)"
     }, 
     "008198": {
         "datatype": "Byte", 
@@ -65,29 +65,29 @@
     "008260": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008260", 
+        "name": "Throttle_Angle_Max", 
         "partial_file_off": "0250", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Indicates the maximum allowed Throttle_Angle (although the factors and units are not clear) at a given Engine_RPM"
     }, 
     "00828a": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "0000828a", 
+        "name": "Torque_Offset_AC", 
         "partial_file_off": "027a", 
         "size_x": 6, 
         "size_z": 5, 
-        "summary": ""
+        "summary": "Calculates Torque compensation needed based on AC level and Engine_RPM"
     }, 
     "0082c2": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "000082c2", 
+        "name": "Torque_Offset_No_AC", 
         "partial_file_off": "02b2", 
         "size_x": 4, 
         "size_z": 3, 
-        "summary": ""
+        "summary": "Calculates Torque compensation needed when AC is not available / not equipped. It uses Intake Air Temp instead."
     }, 
     "0082e4": {
         "datatype": "Byte", 
@@ -96,7 +96,7 @@
         "partial_file_off": "02d4", 
         "size_x": 3, 
         "size_z": 4, 
-        "summary": ""
+        "summary": "It's based on Engine_RPM and Throttle_Angle and then the offset from either `Torque_Offset_AC` or `Torque_Offset_No_AC` map is added, but is it Torque?..."
     }, 
     "008322": {
         "datatype": "Byte", 
@@ -105,7 +105,7 @@
         "partial_file_off": "0312", 
         "size_x": 4, 
         "size_z": 2, 
-        "summary": ""
+        "summary": "Calculates some sort of theoritical Torque output (without any real-life losses) based on Engine_RPM and Engine_Load"
     }, 
     "008344": {
         "datatype": "Byte", 
@@ -114,7 +114,7 @@
         "partial_file_off": "0334", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Maybe Torque compensation based on Coolant_Temp?"
     }, 
     "00835a": {
         "datatype": "Byte", 
@@ -123,7 +123,7 @@
         "partial_file_off": "034a", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Related to `008344` map"
     }, 
     "00836c": {
         "datatype": "Byte", 
@@ -132,7 +132,7 @@
         "partial_file_off": "035c", 
         "size_x": 8, 
         "size_z": 8, 
-        "summary": ""
+        "summary": "Added to `008344` map, maybe this is Torque compensation based on Temp when Cooling Fan is available?"
     }, 
     "0083ca": {
         "datatype": "Byte", 
@@ -141,7 +141,7 @@
         "partial_file_off": "03ba", 
         "size_x": 8, 
         "size_z": 8, 
-        "summary": ""
+        "summary": "Added to `008344` map, maybe this is Torque compensation based on Temp when Cooling Fan is not available?"
     }, 
     "008428": {
         "datatype": "Byte", 
@@ -204,25 +204,25 @@
         "partial_file_off": "054a", 
         "size_x": 8, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Calculates Engine_Temp increase when the Engine is not CUTOFF (only temporary result / dummy)"
     }, 
     "00858a": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "0000858a", 
+        "name": "Throttle_Angle_Min", 
         "partial_file_off": "057a", 
         "size_x": 3, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Indicates the minimum needed Throttle_Angle (although the factors and units are not clear) to run Normal (above Idle setting), it's based on Engine_RPM"
     }, 
     "00859a": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "0000859a", 
+        "name": "Throttle_Angle_WOT", 
         "partial_file_off": "058a", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "IT'S NOT IMPLEMENTED/EMPTY ON ANY FIRMWARE VERSION FOR UNKNOWN REASON. Indicates the minimum Throttle_Angle (although the factors and units are not clear) to consider WOT run (above Normal)"
     }, 
     "0085ee": {
         "datatype": "Byte", 
@@ -231,7 +231,7 @@
         "partial_file_off": "05de", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Maybe low limit for Throttle_Angle? (only temporary result / dummy)"
     }, 
     "008604": {
         "datatype": "Byte", 
@@ -240,34 +240,34 @@
         "partial_file_off": "05f4", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Maybe high limit for Throttle_Angle? (only temporary result / dummy)"
     }, 
     "00861a": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "AAT_Correction", 
+        "name": "IAT_Correction", 
         "partial_file_off": "060a", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Multiplied by `Throttle_Response_Time` (only temporary result / dummy)"
     }, 
     "00862c": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "0000862c", 
+        "name": "MAF_Throttle_Correction", 
         "partial_file_off": "061c", 
         "size_x": 6, 
         "size_z": 6, 
-        "summary": ""
+        "summary": "Throttle_Angle corrected with Engine_MAF2 to produce Throttle_Percentage2"
     }, 
     "00866a": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "0000866a", 
+        "name": "Throttle_Response_Time", 
         "partial_file_off": "065a", 
         "size_x": 6, 
         "size_z": 7, 
-        "summary": ""
+        "summary": "Multiplied by `IAT_Correction`"
     }, 
     "0086c0": {
         "datatype": "Byte", 
@@ -276,7 +276,7 @@
         "partial_file_off": "06b0", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "related to Engine_Torque" 
     }, 
     "0086d2": {
         "datatype": "Byte", 
@@ -285,7 +285,7 @@
         "partial_file_off": "06c2", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "related to Engine_Torque"
     }, 
     "0086e4": {
         "datatype": "Byte", 
@@ -294,7 +294,7 @@
         "partial_file_off": "06d4", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "related to Engine_Torque and Vehicle_Speed"
     }, 
     "0086f6": {
         "datatype": "Byte", 
@@ -303,7 +303,7 @@
         "partial_file_off": "06e6", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "related to Engine_Torque"
     }, 
     "008708": {
         "datatype": "Byte", 
@@ -312,7 +312,7 @@
         "partial_file_off": "06f8", 
         "size_x": 4, 
         "size_z": 7, 
-        "summary": ""
+        "summary": "related to Engine_Torque"
     }, 
     "00873e": {
         "datatype": "Byte", 
@@ -321,7 +321,7 @@
         "partial_file_off": "072e", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "related to Engine_Torque"
     }, 
     "008750": {
         "datatype": "Byte", 
@@ -330,7 +330,7 @@
         "partial_file_off": "0740", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "related to Engine_Torque"
     }, 
     "008762": {
         "datatype": "Byte", 
@@ -339,7 +339,7 @@
         "partial_file_off": "0752", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "related to Engine_Torque"
     }, 
     "008774": {
         "datatype": "Byte", 
@@ -348,13 +348,13 @@
         "partial_file_off": "0764", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "related to Engine_Torque and Engine_RPM"
     }, 
     "008786": {
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "Lambda1", 
-        "partial_file_off": "", 
+        "partial_file_off": "0776", 
         "size_x": 6, 
         "size_z": 8, 
         "summary": ""
@@ -363,7 +363,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "Lambda2", 
-        "partial_file_off": "", 
+        "partial_file_off": "07c2", 
         "size_x": 6, 
         "size_z": 8, 
         "summary": ""
@@ -543,7 +543,7 @@
         "datatype": "Word", 
         "dim": "2D", 
         "name": "00008a62", 
-        "partial_file_off": "", 
+        "partial_file_off": "0a52", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -975,7 +975,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "Lambda2_Running", 
-        "partial_file_off": "", 
+        "partial_file_off": "0fe0", 
         "size_x": 6, 
         "size_z": 7, 
         "summary": "0fe0"
@@ -1065,7 +1065,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "000092c8", 
-        "partial_file_off": "", 
+        "partial_file_off": "12b8", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1074,7 +1074,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "000092da", 
-        "partial_file_off": "", 
+        "partial_file_off": "12ca", 
         "size_x": 6, 
         "size_z": 6, 
         "summary": ""
@@ -1083,7 +1083,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "00009336", 
-        "partial_file_off": "", 
+        "partial_file_off": "1326", 
         "size_x": 6, 
         "size_z": 6, 
         "summary": ""
@@ -1092,7 +1092,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009374", 
-        "partial_file_off": "", 
+        "partial_file_off": "1364", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1101,7 +1101,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009394", 
-        "partial_file_off": "", 
+        "partial_file_off": "1384", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1110,7 +1110,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "000093a6", 
-        "partial_file_off": "", 
+        "partial_file_off": "1396", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1119,7 +1119,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "Injection_Full_Throttle", 
-        "partial_file_off": "", 
+        "partial_file_off": "13a8", 
         "size_x": 16, 
         "size_z": 1, 
         "summary": ""
@@ -1128,7 +1128,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "000093e2", 
-        "partial_file_off": "", 
+        "partial_file_off": "13d2", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1137,7 +1137,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "000093f8", 
-        "partial_file_off": "", 
+        "partial_file_off": "13e8", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1146,7 +1146,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "Correction_Injection_Length", 
-        "partial_file_off": "", 
+        "partial_file_off": "13fe", 
         "size_x": 5, 
         "size_z": 1, 
         "summary": ""
@@ -1155,7 +1155,7 @@
         "datatype": "Word", 
         "dim": "2D", 
         "name": "00009422", 
-        "partial_file_off": "", 
+        "partial_file_off": "1412", 
         "size_x": 10, 
         "size_z": 1, 
         "summary": ""
@@ -1164,7 +1164,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "Injection_Partial_Throttle", 
-        "partial_file_off": "", 
+        "partial_file_off": "1444", 
         "size_x": 16, 
         "size_z": 12, 
         "summary": ""
@@ -1173,7 +1173,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "Injection_Closed_Throttle", 
-        "partial_file_off": "", 
+        "partial_file_off": "152e", 
         "size_x": 6, 
         "size_z": 3, 
         "summary": ""
@@ -1182,7 +1182,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "00009568", 
-        "partial_file_off": "", 
+        "partial_file_off": "1558", 
         "size_x": 8, 
         "size_z": 8, 
         "summary": ""
@@ -1191,7 +1191,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "000095c6", 
-        "partial_file_off": "", 
+        "partial_file_off": "15b6", 
         "size_x": 8, 
         "size_z": 1, 
         "summary": ""
@@ -1200,7 +1200,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009600", 
-        "partial_file_off": "", 
+        "partial_file_off": "15f0", 
         "size_x": 17, 
         "size_z": 1, 
         "summary": ""
@@ -1209,7 +1209,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000962c", 
-        "partial_file_off": "", 
+        "partial_file_off": "161c", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1218,7 +1218,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009642", 
-        "partial_file_off": "", 
+        "partial_file_off": "1632", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1227,7 +1227,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009658", 
-        "partial_file_off": "", 
+        "partial_file_off": "1648", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1236,7 +1236,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000966e", 
-        "partial_file_off": "", 
+        "partial_file_off": "165e", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1245,7 +1245,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "00009684", 
-        "partial_file_off": "", 
+        "partial_file_off": "1674", 
         "size_x": 6, 
         "size_z": 8, 
         "summary": ""
@@ -1254,7 +1254,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "000096d0", 
-        "partial_file_off": "", 
+        "partial_file_off": "16c0", 
         "size_x": 6, 
         "size_z": 8, 
         "summary": ""
@@ -1263,7 +1263,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000971c", 
-        "partial_file_off": "", 
+        "partial_file_off": "170c", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1272,7 +1272,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009732", 
-        "partial_file_off": "", 
+        "partial_file_off": "1722", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1281,7 +1281,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000974a", 
-        "partial_file_off": "", 
+        "partial_file_off": "173a", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1290,7 +1290,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009760", 
-        "partial_file_off": "", 
+        "partial_file_off": "1750", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1299,7 +1299,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009776", 
-        "partial_file_off": "", 
+        "partial_file_off": "1766", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1308,7 +1308,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000978c", 
-        "partial_file_off": "", 
+        "partial_file_off": "177c", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1317,7 +1317,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "000097ca", 
-        "partial_file_off": "", 
+        "partial_file_off": "17ba", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1326,7 +1326,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "000097dc", 
-        "partial_file_off": "", 
+        "partial_file_off": "17cc", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1335,7 +1335,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "000097ee", 
-        "partial_file_off": "", 
+        "partial_file_off": "17de", 
         "size_x": 5, 
         "size_z": 1, 
         "summary": ""
@@ -1344,7 +1344,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "00009802", 
-        "partial_file_off": "", 
+        "partial_file_off": "17f2", 
         "size_x": 4, 
         "size_z": 4, 
         "summary": ""
@@ -1353,7 +1353,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "00009828", 
-        "partial_file_off": "", 
+        "partial_file_off": "1818", 
         "size_x": 10, 
         "size_z": 6, 
         "summary": ""
@@ -1362,7 +1362,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009882", 
-        "partial_file_off": "", 
+        "partial_file_off": "1872", 
         "size_x": 5, 
         "size_z": 1, 
         "summary": ""
@@ -1371,7 +1371,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "00009896", 
-        "partial_file_off": "", 
+        "partial_file_off": "1886", 
         "size_x": 4, 
         "size_z": 4, 
         "summary": ""
@@ -1380,7 +1380,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "000098bc", 
-        "partial_file_off": "", 
+        "partial_file_off": "18ac", 
         "size_x": 3, 
         "size_z": 3, 
         "summary": ""
@@ -1389,7 +1389,7 @@
         "datatype": "Word", 
         "dim": "2D", 
         "name": "000098da", 
-        "partial_file_off": "", 
+        "partial_file_off": "18ca", 
         "size_x": 8, 
         "size_z": 1, 
         "summary": ""
@@ -1398,7 +1398,7 @@
         "datatype": "Word", 
         "dim": "2D", 
         "name": "00009904", 
-        "partial_file_off": "", 
+        "partial_file_off": "18f4", 
         "size_x": 8, 
         "size_z": 1, 
         "summary": ""
@@ -1407,7 +1407,7 @@
         "datatype": "Word", 
         "dim": "2D", 
         "name": "0000992e", 
-        "partial_file_off": "", 
+        "partial_file_off": "191e", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1416,16 +1416,25 @@
         "datatype": "Word", 
         "dim": "2D", 
         "name": "00009950", 
-        "partial_file_off": "", 
+        "partial_file_off": "1940", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
+    }, 
+    "00996a": { 
+        "datatype": "Word", 
+        "dim": "2D", 
+        "name": "0000996a", 
+        "partial_file_off": "195a", 
+        "size_x": 4, 
+        "size_z": 1, 
+        "summary": "" 
     }, 
     "009984": {
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009984", 
-        "partial_file_off": "", 
+        "partial_file_off": "1974", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1434,7 +1443,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009996", 
-        "partial_file_off": "", 
+        "partial_file_off": "1986", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1443,7 +1452,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "000099a8", 
-        "partial_file_off": "", 
+        "partial_file_off": "1998", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1452,7 +1461,7 @@
         "datatype": "Word", 
         "dim": "2D", 
         "name": "000099e2", 
-        "partial_file_off": "", 
+        "partial_file_off": "19d2", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1461,7 +1470,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009a10", 
-        "partial_file_off": "", 
+        "partial_file_off": "1a00", 
         "size_x": 16, 
         "size_z": 1, 
         "summary": ""
@@ -1470,7 +1479,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009a3a", 
-        "partial_file_off": "", 
+        "partial_file_off": "1a2a", 
         "size_x": 5, 
         "size_z": 1, 
         "summary": ""
@@ -1479,7 +1488,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009a62", 
-        "partial_file_off": "", 
+        "partial_file_off": "1a52", 
         "size_x": 11, 
         "size_z": 1, 
         "summary": ""
@@ -1488,7 +1497,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009a82", 
-        "partial_file_off": "", 
+        "partial_file_off": "1a72", 
         "size_x": 11, 
         "size_z": 1, 
         "summary": ""
@@ -1497,16 +1506,16 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009aa2", 
-        "partial_file_off": "", 
+        "partial_file_off": "1a92", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "roundup"
     }, 
     "009ab8": {
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009ab8", 
-        "partial_file_off": "", 
+        "partial_file_off": "1aa8", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1515,7 +1524,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009ace", 
-        "partial_file_off": "", 
+        "partial_file_off": "1abe", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1524,7 +1533,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "MAF", 
-        "partial_file_off": "", 
+        "partial_file_off": "1ad0", 
         "size_x": 11, 
         "size_z": 10, 
         "summary": ""
@@ -1533,7 +1542,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "00009b72", 
-        "partial_file_off": "", 
+        "partial_file_off": "1b62", 
         "size_x": 11, 
         "size_z": 7, 
         "summary": ""
@@ -1542,7 +1551,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "00009be0", 
-        "partial_file_off": "", 
+        "partial_file_off": "1bd0", 
         "size_x": 11, 
         "size_z": 7, 
         "summary": ""
@@ -1551,7 +1560,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "00009c4e", 
-        "partial_file_off": "", 
+        "partial_file_off": "1c3e", 
         "size_x": 11, 
         "size_z": 7, 
         "summary": ""
@@ -1560,7 +1569,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "00009cbc", 
-        "partial_file_off": "", 
+        "partial_file_off": "1cac", 
         "size_x": 9, 
         "size_z": 4, 
         "summary": ""
@@ -1569,7 +1578,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "00009cfc", 
-        "partial_file_off": "", 
+        "partial_file_off": "1cec", 
         "size_x": 4, 
         "size_z": 4, 
         "summary": ""
@@ -1578,7 +1587,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "00009d22", 
-        "partial_file_off": "", 
+        "partial_file_off": "1d12", 
         "size_x": 6, 
         "size_z": 6, 
         "summary": ""
@@ -1587,7 +1596,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009d60", 
-        "partial_file_off": "", 
+        "partial_file_off": "1d50", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1596,7 +1605,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009d78", 
-        "partial_file_off": "", 
+        "partial_file_off": "1d68", 
         "size_x": 16, 
         "size_z": 1, 
         "summary": ""
@@ -1605,7 +1614,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009da2", 
-        "partial_file_off": "", 
+        "partial_file_off": "1d92", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1614,7 +1623,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009db4", 
-        "partial_file_off": "", 
+        "partial_file_off": "1da4", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1623,7 +1632,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009dc6", 
-        "partial_file_off": "", 
+        "partial_file_off": "1db6", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1632,7 +1641,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009dd8", 
-        "partial_file_off": "", 
+        "partial_file_off": "1dc8", 
         "size_x": 5, 
         "size_z": 1, 
         "summary": ""
@@ -1641,16 +1650,16 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009e0c", 
-        "partial_file_off": "", 
+        "partial_file_off": "1dfc", 
         "size_x": 3, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "roundup"
     }, 
     "009e1c": {
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "Knock1", 
-        "partial_file_off": "", 
+        "partial_file_off": "1e0c", 
         "size_x": 12, 
         "size_z": 4, 
         "summary": ""
@@ -1659,7 +1668,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "Knock2", 
-        "partial_file_off": "", 
+        "partial_file_off": "1e5a", 
         "size_x": 12, 
         "size_z": 4, 
         "summary": ""
@@ -1668,7 +1677,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "Knock3", 
-        "partial_file_off": "", 
+        "partial_file_off": "1ea8", 
         "size_x": 12, 
         "size_z": 4, 
         "summary": ""
@@ -1677,7 +1686,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "Knock4", 
-        "partial_file_off": "", 
+        "partial_file_off": "1ef6", 
         "size_x": 12, 
         "size_z": 4, 
         "summary": ""
@@ -1686,7 +1695,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009f54", 
-        "partial_file_off": "", 
+        "partial_file_off": "1f44", 
         "size_x": 8, 
         "size_z": 1, 
         "summary": ""
@@ -1695,7 +1704,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "Ignition_Closed_Throttle", 
-        "partial_file_off": "", 
+        "partial_file_off": "1f5e", 
         "size_x": 8, 
         "size_z": 1, 
         "summary": ""
@@ -1704,7 +1713,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009f88", 
-        "partial_file_off": "", 
+        "partial_file_off": "1f78", 
         "size_x": 8, 
         "size_z": 1, 
         "summary": ""
@@ -1713,7 +1722,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009fa2", 
-        "partial_file_off": "", 
+        "partial_file_off": "1f92", 
         "size_x": 10, 
         "size_z": 1, 
         "summary": ""
@@ -1722,16 +1731,16 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009fc0", 
-        "partial_file_off": "", 
+        "partial_file_off": "1fb0", 
         "size_x": 8, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "roundup"
     }, 
     "009fda": {
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009fda", 
-        "partial_file_off": "", 
+        "partial_file_off": "1fca", 
         "size_x": 8, 
         "size_z": 1, 
         "summary": ""
@@ -1740,16 +1749,16 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "00009ff4", 
-        "partial_file_off": "", 
+        "partial_file_off": "1fe4", 
         "size_x": 8, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "roundup"
     }, 
     "00a00e": {
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a00e", 
-        "partial_file_off": "", 
+        "partial_file_off": "1ffe", 
         "size_x": 16, 
         "size_z": 1, 
         "summary": ""
@@ -1758,7 +1767,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a038", 
-        "partial_file_off": "", 
+        "partial_file_off": "2028", 
         "size_x": 8, 
         "size_z": 1, 
         "summary": ""
@@ -1767,7 +1776,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a052", 
-        "partial_file_off": "", 
+        "partial_file_off": "2042", 
         "size_x": 8, 
         "size_z": 1, 
         "summary": ""
@@ -1776,7 +1785,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a06c", 
-        "partial_file_off": "", 
+        "partial_file_off": "205c", 
         "size_x": 8, 
         "size_z": 1, 
         "summary": ""
@@ -1785,7 +1794,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a086", 
-        "partial_file_off": "", 
+        "partial_file_off": "2076", 
         "size_x": 12, 
         "size_z": 1, 
         "summary": ""
@@ -1794,7 +1803,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a0a8", 
-        "partial_file_off": "", 
+        "partial_file_off": "2098", 
         "size_x": 12, 
         "size_z": 1, 
         "summary": ""
@@ -1803,7 +1812,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a0ca", 
-        "partial_file_off": "", 
+        "partial_file_off": "20ba", 
         "size_x": 16, 
         "size_z": 1, 
         "summary": ""
@@ -1812,7 +1821,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a0f4", 
-        "partial_file_off": "", 
+        "partial_file_off": "20e4", 
         "size_x": 16, 
         "size_z": 1, 
         "summary": ""
@@ -1821,7 +1830,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a11e", 
-        "partial_file_off": "", 
+        "partial_file_off": "210e", 
         "size_x": 16, 
         "size_z": 1, 
         "summary": ""
@@ -1830,7 +1839,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a148", 
-        "partial_file_off": "", 
+        "partial_file_off": "2138", 
         "size_x": 12, 
         "size_z": 1, 
         "summary": ""
@@ -1839,7 +1848,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "0000a16a", 
-        "partial_file_off": "", 
+        "partial_file_off": "215a", 
         "size_x": 4, 
         "size_z": 6, 
         "summary": ""
@@ -1848,7 +1857,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "0000a19a", 
-        "partial_file_off": "", 
+        "partial_file_off": "218a", 
         "size_x": 16, 
         "size_z": 7, 
         "summary": ""
@@ -1857,7 +1866,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "0000a230", 
-        "partial_file_off": "", 
+        "partial_file_off": "2220", 
         "size_x": 8, 
         "size_z": 8, 
         "summary": ""
@@ -1866,7 +1875,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "Fallback_Injection", 
-        "partial_file_off": "", 
+        "partial_file_off": "227e", 
         "size_x": 16, 
         "size_z": 12, 
         "summary": ""
@@ -1875,7 +1884,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a37c", 
-        "partial_file_off": "", 
+        "partial_file_off": "236c", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1884,7 +1893,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a392", 
-        "partial_file_off": "", 
+        "partial_file_off": "2382", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1893,25 +1902,25 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a3ba", 
-        "partial_file_off": "", 
+        "partial_file_off": "23aa", 
         "size_x": 16, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "roundup"
     }, 
     "00a3e4": {
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a3e4", 
-        "partial_file_off": "", 
+        "partial_file_off": "23d4", 
         "size_x": 16, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "roundup"
     }, 
     "00a40e": {
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a40e", 
-        "partial_file_off": "", 
+        "partial_file_off": "23fe", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1920,7 +1929,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a420", 
-        "partial_file_off": "", 
+        "partial_file_off": "2410", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1929,7 +1938,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a432", 
-        "partial_file_off": "", 
+        "partial_file_off": "2422", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1938,7 +1947,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a444", 
-        "partial_file_off": "", 
+        "partial_file_off": "2434", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1947,7 +1956,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a456", 
-        "partial_file_off": "", 
+        "partial_file_off": "2446", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1956,7 +1965,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a468", 
-        "partial_file_off": "", 
+        "partial_file_off": "2458", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -1965,7 +1974,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a47a", 
-        "partial_file_off": "", 
+        "partial_file_off": "246a", 
         "size_x": 2, 
         "size_z": 1, 
         "summary": ""
@@ -1974,7 +1983,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a4a2", 
-        "partial_file_off": "", 
+        "partial_file_off": "2492", 
         "size_x": 8, 
         "size_z": 1, 
         "summary": ""
@@ -1983,7 +1992,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a4bc", 
-        "partial_file_off": "", 
+        "partial_file_off": "24ac", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -1992,7 +2001,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a4d2", 
-        "partial_file_off": "", 
+        "partial_file_off": "24c2", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""
@@ -2001,7 +2010,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a4e8", 
-        "partial_file_off": "", 
+        "partial_file_off": "24d8", 
         "size_x": 3, 
         "size_z": 1, 
         "summary": ""
@@ -2010,7 +2019,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a4f8", 
-        "partial_file_off": "", 
+        "partial_file_off": "24e8", 
         "size_x": 3, 
         "size_z": 1, 
         "summary": ""
@@ -2019,7 +2028,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "0000a508", 
-        "partial_file_off": "", 
+        "partial_file_off": "24f8", 
         "size_x": 4, 
         "size_z": 1, 
         "summary": ""
@@ -2028,7 +2037,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "Ignition_Advance_High", 
-        "partial_file_off": "", 
+        "partial_file_off": "250a", 
         "size_x": 16, 
         "size_z": 6, 
         "summary": ""
@@ -2037,7 +2046,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "0000a59e", 
-        "partial_file_off": "", 
+        "partial_file_off": "258e", 
         "size_x": 16, 
         "size_z": 14, 
         "summary": ""
@@ -2046,7 +2055,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "0000a6aa", 
-        "partial_file_off": "", 
+        "partial_file_off": "269a", 
         "size_x": 12, 
         "size_z": 4, 
         "summary": ""
@@ -2055,7 +2064,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "0000a6f8", 
-        "partial_file_off": "", 
+        "partial_file_off": "26e8", 
         "size_x": 12, 
         "size_z": 9, 
         "summary": ""
@@ -2064,7 +2073,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "0000a788", 
-        "partial_file_off": "", 
+        "partial_file_off": "2778", 
         "size_x": 10, 
         "size_z": 3, 
         "summary": ""
@@ -2073,7 +2082,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "0000a7c2", 
-        "partial_file_off": "", 
+        "partial_file_off": "27b2", 
         "size_x": 10, 
         "size_z": 7, 
         "summary": ""
@@ -2082,7 +2091,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "Ignition_Advance_Normal", 
-        "partial_file_off": "", 
+        "partial_file_off": "2818", 
         "size_x": 16, 
         "size_z": 14, 
         "summary": ""
@@ -2091,7 +2100,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "Dwell_Angle", 
-        "partial_file_off": "", 
+        "partial_file_off": "2924", 
         "size_x": 7, 
         "size_z": 12, 
         "summary": ""
@@ -2100,7 +2109,7 @@
         "datatype": "Byte", 
         "dim": "3D", 
         "name": "0000a9b0", 
-        "partial_file_off": "", 
+        "partial_file_off": "29a0", 
         "size_x": 8, 
         "size_z": 3, 
         "summary": ""
@@ -2109,7 +2118,7 @@
         "datatype": "Byte", 
         "dim": "2D", 
         "name": "PeakAirflow_WOT", 
-        "partial_file_off": "", 
+        "partial_file_off": "2e52", 
         "size_x": 6, 
         "size_z": 1, 
         "summary": ""

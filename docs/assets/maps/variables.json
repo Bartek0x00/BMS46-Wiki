@@ -169,10 +169,10 @@
     },
     "ff8389": {
         "factor": 1.0,
-        "name": "BYTE_00ff8389",
+        "name": "Dummy_Result",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[*]"
     },
     "ff838a": {
         "factor": 1.0,
@@ -239,7 +239,7 @@
     },
     "ff8396": {
         "factor": 1.0,
-        "name": "in_buff",
+        "name": "BYTE_00ff8396",
         "off": 0.0,
         "type": "byte",
         "unit": ""
@@ -868,18 +868,18 @@
         "unit": "[deg]"
     },
     "ff8499": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8499",
+        "factor": 0.89854375,
+        "name": "Throttle_Angle_Min",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[deg]"
     },
     "ff849a": {
-        "factor": 1.0,
-        "name": "BYTE_00ff849a",
+        "factor": 0.89854375,
+        "name": "Throttle_Angle_WOT",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[deg]"
     },
     "ff84a6": {
         "factor": 1.0,
@@ -1127,11 +1127,11 @@
         "unit": ""
     },
     "ff8572": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8572",
+        "factor": 0.89854375,
+        "name": "Throttle_Angle_Max",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[deg]"
     },
     "ff8579": {
         "factor": 1.0,
@@ -1268,10 +1268,10 @@
     },
     "ff85de": {
         "factor": 1.0,
-        "name": "BYTE_00ff85de",
+        "name": "Vehicle_AC_Torque_Offset",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[Nm]"
     },
     "ff85df": {
         "factor": 1.0,
@@ -1387,14 +1387,14 @@
     },
     "ff8656": {
         "factor": 0.391,
-        "name": "?Engine_Throttle_Percentage2?",
+        "name": "Engine_Throttle_Percentage2",
         "off": 0.0,
         "type": "byte",
         "unit": "[%]"
     },
     "ff8657": {
         "factor": 1.0,
-        "name": "?Engine_Throttle_Response_Time?",
+        "name": "Engine_Throttle_Response_Time",
         "off": 0.0,
         "type": "byte",
         "unit": "[ms]"
@@ -1576,7 +1576,7 @@
     },
     "ff8804": {
         "factor": 1.0,
-        "name": "BYTE_00ff8804",
+        "name": "Vehicle_Cooling_Fan_Level",
         "off": 0.0,
         "type": "byte",
         "unit": ""

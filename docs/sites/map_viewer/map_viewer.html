@@ -21,6 +21,29 @@
 		padding: 10px;
 		background-color: #181A1B;
 	}
+
+	#navbar {
+		display: none;
+		justify-content: center;
+		align-items: center;
+		height: 60px;
+	}
+
+	#navbar #map-title {
+		font-family: monospace;
+		font-weight: bold;
+		font-size: 28px;
+	}
+
+	#prev-btn {
+		margin-right: 30px;
+		font-size: 20px;
+	}
+
+	#next-btn {
+		margin-left: 30px;
+		font-size: 20px;
+	}
 	
 	#view-hex {
 		font-family: monospace;
@@ -99,6 +122,30 @@
 		white-space: nowrap;
 	}
 
+	#map-table {
+		display: none;
+		max-width: 750px;
+	}
+
+	#map-table-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top: 40px;
+	}
+	
+	th, td {
+		border: 1px solid white;
+		font-family: monospace;
+		font-size: 24px;
+		padding: 6px;
+	}
+
+	#map-summary-value {
+		white-space: normal;
+		overflow-wrap: break-word;
+	}
+
 </style
 </head>
 <body>
@@ -111,13 +158,18 @@
 		<!--<option value="F">Float (floating 8bit)</option>-->
 	</select>
 	<label for="offset-input">Input Offset</label>
-	<input type="text" id="offset-input" name="offset-input" min="0" step="1" value="0" placeholder="Enter off (dec or hex)">
+	<input type="text" id="offset-input" name="offset-input" min="0" step="1">
   	<label for="viewtype-select">View Type</label>
 	<select id="viewtype-select" name="viewtype-select">
 		<option value="CHART">Chart</option>
 		<option value="HEX">Hex</option>
 	</select>
   	<button id="process-button">Draw</button>
+  </div>
+  <div id="navbar">
+  	<button id="prev-btn">&lt;- Prev</button>
+	<p id="map-title"></p>
+	<button id="next-btn">Next -&gt;</button>
   </div>
   <div id="view-hex">
   	<div id="bytes">
@@ -131,6 +183,57 @@
   		<canvas id="view-chart"></canvas>
   	</div>
 	<input type="range" id="view-chart-rotation" min="-90" max="90" value="-4">
+  </div>
+  <div id="map-table-container">
+  <table id="map-table">
+  	<tr>
+		<th colspan="2">Specification</th>
+	</tr>
+	<tr>
+		<td>Name</td>
+		<td id="map-name-value"></td>
+	</tr>
+	<tr>
+		<td>Type</td>
+		<td id="map-type-value"></td>
+	</tr>
+	<tr>
+		<td>Full dump off</td>
+		<td id="map-full-dump-off-value"></td>
+	</tr>
+	<tr>
+		<td>Partial dump off</td>
+		<td id="map-part-dump-off-value"></td>
+	</tr>
+	<tr>
+		<td>Comment</td>
+		<td id="map-summary-value"></td>
+	</tr>
+	<tr>
+		<td>Size X</td>
+		<td id="map-size-x-value"></td>
+	</tr>
+	<tr>
+		<td>Modifier X</td>
+		<td id="map-modifier-x-value"></td>
+	</tr>
+	<tr>
+		<td>Unit X</td>
+		<td id="map-unit-x-value"></td>
+	</tr>
+	<tr>
+		<td>Size Z</td>
+		<td id="map-size-z-value"></td>
+	</tr>
+	<tr>
+		<td>Modifier Z</td>
+		<td id="map-modifier-z-value"></td>
+	</tr>
+	<tr>
+		<td>Unit Z</td>
+		<td id="map-unit-z-value"></td>
+	</tr>
+  </table>
   </div>
   <div id="tooltip"></div>
   <script type="module">
@@ -148,20 +251,44 @@
 	const FLOAT = 4;
 	let valueType = BYTE;
 
-	let assignMap = null;
-	let assignMapPath = "../../assets/maps/variables.json";
+	let assignVariable = null;
+	let assignVariablePath = "../../assets/maps/variables.json";
 	
+	(async () => {
+		try {
+			const resp = await fetch(assignVariablePath);
+			if (resp.ok)
+				assignVariable = await resp.json();
+			else
+				console.warn(`Variable assignment json file not found at ${assignVariablePath}`);
+		} catch (err) {
+			console.warn(`Variable assignment json file not found at ${assignVariablePath}`);
+		}
+	})();
+
+	let assignMap = null;
+	let assignMapKeys = null;
+	let assignMapIdx = 0;
+	let assignMapMaxIdx = 0;
+	let assignMapPath = "../../assets/maps/maps.json";
+
 	(async () => {
 		try {
 			const resp = await fetch(assignMapPath);
 			if (resp.ok)
 				assignMap = await resp.json();
 			else
-				console.warn(`Assignment map file not found at ${assignMapPath}`);
+				console.warn(`Map assignment json file not found at ${assignMapPath}`);
 		} catch (err) {
-			console.warn(`Assignment map file not found at ${assignMapPath}`);
+			console.warn(`Map assignment json file not found at ${assignMapPath}`);
 		}
+
+		assignMapKeys = Object.keys(assignMap);
+		assignMapMaxIdx = assignMapKeys.length;
 	})();
+
+	document.getElementById("offset-input").value = "0x008164";
+	document.getElementById("datatype-select").value = "BYTE";
 
 	function normalize(avg, min, max) {
 		if (max == min)
@@ -219,7 +346,7 @@
 					(addr[3] << 0);
 
 		const key = hex.toString(16).padStart(6, "0");
-		const obj = assignMap[key];
+		const obj = assignVariable[key];
 		
 		if (obj) {
 			if (obj.unit != "")
@@ -236,7 +363,7 @@
 					(addr[3] << 0);
 
 		const key = hex.toString(16).padStart(6, "0");
-		const obj = assignMap[key];
+		const obj = assignVariable[key];
 		
 		if (obj)
 			return obj.name + getUnit(addr);
@@ -251,7 +378,7 @@
 					(addr[3] << 0);
 
 		const key = hex.toString(16).padStart(6, '0');
-		const obj = assignMap[key];
+		const obj = assignVariable[key];
 		
 		if (obj) {
 			if (obj.type == "byte" || obj.type == "word")
@@ -741,7 +868,7 @@
 
 					const userData = first.userData;
 
-					tooltip.innerHTML = `X: ${userData.rawX}${getUnit(this.input)} -> ${getScaler(this.input)(userData.rawX)}<br>Y: ${userData.rawY}${getUnit(this.output)} -> ${getScaler(this.output)(userData.rawY)}`;
+					tooltip.innerHTML = `X: ${userData.rawX} -> ${getScaler(this.input)(userData.rawX)}${getUnit(this.input)}<br>Y: ${userData.rawY} -> ${getScaler(this.output)(userData.rawY)}${getUnit(this.output)}`;
 
 					if (INTERSECTED !== first) {
 						if (INTERSECTED) {
@@ -1367,9 +1494,30 @@ const drawPlaneBetweenPoints = (p, px, pxz, pz, thickness) => {
 			exitError(`Invalid offset: ${value}`);
 			throw new Error(`Invalid offset: ${value}`);
 		};	
-		const off = parseOffsetInput(offsetInput);
-		const bytes = await getBytesFromFile(file, off);
 
+		const showMapMetadata = (str_off) => {
+			const obj = assignMap[str_off];
+			console.log(str_off);
+			document.getElementById("map-title").textContent = obj.name;
+			document.getElementById("map-name-value").textContent = obj.name;
+			document.getElementById("map-type-value").textContent = `${obj.datatype} ${obj.dim}`;
+			document.getElementById("map-full-dump-off-value").textContent = "0x" + str_off;
+			document.getElementById("map-part-dump-off-value").textContent = "0x" + obj.partial_file_off;
+			document.getElementById("map-size-x-value").textContent = obj.size_x;
+			document.getElementById("map-size-z-value").textContent = obj.size_z;
+			if (obj.size_z <= 1) {
+				document.getElementById("map-modifier-z-value").textContent = "-";
+				document.getElementById("map-unit-z-value").textContent = "-";
+			}
+			document.getElementById("map-summary-value").textContent = obj.summary;
+		};
+		
+		const off = parseOffsetInput(offsetInput);
+		const str_off = off.toString(16).padStart(6, '0');
+		showMapMetadata(str_off);
+		const bytes = await getBytesFromFile(file, off);
+		
+		assignMapIdx = assignMapKeys.indexOf(str_off);
 		switch(dataTypeSelect.value) {
 			case "BYTE":
 				valueType = BYTE;
@@ -1382,22 +1530,28 @@ const drawPlaneBetweenPoints = (p, px, pxz, pz, thickness) => {
 				throw new Error("Unknown datatype");
 		}
 		
+		const navbar = document.getElementById("navbar");
 		const viewChart = document.getElementById("view-chart");
 		const viewHex = document.getElementById("view-hex");
 		const slider = document.getElementById("view-chart-rotation");
-		
+		const mapMetadata = document.getElementById("map-table");
+
 		const map = parseMap(bytes);
 		switch (viewTypeSelect.value) {
 			case "HEX":
+				navbar.style = "display:flex;";
 				viewChart.style = "display:none;";
 				viewHex.style = "display:inline-block;";
 				slider.style = "display:none;";
+				mapMetadata.style = "display:inline;";
 				map.drawHexView();
 				break;
 			case "CHART":
 				map.clearView();
+				navbar.style = "display:flex;";
 				viewChart.style = "display:inline;";
 				slider.style = "display:inline;";
+				mapMetadata.style = "display:inline;";
 				map.drawChartView();
 				break;
 			default:
@@ -1411,9 +1565,46 @@ const drawPlaneBetweenPoints = (p, px, pxz, pz, thickness) => {
 		const dataTypeSelect = document.getElementById("datatype-select");
 		const offsetInput = document.getElementById("offset-input");
 		const processButton = document.getElementById("process-button");
+		const prevButton = document.getElementById("prev-btn");
+		const nextButton = document.getElementById("next-btn");
 		const viewTypeSelect = document.getElementById("viewtype-select");
 
 		processButton.addEventListener("click", () => {
+			process(fileInput, dataTypeSelect, offsetInput, viewTypeSelect);
+		});
+
+		prevButton.addEventListener("click", () => {
+			if (assignMapIdx <= 0)
+				return;
+			assignMapIdx -= 1;
+			if (assignMapIdx == 0)
+				prevButton.style = "display:none;";
+			if (nextButton.style.display == "none")
+				nextButton.style.display == "inline";
+
+			offsetInput.value = "0x" + assignMapKeys[assignMapIdx];
+			const obj = assignMap[assignMapKeys[assignMapIdx]];
+			if (obj.datatype === "Byte")
+				dataTypeSelect.value = "BYTE";
+			else
+				dataTypeSelect.value = "WORD";
+			process(fileInput, dataTypeSelect, offsetInput, viewTypeSelect);
+		});
+
+		nextButton.addEventListener("click", () => {
+			if (assignMapIdx >= assignMapMaxIdx - 1)
+				return;
+			assignMapIdx += 1;
+			if (assignMapIdx == assignMapMaxIdx - 1)
+				nextButton.style = "display:none;";
+			if (prevButton.style.display == "none")
+				prevButton.style.display == "inline";
+			offsetInput.value = "0x" + assignMapKeys[assignMapIdx];
+			const obj = assignMap[assignMapKeys[assignMapIdx]];
+			if (obj.datatype === "Byte")
+				dataTypeSelect.value = "BYTE";
+			else
+				dataTypeSelect.value = "WORD";
 			process(fileInput, dataTypeSelect, offsetInput, viewTypeSelect);
 		});
 	});
