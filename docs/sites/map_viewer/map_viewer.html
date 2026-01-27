@@ -22,11 +22,19 @@
 		background-color: #181A1B;
 	}
 
-	#navbar {
+	#navbar-container {
 		display: none;
 		justify-content: center;
 		align-items: center;
+	}
+	
+	#navbar {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 		height: 60px;
+		width: 90vw;
+		max-width: 700px;
 	}
 
 	#navbar #map-title {
@@ -166,10 +174,12 @@
 	</select>
   	<button id="process-button">Draw</button>
   </div>
-  <div id="navbar">
-  	<button id="prev-btn">&lt;- Prev</button>
-	<p id="map-title"></p>
-	<button id="next-btn">Next -&gt;</button>
+  <div id="navbar-container">
+    <div id="navbar">
+  	  <button id="prev-btn">&lt;- Prev</button>
+	  <p id="map-title"></p>
+	  <button id="next-btn">Next -&gt;</button>
+    </div>
   </div>
   <div id="view-hex">
   	<div id="bytes">
@@ -287,7 +297,8 @@
 		assignMapMaxIdx = assignMapKeys.length;
 	})();
 
-	document.getElementById("offset-input").value = "0x008164";
+	if (document.getElementById("offset-input").value === "")
+		document.getElementById("offset-input").value = "0x008164";
 	document.getElementById("datatype-select").value = "BYTE";
 
 	function normalize(avg, min, max) {
@@ -689,12 +700,13 @@
 				return mesh;
 			}
 
-			const hasClearance = (arr, idx, thresh) => {
-				for (let i = 0; i < idx; i++) {
-					if ((usableLength * Math.abs(arr[i] - arr[idx])) < thresh)
-						return false;
-				}
-				return true;
+			const hasClearance = (distance, value, spacing) => {
+				const absVal = Math.abs(value);
+				const digits = (value < 0 ? 1 : 0) + (absVal > 0 ? Math.floor(Math.log10(absVal)) + 1 : 1);
+				if ((digits * spacing) < distance)
+					return true;
+				else
+					return false;
 			};
 			
 			drawTextSprite(
@@ -757,17 +769,20 @@
 				const x = usableLength * (this.ticks[i] / maxTick);
 				const y = usableLength * (this.data[i] / maxData);
 				
-				if (hasClearance(this.ticks, i, 44 * maxTick)) {
+				const scaledX = getScaler(this.input)(this.ticks[i]);
+				const distToLastX = Math.abs((axisCenter + x) - lastSpriteX);
+
+				if (hasClearance(distToLastX, scaledX, 12)) {
 					drawTextSprite(
-						getScaler(this.input)(this.ticks[i]),
+						scaledX,
 						new THREE.Vector3(axisCenter + x, axisCenter - 25, 0),
 						0,
 						16
 					);
 					lastSpriteX = axisCenter + x;
-				} else if (hasClearance(this.ticks, i, 22 * maxTick)) {
+				} else if (hasClearance(distToLastX, scaledX, 6)) {
 					drawTextSprite(
-						getScaler(this.input)(this.ticks[i]),
+						scaledX,
 						new THREE.Vector3(axisCenter + x, axisCenter - 35 + (lastSpriteXDir * 10), 0),
 						0,
 						16
@@ -1246,8 +1261,23 @@ const drawPlaneBetweenPoints = (p, px, pxz, pz, thickness) => {
 			let lastLabelX = -1000;
 			let lastLabelZ = -1000;
 			const drawnYPixelValues = [];
-			const minSpacing = 45;
+			
+			const digitSpacing = 30;
 
+			const hasClearance = (distance, value) => {
+				let digit_count = 0;
+				if (value < 0)
+					digit_count = 1;
+				let abs_value = Math.abs(value);
+				
+				digit_count += Math.floor(Math.log10(abs_value)) + 1;
+				
+				if (((digit_count * digitSpacing) / 2) < distance)
+					return true;
+				else
+					return false;
+			};
+			
 			for (let j = 0; j < this.size_z; j++) {
 				const z = usableLength * (this.ticks_z[j] / maxTickZ);
 				
@@ -1258,9 +1288,10 @@ const drawPlaneBetweenPoints = (p, px, pxz, pz, thickness) => {
 					lineMaterial
 				);
 				
-				if (Math.abs(z - lastLabelZ) > minSpacing) {
+				let scaledZ = getScaler(this.input_z)(this.ticks_z[j]);
+				if (hasClearance(Math.abs(z - lastLabelZ), scaledZ)) {
 					drawFlatText(
-						getScaler(this.input_z)(this.ticks_z[j]),
+						scaledZ,
 						new THREE.Vector3(-20, -20, z),
 						{x: -Math.PI / 4, y: -Math.PI / 2, z: 0},
 						40
@@ -1280,9 +1311,10 @@ const drawPlaneBetweenPoints = (p, px, pxz, pz, thickness) => {
 							lineMaterial
 						);
 					
-						if (Math.abs(x - lastLabelX) > minSpacing) {
+						let scaledX = getScaler(this.input_x)(this.ticks_x[i]);
+						if (hasClearance(Math.abs(x - lastLabelX), scaledX)) {
 							drawFlatText(
-								getScaler(this.input_x)(this.ticks_x[i]),
+								scaledX,
 								new THREE.Vector3(x, -20, -20),
 								{x: -Math.PI / 4, y: Math.PI, z: 0},
 								40
@@ -1298,7 +1330,7 @@ const drawPlaneBetweenPoints = (p, px, pxz, pz, thickness) => {
 						lineMaterial
 					);
 
-					const isCrowded = drawnYPixelValues.some(val => Math.abs(val - y) < minSpacing);
+					const isCrowded = drawnYPixelValues.some(val => Math.abs(val - y) < 30);
 
 					if (!isCrowded) {
 						drawFlatText(
@@ -1497,12 +1529,14 @@ const drawPlaneBetweenPoints = (p, px, pxz, pz, thickness) => {
 
 		const showMapMetadata = (str_off) => {
 			const obj = assignMap[str_off];
-			console.log(str_off);
 			document.getElementById("map-title").textContent = obj.name;
 			document.getElementById("map-name-value").textContent = obj.name;
 			document.getElementById("map-type-value").textContent = `${obj.datatype} ${obj.dim}`;
 			document.getElementById("map-full-dump-off-value").textContent = "0x" + str_off;
-			document.getElementById("map-part-dump-off-value").textContent = "0x" + obj.partial_file_off;
+			if (obj.partial_file_off == "")
+				document.getElementById("map-part-dump-off-value").textContent = "Not present";
+			else
+				document.getElementById("map-part-dump-off-value").textContent = "0x" + obj.partial_file_off;
 			document.getElementById("map-size-x-value").textContent = obj.size_x;
 			document.getElementById("map-size-z-value").textContent = obj.size_z;
 			if (obj.size_z <= 1) {
@@ -1530,7 +1564,7 @@ const drawPlaneBetweenPoints = (p, px, pxz, pz, thickness) => {
 				throw new Error("Unknown datatype");
 		}
 		
-		const navbar = document.getElementById("navbar");
+		const navbar = document.getElementById("navbar-container");
 		const viewChart = document.getElementById("view-chart");
 		const viewHex = document.getElementById("view-hex");
 		const slider = document.getElementById("view-chart-rotation");
@@ -1578,9 +1612,9 @@ const drawPlaneBetweenPoints = (p, px, pxz, pz, thickness) => {
 				return;
 			assignMapIdx -= 1;
 			if (assignMapIdx == 0)
-				prevButton.style = "display:none;";
+				prevButton.style.display = "none";
 			if (nextButton.style.display == "none")
-				nextButton.style.display == "inline";
+				nextButton.style.display = "inline";
 
 			offsetInput.value = "0x" + assignMapKeys[assignMapIdx];
 			const obj = assignMap[assignMapKeys[assignMapIdx]];
@@ -1596,9 +1630,9 @@ const drawPlaneBetweenPoints = (p, px, pxz, pz, thickness) => {
 				return;
 			assignMapIdx += 1;
 			if (assignMapIdx == assignMapMaxIdx - 1)
-				nextButton.style = "display:none;";
+				nextButton.style.display = "none;";
 			if (prevButton.style.display == "none")
-				prevButton.style.display == "inline";
+				prevButton.style.display = "inline";
 			offsetInput.value = "0x" + assignMapKeys[assignMapIdx];
 			const obj = assignMap[assignMapKeys[assignMapIdx]];
 			if (obj.datatype === "Byte")

@@ -38,7 +38,6 @@ def main():
     start = int(sys.argv[1], 0)
     end   = int(sys.argv[2], 0)
     files = [
-		"01119700EF00Q20G.bin",
 		"01119700F000O2AG.bin",
 		"01119700F000P2AG.bin",
 		"01119700F000P2FG.bin",

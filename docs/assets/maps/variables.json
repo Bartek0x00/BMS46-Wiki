@@ -43,7 +43,7 @@
     },
     "ff8317": {
         "factor": 1.0,
-        "name": "BYTE_00ff8317",
+        "name": "Vehicle_Ambient_Temp",
         "off": 0.0,
         "type": "byte",
         "unit": ""
@@ -1295,18 +1295,18 @@
         "unit": ""
     },
     "ff85e5": {
-        "factor": 1.0,
-        "name": "Lambda1_heating",
+        "factor": 0.390625,
+        "name": "Lambda1_Heating",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[PWM %]"
     },
     "ff85e6": {
-        "factor": 1.0,
-        "name": "Lambda2_heating",
+        "factor": 0.390625,
+        "name": "Lambda2_Heating",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[PWM %]"
     },
     "ff8603": {
         "factor": 1.0,
