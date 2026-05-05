@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Connector Viewer</title>
+		<style>
+			* {
+				font-family: monospace;
+				color: white;
+			}
+			
+			h1 {
+				font-size: 40px;
+			}
+			
+			h2 {
+				font-size: 30px;
+				margin-bottom: 4px;
+			}
+
+			body {
+				background-color: #222422;
+			}
+			
+			table {
+				border-collapse: collapse;
+				background-color: #151515;
+				border: collapse;
+				border: 2px solid white;
+				cursor: pointer;
+				width: max-content;
+			}
+
+			th, td {
+				font-size: 20px;
+				padding: 6px 12px;
+				border: 1px solid white;
+				max-width: 450px;
+				word-break: break-word;
+				overflow-wrap: anywhere;
+			}
+
+			#pin-list-container {
+				width: 100%;
+				overflow-x: scroll;
+			}
+			
+			#svg-container {
+				position: relative;
+				width: 100%;
+				max-width: 1200px;
+			}
+
+			img {
+				width: 100%;
+				display: block;
+			}
+
+			#svg-overlay-m1 {
+				position: absolute;
+				
+				left: 9%;
+				top: 30%;
+
+				width: 10%;
+				height: 85%;
+
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				grid-template-rows: repeat(3, 1fr);
+			}
+
+			#svg-overlay-m2 {
+				position: absolute;
+
+				left: 20%;
+				top: 20%;
+
+				width: 12%;
+				height: 85%;
+
+				display: grid;
+				grid-template-columns: repeat(6, 1fr);
+				grid-template-rows: repeat(4, 1fr);
+			}
+
+			#svg-overlay-m3 {
+				position: absolute;
+
+				left: 33.5%;
+				top: 20%;
+
+				width: 28%;
+				height: 85%;
+
+				display: grid;
+				grid-template-columns: repeat(13, 1fr);
+				grid-template-rows: repeat(4, 1fr);
+			}
+
+			#svg-overlay-m4 {
+				position: absolute;
+
+				left: 63%;
+				top: 20%;
+
+				width: 18%;
+				height: 85%;
+
+				display: grid;
+				grid-template-columns: repeat(10, 1fr);
+				grid-template-rows: repeat(4, 1fr);
+			}
+
+			#svg-overlay-m5 {
+				position: absolute;
+
+				left: 82.5%;
+				top: 30%;
+
+				width: 10%;
+				height: 85%;
+
+				display: grid;
+
+				grid-template-columns: repeat(3, 1fr);
+				grid-template-rows: repeat(3, 1fr);
+			}
+
+			.cell-m1, .cell-m2, .cell-m3, .cell-m4, .cell-m5 {
+				width: 50%;
+				cursor: pointer;
+				background-color: grey;
+			}
+
+			.cell-m1 {
+				height: 10%;
+			}
+
+			.cell-m2 {
+				height: 35%;
+			}
+
+			.cell-m3 {
+				height: 35%;
+			}
+
+			.cell-m4 {
+				height: 35%;
+			}
+
+			.cell-m5 {
+				height: 10%;
+			}
+
+			@keyframes row-flash {
+				from {
+					background-color: rgba(255, 230, 100, 0.9);
+				}
+
+				to {
+					background-color: transparent;
+				}
+			}
+
+			.highlight {
+				animation: row-flash 2s ease-out;
+			}
+
+			#go-top-btn {
+				position: fixed;
+				top: 10px;
+				left: calc(50% - 65px);
+				padding: 10px 40px;
+				font-size: 16px;
+				cursor: pointer;
+				z-index: 1000;
+				color: white;
+				background-color: grey;
+				border: 2px solid white;
+				opacity: 0;
+				pointer-events: none;
+				transition: opacity 0.6s;
+			}
+
+			#go-top-btn.visible {
+				opacity: 1;
+				pointer-events: auto;
+			}
+
+			#svg-titles {
+				width: 100%;
+				max-width: 1200px;
+
+				margin-top: 8px;
+				
+				display: grid;
+				grid-template-columns: repeat(5, 1fr);
+				grid-template-rows: repeat(1, 1fr);
+			}
+
+			#svg-title-m1, #svg-title-m2, #svg-title-m3, #svg-title-m4, #svg-title-m5 {
+				position: relative;
+				font-size: 200%;
+				text-align: center;
+			}
+
+			#svg-title-m1 {
+				left: 15%;
+			}
+
+			#svg-title-m2 {
+				left: -20%;
+			}
+
+			#svg-title-m3 {
+				left: -15%;
+			}
+
+			#svg-title-m4 {
+				left: 10%;
+			}
+
+			#svg-title-m5 {
+				left: -15%;
+			}
+
+			#svg-legend {
+				padding-top: 20px;
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				grid-template-rows: repeat(3, 1fr);
+				font-size: 150%;
+			}
+
+			#svg-legend div {
+				padding: 8px;
+			}
+
+			#svg-legend-mass {
+				background-color:#852A2A;
+			}
+
+			#svg-legend-power {
+				background-color:red;
+			}
+
+			#svg-legend-analog {
+				background-color:orange;
+			}
+
+			#svg-legend-digital-data {
+				background-color: magenta;
+			}
+
+			#svg-legend-digital-pwm {
+				background-color: green;
+			}
+
+			#svg-legend-digital-bit {
+				background-color: lightseagreen;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Connector Viewer</h1>
+
+		<button id="go-top-btn">^ Top ^</button>
+
+		<div id="svg-container">
+			<img src="../../assets/connector/connector_drawing.svg">
+			
+			<script>
+				const btn = document.getElementById("go-top-btn");
+
+				window.addEventListener("scroll", () => {
+					btn.classList.toggle("visible", window.scrollY > 200);
+				});
+
+				btn.addEventListener("click", () => {
+					window.scrollTo({
+						top: 0,
+						behavior: "smooth"
+					});
+				});
+			</script>
+
+			<div id="svg-overlay-m1">
+				<div class="cell-m1" id="pin-btn_1-07"></div>
+				<div class="cell-m1" id="pin-btn_1-08"></div>
+				<div class="cell-m1" id="pin-btn_1-09"></div>
+				<div class="cell-m1" id="pin-btn_1-04"></div>
+				<div class="cell-m1" id="pin-btn_1-05"></div>
+				<div class="cell-m1" id="pin-btn_1-06"></div>
+				<div class="cell-m1" id="pin-btn_1-01"></div>
+				<div class="cell-m1" id="pin-btn_1-02"></div>
+				<div class="cell-m1" id="pin-btn_1-03"></div>
+			</div>
+
+			<div id="svg-overlay-m2">
+				<div class="cell-m2" id="pin-btn_2-19"></div>	
+				<div class="cell-m2" id="pin-btn_2-20"></div>	
+				<div class="cell-m2" id="pin-btn_2-21"></div>	
+				<div class="cell-m2" id="pin-btn_2-22"></div>	
+				<div class="cell-m2" id="pin-btn_2-23"></div>	
+				<div class="cell-m2" id="pin-btn_2-24"></div>	
+				<div class="cell-m2" id="pin-btn_2-13"></div>	
+				<div class="cell-m2" id="pin-btn_2-14"></div>	
+				<div class="cell-m2" id="pin-btn_2-15"></div>	
+				<div class="cell-m2" id="pin-btn_2-16"></div>	
+				<div class="cell-m2" id="pin-btn_2-17"></div>	
+				<div class="cell-m2" id="pin-btn_2-18"></div>	
+				<div class="cell-m2" id="pin-btn_2-07"></div>	
+				<div class="cell-m2" id="pin-btn_2-08"></div>	
+				<div class="cell-m2" id="pin-btn_2-09"></div>	
+				<div class="cell-m2" id="pin-btn_2-10"></div>	
+				<div class="cell-m2" id="pin-btn_2-11"></div>	
+				<div class="cell-m2" id="pin-btn_2-12"></div>	
+				<div class="cell-m2" id="pin-btn_2-01"></div>	
+				<div class="cell-m2" id="pin-btn_2-02"></div>	
+				<div class="cell-m2" id="pin-btn_2-03"></div>	
+				<div class="cell-m2" id="pin-btn_2-04"></div>	
+				<div class="cell-m2" id="pin-btn_2-05"></div>	
+				<div class="cell-m2" id="pin-btn_2-06"></div>	
+			</div>
+
+			<div id="svg-overlay-m3">
+				<div class="cell-m3" id="pin-btn_3-40"></div>
+				<div class="cell-m3" id="pin-btn_3-41"></div>
+				<div class="cell-m3" id="pin-btn_3-42"></div>
+				<div class="cell-m3" id="pin-btn_3-43"></div>
+				<div class="cell-m3" id="pin-btn_3-44"></div>
+				<div class="cell-m3" id="pin-btn_3-45"></div>
+				<div class="cell-m3" id="pin-btn_3-46"></div>
+				<div class="cell-m3" id="pin-btn_3-47"></div>
+				<div class="cell-m3" id="pin-btn_3-48"></div>
+				<div class="cell-m3" id="pin-btn_3-49"></div>
+				<div class="cell-m3" id="pin-btn_3-50"></div>
+				<div class="cell-m3" id="pin-btn_3-51"></div>
+				<div class="cell-m3" id="pin-btn_3-52"></div>
+				<div class="cell-m3" id="pin-btn_3-27"></div>
+				<div class="cell-m3" id="pin-btn_3-28"></div>
+				<div class="cell-m3" id="pin-btn_3-29"></div>
+				<div class="cell-m3" id="pin-btn_3-30"></div>
+				<div class="cell-m3" id="pin-btn_3-31"></div>
+				<div class="cell-m3" id="pin-btn_3-32"></div>
+				<div class="cell-m3" id="pin-btn_3-33"></div>
+				<div class="cell-m3" id="pin-btn_3-34"></div>
+				<div class="cell-m3" id="pin-btn_3-35"></div>
+				<div class="cell-m3" id="pin-btn_3-36"></div>
+				<div class="cell-m3" id="pin-btn_3-37"></div>
+				<div class="cell-m3" id="pin-btn_3-38"></div>
+				<div class="cell-m3" id="pin-btn_3-39"></div>
+				<div class="cell-m3" id="pin-btn_3-14"></div>
+				<div class="cell-m3" id="pin-btn_3-15"></div>
+				<div class="cell-m3" id="pin-btn_3-16"></div>
+				<div class="cell-m3" id="pin-btn_3-17"></div>
+				<div class="cell-m3" id="pin-btn_3-18"></div>
+				<div class="cell-m3" id="pin-btn_3-19"></div>
+				<div class="cell-m3" id="pin-btn_3-20"></div>
+				<div class="cell-m3" id="pin-btn_3-21"></div>
+				<div class="cell-m3" id="pin-btn_3-22"></div>
+				<div class="cell-m3" id="pin-btn_3-23"></div>
+				<div class="cell-m3" id="pin-btn_3-24"></div>
+				<div class="cell-m3" id="pin-btn_3-25"></div>
+				<div class="cell-m3" id="pin-btn_3-26"></div>
+				<div class="cell-m3" id="pin-btn_3-01"></div>
+				<div class="cell-m3" id="pin-btn_3-02"></div>
+				<div class="cell-m3" id="pin-btn_3-03"></div>
+				<div class="cell-m3" id="pin-btn_3-04"></div>
+				<div class="cell-m3" id="pin-btn_3-05"></div>
+				<div class="cell-m3" id="pin-btn_3-06"></div>
+				<div class="cell-m3" id="pin-btn_3-07"></div>
+				<div class="cell-m3" id="pin-btn_3-08"></div>
+				<div class="cell-m3" id="pin-btn_3-09"></div>
+				<div class="cell-m3" id="pin-btn_3-10"></div>
+				<div class="cell-m3" id="pin-btn_3-11"></div>
+				<div class="cell-m3" id="pin-btn_3-12"></div>
+				<div class="cell-m3" id="pin-btn_3-13"></div>
+			</div>
+
+			<div id="svg-overlay-m4">
+				<div class="cell-m4" id="pin-btn_4-31"></div>
+				<div class="cell-m4" id="pin-btn_4-32"></div>
+				<div class="cell-m4" id="pin-btn_4-33"></div>
+				<div class="cell-m4" id="pin-btn_4-34"></div>
+				<div class="cell-m4" id="pin-btn_4-35"></div>
+				<div class="cell-m4" id="pin-btn_4-36"></div>
+				<div class="cell-m4" id="pin-btn_4-37"></div>
+				<div class="cell-m4" id="pin-btn_4-38"></div>
+				<div class="cell-m4" id="pin-btn_4-39"></div>
+				<div class="cell-m4" id="pin-btn_4-40"></div>
+				<div class="cell-m4" id="pin-btn_4-21"></div>
+				<div class="cell-m4" id="pin-btn_4-22"></div>
+				<div class="cell-m4" id="pin-btn_4-23"></div>
+				<div class="cell-m4" id="pin-btn_4-24"></div>
+				<div class="cell-m4" id="pin-btn_4-25"></div>
+				<div class="cell-m4" id="pin-btn_4-26"></div>
+				<div class="cell-m4" id="pin-btn_4-27"></div>
+				<div class="cell-m4" id="pin-btn_4-28"></div>
+				<div class="cell-m4" id="pin-btn_4-29"></div>
+				<div class="cell-m4" id="pin-btn_4-30"></div>
+				<div class="cell-m4" id="pin-btn_4-11"></div>
+				<div class="cell-m4" id="pin-btn_4-12"></div>
+				<div class="cell-m4" id="pin-btn_4-13"></div>
+				<div class="cell-m4" id="pin-btn_4-14"></div>
+				<div class="cell-m4" id="pin-btn_4-15"></div>
+				<div class="cell-m4" id="pin-btn_4-16"></div>
+				<div class="cell-m4" id="pin-btn_4-17"></div>
+				<div class="cell-m4" id="pin-btn_4-18"></div>
+				<div class="cell-m4" id="pin-btn_4-19"></div>
+				<div class="cell-m4" id="pin-btn_4-20"></div>
+				<div class="cell-m4" id="pin-btn_4-01"></div>
+				<div class="cell-m4" id="pin-btn_4-02"></div>
+				<div class="cell-m4" id="pin-btn_4-03"></div>
+				<div class="cell-m4" id="pin-btn_4-04"></div>
+				<div class="cell-m4" id="pin-btn_4-05"></div>
+				<div class="cell-m4" id="pin-btn_4-06"></div>
+				<div class="cell-m4" id="pin-btn_4-07"></div>
+				<div class="cell-m4" id="pin-btn_4-08"></div>
+				<div class="cell-m4" id="pin-btn_4-09"></div>
+				<div class="cell-m4" id="pin-btn_4-10"></div>
+			</div>
+
+			<div id="svg-overlay-m5">
+				<div class="cell-m5" id="pin-btn_5-07"></div>
+				<div class="cell-m5" id="pin-btn_5-08"></div>
+				<div class="cell-m5" id="pin-btn_5-09"></div>
+				<div class="cell-m5" id="pin-btn_5-04"></div>
+				<div class="cell-m5" id="pin-btn_5-05"></div>
+				<div class="cell-m5" id="pin-btn_5-06"></div>
+				<div class="cell-m5" id="pin-btn_5-01"></div>
+				<div class="cell-m5" id="pin-btn_5-02"></div>
+				<div class="cell-m5" id="pin-btn_5-03"></div>
+			</div>
+		</div>
+
+		<div id="svg-titles">
+			<div id="svg-title-m1">M1<br>(Power)</div>
+			<div id="svg-title-m2">M2<br>(Periph)</div>
+			<div id="svg-title-m3">M3<br>(Engine)</div>
+			<div id="svg-title-m4">M4<br>(Chassis)</div>
+			<div id="svg-title-m5">M5<br>(Aux)</div>
+		</div>
+
+		<div id="svg-legend">
+			<div><span id="svg-legend-mass">&ThickSpace;</span> - Mass (GND)</div>
+			<div><span id="svg-legend-power">&ThickSpace;</span> - Power (VCC)</div>
+			<div><span id="svg-legend-analog">&ThickSpace;</span> - Analog (ADC)</div>
+			<div><span id="svg-legend-digital-data">&ThickSpace;</span> - Digital_Data (CAN, K-Line, EWS)</div>
+			<div><span id="svg-legend-digital-pwm">&ThickSpace;</span> - Digital_PWM / PCNT</div>
+			<div><span id="svg-legend-digital-bit">&ThickSpace;</span> - Digital_Bit (GPIO)</div>
+		</div>
+
+		<div id="pin-list-container">
+
+		</div>
+	</body>
+	<script type="module">
+		let assignConnector = null;
+		let assignConnectorPath = "../../assets/connector/connector_map.json";
+
+		const resp = await fetch(assignConnectorPath);
+		if (!resp.ok)
+			throw new Error(`Cannot find connector mapping at ${assignConnectorPath}`);
+
+		assignConnector = await resp.json();
+
+		const pretty_column_names = [
+			"Pin",
+			"Short_Name",
+			"Full_Name",
+			"Type",
+			"Direction",
+			"Software",
+			"Comment"
+		];
+
+		const json_column_names = [
+			"name",
+			"fullname",
+			"type",
+			"direction",
+			"software",
+			"comment"
+		];
+
+		const pin_list_container = document.getElementById("pin-list-container");
+
+		const add_row = (table, data, is_header = false) => {
+			const tr_el = document.createElement("tr");
+			
+			if (!is_header)
+				tr_el.id = `pin-row_${data[0]}`;
+
+			for (const cell of data) {
+				const td_el = document.createElement("td");
+				td_el.textContent = cell;
+
+				tr_el.append(td_el);
+			}
+
+			table.append(tr_el);
+		}
+
+		const add_table = (module) => {
+			const header_el = document.createElement("h2");
+			header_el.textContent = `Module ${module}`;
+
+			const table_el = document.createElement("table");
+			table_el.id = `pin-list_m${module}`;
+			table_el.userData_module = module;
+			
+			add_row(table_el, pretty_column_names, true);
+			
+			for (const [key, value] of Object.entries(assignConnector[module])) {
+				const data = [`${module}-${key.padStart(2, '0')}`];
+
+				for (const name of json_column_names)
+					data.push(value[name]);
+				
+				add_row(table_el, data);
+			}	
+
+			pin_list_container.append(header_el);
+			pin_list_container.append(table_el);
+		}
+
+		const assign_pin_btns = () => {
+			const pin_btns = document.querySelectorAll(".cell-m1, .cell-m2, .cell-m3, .cell-m4, .cell-m5");
+			for (const pin_btn of pin_btns) {
+				const module_pin = pin_btn.id.slice(-4);
+				const module = module_pin[0];
+				const pin = module_pin.slice(-2).replace(/^0+/, "");
+
+				const data = assignConnector[module][pin];
+				if (data && data["type"]) {
+					let color = "grey";
+
+					switch (data["type"]) {
+						case "mass":
+							color = "#852A2A";
+							break;
+						case "power":
+							color = "red";
+							break;
+						case "analog":
+							color = "orange";
+							break;
+						case "digital_data":
+							color = "magenta";
+							break;
+						case "digital_pwm":
+							color = "green";
+							break;
+						case "digital_bit":
+							color = "lightseagreen";
+					}
+
+					pin_btn.style.backgroundColor = color;
+				}
+
+				let tooltip = `${module_pin}`;
+				if (data && data["name"])
+					tooltip += `   (${data["name"]})`;
+				pin_btn.title = tooltip;
+
+				const target = document.getElementById(`pin-row_${module_pin}`);
+
+				if (!target)
+					continue;
+
+				pin_btn.addEventListener("click", () => {
+					
+					
+					target.scrollIntoView({
+						behavior: "smooth",
+						block: "center"
+					});
+						
+					target.classList.remove("highlight");
+					void target.offsetWidth;
+
+					target.classList.add("highlight");
+
+					setTimeout(() => {
+						target.classList.remove("highlight");
+					}, 2000);
+				});
+			}
+		};
+
+		add_table(1);
+		add_table(2);
+		add_table(3);
+		add_table(4);
+		add_table(5);
+
+		assign_pin_btns();
+	</script>
+</html>

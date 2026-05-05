@@ -1,0 +1,764 @@
+{
+	"1": { 
+		"1": { 
+			"name": "E_U_KL15", 
+			"fullname": "Terminal 15 voltage (Ignition ON)", 
+			"type": "analog", 
+			"direction": "in", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"3": { 
+			"name": "D_DIAG-K",
+			"fullname": "K-Line 10.4kbps diagnostic", 
+			"type": "digital_data", 
+			"direction": "in_out", 
+			"software": "QSM::SCDR", 
+			"comment": "" 
+		}, 
+		"4": { 
+			"name": "M_EL", 
+			"fullname": "Mass for General Electronics", 
+			"type": "mass", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"5": { 
+			"name": "M_EV", 
+			"fullname": "Mass for Injectors", 
+			"type": "mass", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"6": { 
+			"name": "M_ES", 
+			"fullname": "Mass for High Voltage", 
+			"type": "mass", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"7": { 
+			"name": "E_U_UBD", 
+			"fullname": "Reference voltage from Terminal 30 (Battery 12V)", 
+			"type": "power", 
+			"direction": "in", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"8": { 
+			"name": "E_U_UBR", 
+			"fullname": "Reference voltage from Terminal 87 (Key in)", 
+			"type": "power", 
+			"direction": "in", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"9": { 
+			"name": "E_U_UBFK", 
+			"fullname": "Reference voltage from Ignition Switch", 
+			"type": "power", 
+			"direction": "in", 
+			"software": "N/A", 
+			"comment": "" 
+		} 
+	}, 
+	"2": { 
+		"2": { 
+			"name": "B_S_RFL", 
+			"fullname": "Reverse light signal", 
+			"type": "digital_bit", 
+			"direction": "in", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"3": { 
+			"name": "D_CAN_L", 
+			"fullname": "CAN 500kbps differential low signal", 
+			"type": "digital_data", 
+			"direction": "in_out", 
+			"software": "CAN::LOW", 
+			"comment": "" 
+		}, 
+		"4": { 
+			"name": "D_CAN_H", 
+			"fullname": "CAN 500kbps differential high signal", 
+			"type": "digital_data", 
+			"direction": "in_out", 
+			"software": "CAN::HIGH", 
+			"comment": "" 
+		}, 
+		"5": { 
+			"name": "W_CAN", 
+			"fullname": "Wakeup CAN signal", 
+			"type": "digital_bit", 
+			"direction": "in_out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"6": { 
+			"name": "D_DIAG-K", 
+			"fullname": "K-Line 10.4kbps diagnostic", 
+			"type": "digital_data", 
+			"direction": "in_out", 
+			"software": "QSM::SCDR", 
+			"comment": "" 
+		}, 
+		"7": { 
+			"name": "M_LHV1", 
+			"fullname": "Mass for pre-CAT Lambda heater", 
+			"type": "mass", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"8": { 
+			"name": "M_LHH1", 
+			"fullname": "Mass for post-CAT Lambda heater", 
+			"type": "mass", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"10": { 
+			"name": "A_S_RES", 
+			"fullname": "Reset signal", 
+			"type": "digital_bit", 
+			"direction": "in", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"11": { 
+			"name": "A_U_RES", 
+			"fullname": "Reset voltage", 
+			"type": "power", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"14": { 
+			"name": "E_M_LSH1", 
+			"fullname": "Mass for post-CAT Lambda sensor", 
+			"type": "mass", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"16": { 
+			"name": "E_A_LSH1", 
+			"fullname": "Read from post-CAT Lambda sensor", 
+			"type": "analog", 
+			"direction": "in", 
+			"software": "QADC::RJURR[20]", 
+			"comment": "" 
+		}, 
+		"17": { 
+			"name": "E_M_LSV1", 
+			"fullname": "Mass for pre-CAT Lambda sensor", 
+			"type": "mass", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"18": { 
+			"name": "E_A_LSV1", 
+			"fullname": "Read from pre-CAT Lambda sensor", 
+			"type": "analog", 
+			"direction": "in", 
+			"software": "QADC::LJURR[25]", 
+			"comment": "" 
+		}, 
+		"22": { 
+			"name": "A_T_LHH1", 
+			"fullname": "Control of post-CAT Lambda heater", 
+			"type": "digital_pwm", 
+			"direction": "out", 
+			"software": "CTM4::PWM6B", 
+			"comment": "" 
+		}, 
+		"23": { 
+			"name": "A_S_HR", 
+			"fullname": "Control main relay", 
+			"type": "digital_bit", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"24": { 
+			"name": "A_T_LHV1", 
+			"fullname": "Control of pre-CAT Lambda heater", 
+			"type": "digital_pwm", 
+			"direction": "out", 
+			"software": "CTM4::PWM5B", 
+			"comment": "" 
+		} 
+	}, 
+	"3": { 
+		"1": { 
+			"name": "A_U_EVZ2", 
+			"fullname": "Reference voltage for Injector2", 
+			"type": "power", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"2": { 
+			"name": "A_U_EVZ1", 
+			"fullname": "Reference voltage for Injector1", 
+			"type": "power", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"3": { 
+			"name": "A_U_HFM-87", 
+			"fullname": "Reference voltage (12V) for Hot Film Air Sensor", 
+			"type": "power", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"4": { 
+			"name": "A_U_NWG", 
+			"fullname": "Reference voltage for Camshaft Position Sensor", 
+			"type": "power", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"5": { 
+			"name": "A_U_DISA", 
+			"fullname": "Reference voltage for DISA valve", 
+			"type": "power", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"6": { 
+			"name": "A_U_TEV", 
+			"fullname": "Reference voltage for Tank Vent Valve", 
+			"type": "power", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"7": { 
+			"name": "A_U_SLV", 
+			"fullname": "Reference voltage for Secondary Air Valve", 
+			"type": "power", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"8": { 
+			"name": "M_HFM", 
+			"fullname": "Mass for Hot Film Air Sensor", 
+			"type": "mass", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"9": { 
+			"name": "M_KFK", 
+			"fullname": "Mass for Electronic Thermostat", 
+			"type": "mass", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"10": { 
+			"name": "M_OLN", 
+			"fullname": "Mass for Oil Temperature and Level Sensor", 
+			"type": "mass", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"11": { 
+			"name": "A_S_SLP", 
+			"fullname": "Trigger for Secondary Air Pump", 
+			"type": "digital_bit", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"12": { 
+			"name": "B_S_30h", 
+			"fullname": "Reference voltage for Terminal 30", 
+			"type": "power", 
+			"direction": "in", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"13": { 
+			"name": "B_S_61-1", 
+			"fullname": "Reference voltage for Terminal 61 (Alternator Charging)", 
+			"type": "power", 
+			"direction": "in", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"14": { 
+			"name": "A_U_EVZ4", 
+			"fullname": "Reference voltage for Injector4", 
+			"type": "power", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"15": { 
+			"name": "A_U_EVZ3", 
+			"fullname": "Reference voltage for Injector3", 
+			"type": "power", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"16": { 
+			"name": "A_U_KWG", 
+			"fullname": "Reference voltage for Crankshaft Position Sensor", 
+			"type": "power", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"17": { 
+			"name": "A_U_SSP", 
+			"fullname": "Reference voltage for Suction Jet Pump", 
+			"type": "power", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"18": { 
+			"name": "E_A_KS1B", 
+			"fullname": "Inverse Reading from Knock_Sensor1", 
+			"type": "analog", 
+			"direction": "in", 
+			"software": "QADC::LJURR[0]", 
+			"comment": "The differential signal first goes through Renesas HIP9010 processor and then gets reinterpreted as a single wire analog signal" 
+		}, 
+		"19": { 
+			"name": "E_A_KS2B", 
+			"fullname": "Inverse Reading from Knock_Sensor2", 
+			"type": "analog", 
+			"direction": "in", 
+			"software": "QADC::LJURR[0]", 
+			"comment": "The differential signal first goes through Renesas HIP9010 processor and then gets reinterpreted as a single wire analog signal" 
+		}, 
+		"20": { 
+			"name": "M_DKG", 
+			"fullname": "Mass for Throttle Position Sensor", 
+			"type": "mass", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"21": { 
+			"name": "A_S_SSP", 
+			"fullname": "Trigger for Suction Jet Pump", 
+			"type": "digital_bit", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"23": { 
+			"name": "M_LLFS", 
+			"fullname": "Mass for Idle Speed Control Valve", 
+			"type": "mass", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"26": { 
+			"name": "B_S_OLD", 
+			"fullname": "Reference voltage for Oil Pressure Error", 
+			"type": "power", 
+			"direction": "in", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"27": { 
+			"name": "A_U_5VHFM", 
+			"fullname": "Reference voltage (5V) for Hot Film Air Sensor", 
+			"type": "power", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"29": { 
+			"name": "E_A_TANS", 
+			"fullname": "Reading from Intake Air Temperature Sensor", 
+			"type": "analog", 
+			"direction": "in", 
+			"software": "QADC::LJURR[15]", 
+			"comment": "" 
+		}, 
+		"30": { 
+			"name": "E_A_HFM", 
+			"fullname": "Reading from Mass Air Flow Sensor", 
+			"type": "analog", 
+			"direction": "in", 
+			"software": "QADC::LJURR[12]", 
+			"comment": "" 
+		}, 
+		"31": { 
+			"name": "E_A_KS2A", 
+			"fullname": "Reading from Knock_Sensor2", 
+			"type": "analog", 
+			"direction": "in", 
+			"software": "QADC::LJURR[0]", 
+			"comment": "The differential signal first goes through Renesas HIP9010 processor and then gets reinterpreted as a single wire analog signal" 
+		}, 
+		"32": { 
+			"name": "E_A_KS1A", 
+			"fullname": "Reading from Knock_Sensor1", 
+			"type": "analog", 
+			"direction": "in", 
+			"software": "QADC::LJURR[0]", 
+			"comment": "The differential signal first goes through Renesas HIP9010 processor and then gets reinterpreted as a single wire analog signal" 
+		}, 
+		"33": { 
+			"name": "E_A_DKG1", 
+			"fullname": "Reading from Throttle Position Sensor", 
+			"type": "analog", 
+			"direction": "in", 
+			"software": "QADC::LJURR[18]", 
+			"comment": "" 
+		}, 
+		"35": { 
+			"name": "E_P_KWGA", 
+			"fullname": "Input from Crankshaft Position Sensor", 
+			"type": "digital_pwm", 
+			"direction": "in", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"36": { 
+			"name": "M_KWG", 
+			"fullname": "Mass for Crankshaft Position Sensor", 
+			"type": "mass", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"37": { 
+			"name": "M_NWGA1", 
+			"fullname": "Mass for Camshaft Position Sensor", 
+			"type": "mass", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"38": { 
+			"name": "E_P_NWGA1", 
+			"fullname": "Input from Camshaft Position Sensor", 
+			"type": "digital_pwm", 
+			"direction": "in", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"39": { 
+			"name": "B_F_OLN", 
+			"fullname": "Reading from Oil Temperature and Level Sensor", 
+			"type": "power", 
+			"direction": "in", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"40": { 
+			"name": "A_T_LLFSS", 
+			"fullname": "Close trigger for Idle Speed Control Valve", 
+			"type": "digital_pwm", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"41": { 
+			"name": "A_T_LLFSO", 
+			"fullname": "Open trigger for Idle Speed Control Valve", 
+			"type": "digital_pwm", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"43": { 
+			"name": "A_S_KFK", 
+			"fullname": "Control of Electronic Thermostat", 
+			"type": "digital_pwm", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"44": { 
+			"name": "A_T_TEV", 
+			"fullname": "Control of Tank Vent Valve", 
+			"type": "digital_pwm", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"45": { 
+			"name": "A_S_DISA", 
+			"fullname": "Trigger for DISA valve", 
+			"type": "digital_bit", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"46": { 
+			"name": "A_U_5DKG", 
+			"fullname": "Reference voltage for Throttle Position Sensor", 
+			"type": "power", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"48": { 
+			"name": "A_P_EVZ4", 
+			"fullname": "Control for Injector4", 
+			"type": "digital_pwm", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"49": { 
+			"name": "A_P_EVZ3", 
+			"fullname": "Control for Injector3", 
+			"type": "digital_pwm", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"50": { 
+			"name": "A_P_EVZ2", 
+			"fullname": "Control for Injector2", 
+			"type": "digital_pwm", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"51": { 
+			"name": "A_P_EVZ1", 
+			"fullname": "Control for Injector1", 
+			"type": "digital_pwm", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"52": { 
+			"name": "A_S_SLV", 
+			"fullname": "Trigger for Secondary Air Valve", 
+			"type": "digital_bit", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		} 
+	}, 
+	"4": {
+		"1": { 
+			"name": "B_S_61-1", 
+			"fullname": "Output of Terminal 61 voltage (Alternator Charging) to Chassis", 
+			"type": "power", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"2": { 
+			"name": "B_S_30h", 
+			"fullname": "Output of Terminal 30 voltage to Chassis", 
+			"type": "power", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"3": { 
+			"name": "A_S_SLP", 
+			"fullname": "Trigger for Secondary Air Pump from Chassis", 
+			"type": "digital_bit", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"4": { 
+			"name": "A_T_ELUE", 
+			"fullname": "Trigger for Electric Fan", 
+			"type": "digital_bit", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"10": { 
+			"name": "A_S_EKP", 
+			"fullname": "Trigger for Electric Fuel Pump", 
+			"type": "digital_bit", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"11": { 
+			"name": "B_S_OLD", 
+			"fullname": "Output of Oil Pressure voltage to Chassis", 
+			"type": "power", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"17": { 
+			"name": "A_F_TD", 
+			"fullname": "Output of Engine Speed Signal", 
+			"type": "digital_pwm", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"19": { 
+			"name": "B_S_RFL", 
+			"fullname": "Output of Reverse Light Signal", 
+			"type": "power", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"21": { 
+			"name": "B_F_OLN", 
+			"fullname": "Output of Oil Temperature and Level Sensor voltage", 
+			"type": "power", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"22": { 
+			"name": "E_F_DFAHR", 
+			"fullname": "Single wire Vehicle Speed Signal", 
+			"type": "digital_pwm", 
+			"direction": "in", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"26": { 
+			"name": "E_U_KL15", 
+			"fullname": "Voltage from Terminal15 to Chassis", 
+			"type": "power", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"29": { 
+			"name": "A_S_KOREL", 
+			"fullname": "Trigger AC Compressor", 
+			"type": "digital_bit", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"31": { 
+			"name": "A_S_SLV", 
+			"fullname": "Trigger for Secondary Air Valve from Chassis", 
+			"type": "digital_bit", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"32": { 
+			"name": "D_TXD2", 
+			"fullname": "K-Line 10.4kbps serial communication wire for Chassis", 
+			"type": "digital_data", 
+			"direction": "in_out", 
+			"software": "QSM::SCDR", 
+			"comment": "" 
+		}, 
+		"33": { 
+			"name": "D_EWS", 
+			"fullname": "EWS serial communication wire", 
+			"type": "digital_data", 
+			"direction": "in_out", 
+			"software": "CTM4::DASM9", 
+			"comment": "" 
+		}, 
+		"35": { 
+			"name": "D_CAN_L", 
+			"fullname": "Differential Low signal for CAN Chassis", 
+			"type": "digital_data", 
+			"direction": "in_out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"36": { 
+			"name": "D_CAN_H", 
+			"fullname": "Differential High signal for CAN Chassis", 
+			"type": "digital_data", 
+			"direction": "in_out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"37": { 
+			"name": "W_CAN", 
+			"fullname": "Wake signal for CAN Chassis", 
+			"type": "digital_bit", 
+			"direction": "in", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"38": { 
+			"name": "M_TKA", 
+			"fullname": "Mass for Coolant Temp Sensor", 
+			"type": "mass", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"39": { 
+			"name": "E_A_TKA", 
+			"fullname": "Input from Coolant Temp Sensor", 
+			"type": "analog", 
+			"direction": "in", 
+			"software": "", 
+			"comment": "" 
+		} 
+	}, 
+	"5": { 
+		"4": { 
+			"name": "A_P_ZSZ2", 
+			"fullname": "Control for Igniter2", 
+			"type": "digital_pwm", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"5": { 
+			"name": "M_ZS", 
+			"fullname": "Mass for Ignitiers", 
+			"type": "mass", 
+			"direction": "N/A", 
+			"software": "N/A", 
+			"comment": "" 
+		}, 
+		"6": { 
+			"name": "A_P_ZSZ1", 
+			"fullname": "Control for Igniter1", 
+			"type": "digital_pwm", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"8": { 
+			"name": "A_P_ZSZ3", 
+			"fullname": "Control for Igniter3", 
+			"type": "digital_pwm", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		}, 
+		"9": { 
+			"name": "A_P_ZSZ4", 
+			"fullname": "Control for Igniter4", 
+			"type": "digital_pwm", 
+			"direction": "out", 
+			"software": "", 
+			"comment": "" 
+		} 
+	} 
+}

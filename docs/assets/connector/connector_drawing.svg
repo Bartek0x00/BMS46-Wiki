@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.2"
+   width="190.28221mm"
+   height="33.312222mm"
+   viewBox="0 0 19028.221 3252.7085"
+   preserveAspectRatio="xMidYMid"
+   fill-rule="evenodd"
+   stroke-width="28.222"
+   stroke-linejoin="round"
+   xml:space="preserve"
+   id="svg27"
+   sodipodi:docname="connector_drawing.svg"
+   inkscape:export-filename="connector_drawing2.png"
+   inkscape:export-xdpi="96.109879"
+   inkscape:export-ydpi="96.109879"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+   id="namedview27"
+   pagecolor="#505050"
+   bordercolor="#ffffff"
+   borderopacity="1"
+   inkscape:showpageshadow="0"
+   inkscape:pageopacity="0"
+   inkscape:pagecheckerboard="1"
+   inkscape:deskcolor="#505050"
+   inkscape:document-units="mm"><inkscape:page
+     x="0"
+     y="0"
+     width="19028.221"
+     height="3252.7085"
+     id="page2"
+     margin="0"
+     bleed="0" /></sodipodi:namedview>
+ <defs
+   class="ClipPathGroup"
+   id="defs2"><clipPath
+     id="presentation_clip_path"
+     clipPathUnits="userSpaceOnUse">
+   <rect
+   x="0"
+   y="0"
+   width="21000"
+   height="29700"
+   id="rect1" />
+  </clipPath></defs>
+ <defs
+   class="TextShapeIndex"
+   id="defs3" />
+ <defs
+   class="EmbeddedBulletChars"
+   id="defs12" />
+ 
+ <g
+   class="SlideGroup"
+   id="g27"
+   transform="translate(-984.88977,-12403.146)">
+  <g
+   id="g26">
+   <g
+   id="container-id1">
+    <g
+   id="id1"
+   class="Slide"
+   clip-path="url(#presentation_clip_path)">
+     <g
+   class="Page"
+   id="g25">
+      <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g14">
+       <g
+   id="id3">
+        <rect
+   class="BoundingBox"
+   stroke="none"
+   fill="none"
+   x="998"
+   y="12377"
+   width="19003"
+   height="3306"
+   id="rect12" />
+        <path
+   fill="#ffffff"
+   stroke="none"
+   d="M 999,15681 H 19999 L 18521,12378 H 2476 Z"
+   id="path13" />
+        <path
+   fill="none"
+   stroke="#ffffff"
+   d="M 999,15681 H 19999 L 18521,12378 H 2476 Z"
+   id="path14" />
+       </g>
+      </g>
+      <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g16">
+       <g
+   id="id4">
+        <rect
+   class="BoundingBox"
+   stroke="none"
+   fill="none"
+   x="2523"
+   y="12479"
+   width="1933"
+   height="3076"
+   id="rect14" />
+        <path
+   fill="#222422"
+   stroke="none"
+   d="m 3489,15553 h -965 v -3073 h 1930 v 3073 z"
+   id="path15" />
+        <path
+   fill="none"
+   stroke="#222422"
+   d="m 3489,15553 h -965 v -3073 h 1930 v 3073 z"
+   id="path16" />
+       </g>
+      </g>
+      <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g18">
+       <g
+   id="id5">
+        <rect
+   class="BoundingBox"
+   stroke="none"
+   fill="none"
+   x="4657"
+   y="12479"
+   width="2391"
+   height="3076"
+   id="rect16" />
+        <path
+   fill="#222422"
+   stroke="none"
+   d="M 5852,15553 H 4658 v -3073 h 2388 v 3073 z"
+   id="path17" />
+        <path
+   fill="none"
+   stroke="#222422"
+   d="M 5852,15553 H 4658 v -3073 h 2388 v 3073 z"
+   id="path18" />
+       </g>
+      </g>
+      <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g20">
+       <g
+   id="id6">
+        <rect
+   class="BoundingBox"
+   stroke="none"
+   fill="none"
+   x="7246"
+   y="12479"
+   width="5388"
+   height="3076"
+   id="rect18" />
+        <path
+   fill="#222422"
+   stroke="none"
+   d="M 9940,15553 H 7247 v -3073 h 5385 v 3073 z"
+   id="path19" />
+        <path
+   fill="none"
+   stroke="#222422"
+   d="M 9940,15553 H 7247 v -3073 h 5385 v 3073 z"
+   id="path20" />
+       </g>
+      </g>
+      <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g22">
+       <g
+   id="id7">
+        <rect
+   class="BoundingBox"
+   stroke="none"
+   fill="none"
+   x="12834"
+   y="12479"
+   width="3508"
+   height="3076"
+   id="rect20" />
+        <path
+   fill="#222422"
+   stroke="none"
+   d="m 14588,15553 h -1753 v -3073 h 3505 v 3073 z"
+   id="path21" />
+        <path
+   fill="none"
+   stroke="#222422"
+   d="m 14588,15553 h -1753 v -3073 h 3505 v 3073 z"
+   id="path22" />
+       </g>
+      </g>
+      <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g24">
+       <g
+   id="id8">
+        <rect
+   class="BoundingBox"
+   stroke="none"
+   fill="none"
+   x="16544"
+   y="12479"
+   width="1933"
+   height="3076"
+   id="rect22" />
+        <path
+   fill="#222422"
+   stroke="none"
+   d="m 17510,15553 h -965 v -3073 h 1930 v 3073 z"
+   id="path23" />
+        <path
+   fill="none"
+   stroke="#222422"
+   d="m 17510,15553 h -965 v -3073 h 1930 v 3073 z"
+   id="path24" />
+       </g>
+      </g>
+     </g>
+    </g>
+   </g>
+  </g>
+ </g>
+</svg>

@@ -5,3 +5,5 @@ other/*
 
 *.lock
 *.lock~
+
+ghidrassist*.db

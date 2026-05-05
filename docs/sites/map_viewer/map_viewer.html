@@ -270,9 +270,9 @@
 			if (resp.ok)
 				assignVariable = await resp.json();
 			else
-				console.warn(`Variable assignment json file not found at ${assignVariablePath}`);
+				console.error(`Variable assignment json file not found at ${assignVariablePath}`);
 		} catch (err) {
-			console.warn(`Variable assignment json file not found at ${assignVariablePath}`);
+			console.error(`Variable assignment json file not found at ${assignVariablePath}`);
 		}
 	})();
 

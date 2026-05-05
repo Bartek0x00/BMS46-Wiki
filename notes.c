@@ -34,6 +34,10 @@
 //   ERROR_ECU_UNKNOWN_STATUSBYTE = 0x00
 // }
 
+// CAN Bosch CC770
+
+// Knock signal processor Renesas HIP9010
+
 typedef unsigned char byte;
 
 union Reg {
