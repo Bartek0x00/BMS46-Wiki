@@ -1,45 +1,45 @@
 {
     "ff82b6": {
         "factor": 1.0,
-        "name": "BYTE_00ff82b6",
+        "name": "Injection_DryWall_Priming",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff82b7": {
         "factor": 1.0,
-        "name": "BYTE_00ff82b7",
+        "name": "Injection_WetWall_Priming",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff830a": {
-        "factor": 1.0,
-        "name": "Engine_Coolant_Temp_Word",
-        "off": 0.0,
+        "factor": 0.00293,
+        "name": "Engine_Coolant_Temp",
+        "off": -48.0,
         "type": "word",
-        "unit": ""
+        "unit": "[°C]"
     },
     "ff8312": {
-        "factor": 1.0,
+        "factor": 0.000084,
         "name": "Engine_Coolant_Temp_Raw",
         "off": 0.0,
         "type": "word",
-        "unit": ""
+        "unit": "[V]"
     },
     "ff8314": {
-        "factor": 1.0,
-        "name": "Engine_Coolant_Temp_Word2",
-        "off": 0.0,
+        "factor": 0.00293,
+        "name": "Engine_Coolant_Temp_Word",
+        "off": -48.0,
         "type": "word",
-        "unit": ""
+        "unit": "[°C]"
     },
     "ff8316": {
         "factor": 0.75,
         "name": "Engine_Coolant_Temp",
         "off": -48.0,
         "type": "byte",
-        "unit": "[deg C]"
+        "unit": "[°C]"
     },
     "ff8317": {
         "factor": 1.0,
@@ -49,46 +49,46 @@
         "unit": ""
     },
     "ff831e": {
-        "factor": 1.0,
+        "factor": 0.000084,
         "name": "Engine_IAT_Raw",
         "off": 0.0,
         "type": "word",
-        "unit": ""
+        "unit": "[V]"
     },
     "ff8320": {
-        "factor": 1.0,
+        "factor": 0.00293,
         "name": "Engine_IAT_Word",
-        "off": 0.0,
+        "off": -48.0,
         "type": "word",
-        "unit": ""
+        "unit": "[°C]"
     },
     "ff8322": {
         "factor": 0.75,
         "name": "Engine_IAT",
         "off": -48.0,
         "type": "byte",
-        "unit": "[deg C]"
+        "unit": "[°C]"
     },
     "ff8324": {
-        "factor": 1.0,
-        "name": "WORD_00ff8324",
+        "factor": 0.000084,
+        "name": "Engine_Radiator_Temp_Raw",
         "off": 0.0,
         "type": "word",
-        "unit": ""
+        "unit": "[V]"
     },
     "ff8326": {
-        "factor": 1.0,
-        "name": "WORD_00ff8326",
-        "off": 0.0,
+        "factor": 0.00293,
+        "name": "Engine_Radiator_Temp_Target",
+        "off": -48.0,
         "type": "word",
-        "unit": ""
+        "unit": "[°C]"
     },
     "ff8328": {
-        "factor": 1.0,
-        "name": "WORD_00ff8328",
-        "off": 0.0,
-        "type": "word",
-        "unit": ""
+        "factor": 0.75,
+        "name": "Engine_Radiator_Temp",
+        "off": -48.0,
+        "type": "byte",
+        "unit": "[°C]"
     },
     "ff832a": {
         "factor": 0.094,
@@ -98,43 +98,43 @@
         "unit": "[V]"
     },
     "ff832c": {
-        "factor": 1.0,
+        "factor": 0.094,
         "name": "Engine_Voltage",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[V]"
     },
     "ff832d": {
         "factor": 1.0,
         "name": "Vehicle_Speed",
         "off": 0.0,
         "type": "byte",
-        "unit": "[KPH]"
+        "unit": "[km/h]"
     },
     "ff8334": {
-        "factor": 46.3636,
+        "factor": 40.0,
         "name": "Engine_RPM",
         "off": 0.0,
         "type": "byte",
         "unit": "[RPM]"
     },
     "ff8336": {
-        "factor": 1.0,
-        "name": "Engine_RPM_10bit",
+        "factor": 0.15625,
+        "name": "Engine_RPM_Word",
         "off": 0.0,
         "type": "word",
-        "unit": ""
+        "unit": "[RPM]"
     },
     "ff8358": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8358",
+        "factor": 40.0,
+        "name": "Engine_RPM_Delta",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[RPM]"
     },
     "ff8374": {
         "factor": 1.0,
-        "name": "BYTE_00ff8374",
+        "name": "Engine_TPS_Voltage_Byte",
         "off": 0.0,
         "type": "byte",
         "unit": ""
@@ -148,7 +148,7 @@
     },
     "ff8379": {
         "factor": 1.0,
-        "name": "BYTE_00ff8379",
+        "name": "Engine_Lambda2_Target",
         "off": 0.0,
         "type": "byte",
         "unit": ""
@@ -158,11 +158,11 @@
         "name": "Engine_Load",
         "off": 0.0,
         "type": "byte",
-        "unit": "[%]"
+        "unit": "[kg/h]"
     },
     "ff8388": {
         "factor": 1.0,
-        "name": "BYTE_00ff8388",
+        "name": "Engine_Airflow",
         "off": 0.0,
         "type": "byte",
         "unit": ""
@@ -183,14 +183,14 @@
     },
     "ff838c": {
         "factor": 1.0,
-        "name": "WORD_00ff838c",
+        "name": "MAF_Filter_Normal",
         "off": 0.0,
         "type": "word",
         "unit": ""
     },
     "ff838e": {
         "factor": 1.0,
-        "name": "WORD_00ff838e",
+        "name": "MAF_Filter_Idle",
         "off": 0.0,
         "type": "word",
         "unit": ""
@@ -204,7 +204,7 @@
     },
     "ff8391": {
         "factor": 1.0,
-        "name": "BYTE_00ff8391",
+        "name": "Engine_Lambda2_Correction",
         "off": 0.0,
         "type": "byte",
         "unit": ""
@@ -218,21 +218,21 @@
     },
     "ff8393": {
         "factor": 1.0,
-        "name": "BYTE_00ff8393",
+        "name": "MAF_Correction_IAT",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff8394": {
         "factor": 1.0,
-        "name": "BYTE_00ff8394",
+        "name": "MAF_Limp_Mode",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff8395": {
         "factor": 1.0,
-        "name": "BYTE_00ff8395",
+        "name": "Engine_Crank_Load",
         "off": 0.0,
         "type": "byte",
         "unit": ""
@@ -252,11 +252,11 @@
         "unit": ""
     },
     "ff83a5": {
-        "factor": 1.0,
-        "name": "BYTE_00ff83a5",
-        "off": 0.0,
+        "factor": 0.75,
+        "name": "Engine_Ignition_Closed",
+        "off": -22.5,
         "type": "byte",
-        "unit": ""
+        "unit": "[°]"
     },
     "ff83a6": {
         "factor": 1.0,
@@ -476,123 +476,123 @@
         "unit": ""
     },
     "ff841f": {
-        "factor": 1.0,
-        "name": "BYTE_00ff841f",
-        "off": 0.0,
+        "factor": 0.75,
+        "name": "Ignition_Crank_Temp",
+        "off": -22.5,
         "type": "byte",
-        "unit": ""
+        "unit": "[°]"
     },
     "ff8420": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8420",
-        "off": 0.0,
+        "factor": 0.75,
+        "name": "Ignition_Crank_RPM",
+        "off": -22.5,
         "type": "byte",
-        "unit": ""
+        "unit": "[°]"
     },
     "ff8421": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8421",
-        "off": 0.0,
+        "factor": 0.75,
+        "name": "Ignition_Edge",
+        "off": -22.5,
         "type": "byte",
-        "unit": ""
+        "unit": "[°]"
     },
     "ff8422": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8422",
-        "off": 0.0,
+        "factor": 0.75,
+        "name": "Ignition_Idle",
+        "off": -22.5,
         "type": "byte",
         "unit": ""
     },
     "ff8423": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8423",
-        "off": 0.0,
+        "factor": 0.75,
+        "name": "Ignition_Idle_No_ICV",
+        "off": -22.5,
         "type": "byte",
-        "unit": ""
+        "unit": "[°]"
     },
     "ff8424": {
-        "factor": 1.0,
-        "name": "Ignition_Advance_High",
-        "off": 0.0,
+        "factor": 0.75,
+        "name": "Ignition_WOT",
+        "off": -22.5,
         "type": "byte",
-        "unit": ""
+        "unit": "[°]"
     },
     "ff8425": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8425",
-        "off": 0.0,
+        "factor": 0.75,
+        "name": "Ignition_Normal",
+        "off": -22.5,
         "type": "byte",
-        "unit": ""
+        "unit": "[°]"
     },
     "ff8426": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8426",
-        "off": 0.0,
+        "factor": 0.75,
+        "name": "Ignition_On_Knock",
+        "off": -22.5,
         "type": "byte",
-        "unit": ""
+        "unit": "[°]"
     },
     "ff8427": {
         "factor": 1.0,
-        "name": "BYTE_00ff8427",
-        "off": 0.0,
+        "name": "Ignition_IAT",
+        "off": -120.0,
         "type": "byte",
         "unit": ""
     },
     "ff8428": {
         "factor": 1.0,
-        "name": "BYTE_00ff8428",
-        "off": 0.0,
+        "name": "Ignition_Coolant_Temp",
+        "off": -120.0,
         "type": "byte",
         "unit": ""
     },
     "ff8429": {
         "factor": 1.0,
-        "name": "BYTE_00ff8429",
+        "name": "Ignition_WOT_IAT",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff842a": {
         "factor": 1.0,
-        "name": "BYTE_00ff842a",
+        "name": "Ignition_Normal_IAT",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff842b": {
         "factor": 1.0,
-        "name": "BYTE_00ff842b",
+        "name": "Ignition_WOT_Coolant",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff842c": {
         "factor": 1.0,
-        "name": "BYTE_00ff842c",
+        "name": "Ignition_Normal_Coolant",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff842d": {
-        "factor": 1.0,
+        "factor": 0.75,
         "name": "Dwell_Angle",
-        "off": 0.0,
+        "off": -22.5,
         "type": "byte",
-        "unit": ""
+        "unit": "[°]"
     },
     "ff8430": {
-        "factor": 1.0,
-        "name": "Engine_AFR",
+        "factor": 0.0125,
+        "name": "Engine_ICV_Target",
         "off": 0.0,
         "type": "word",
-        "unit": ""
+        "unit": "[kg/h]"
     },
     "ff8432": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8432",
+        "factor": 0.078,
+        "name": "Engine_ICV_Correction",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[kg/h]"
     },
     "ff8434": {
         "factor": 1.0,
@@ -602,86 +602,86 @@
         "unit": ""
     },
     "ff843e": {
-        "factor": 1.0,
-        "name": "WORD_00ff843e",
+        "factor": 0.15625,
+        "name": "Engine_RPM_Idle_Error",
         "off": 0.0,
         "type": "word",
-        "unit": ""
+        "unit": "[RPM]"
     },
     "ff8440": {
         "factor": 1.0,
-        "name": "BYTE_00ff8440",
+        "name": "ICV_Neutral_Min_Duty",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff8441": {
         "factor": 1.0,
-        "name": "BYTE_00ff8441",
+        "name": "ICV_Base_Duty",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff8442": {
         "factor": 1.0,
-        "name": "BYTE_00ff8442",
+        "name": "ICV_InGear_Duty",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff8443": {
         "factor": 1.0,
-        "name": "BYTE_00ff8443",
+        "name": "ICV_InGear_AC_Duty",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff8444": {
         "factor": 1.0,
-        "name": "BYTE_00ff8444",
+        "name": "Engine_RPM_Slew_Rate",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff8445": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8445",
+        "factor": 10.0,
+        "name": "ICV_Crank_Max_RPM",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[RPM]"
     },
     "ff8446": {
         "factor": 1.0,
-        "name": "BYTE_00ff8446",
+        "name": "ICV_Duty_Crank1",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff8447": {
         "factor": 1.0,
-        "name": "BYTE_00ff8447",
+        "name": "ICV_Duty_Crank2",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff8448": {
         "factor": 1.0,
-        "name": "BYTE_00ff8448",
+        "name": "ICV_Cutoff_Duty",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff8449": {
         "factor": 1.0,
-        "name": "BYTE_00ff8449",
+        "name": "ICV_Duty_Warm",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff844a": {
         "factor": 1.0,
-        "name": "BYTE_00ff844a",
-        "off": 0.0,
+        "name": "ICV_Correction_Speed",
+        "off": -128.0,
         "type": "byte",
         "unit": ""
     },
@@ -694,56 +694,56 @@
     },
     "ff8455": {
         "factor": 1.0,
-        "name": "BYTE_00ff8455",
+        "name": "ICV_Gear_Duty_Base",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff8456": {
         "factor": 1.0,
-        "name": "BYTE_00ff8456",
+        "name": "ICV_Gear_Slew_Neutral",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff8457": {
         "factor": 1.0,
-        "name": "BYTE_00ff8457",
+        "name": "ICV_Gear_Slew_InGear",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff8458": {
         "factor": 1.0,
-        "name": "BYTE_00ff8458",
+        "name": "ICV_EFAN_Duty",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff8460": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8460",
+        "factor": 0.715,
+        "name": "ICV_Overrun_Min_Load",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[kg/h]"
     },
     "ff8465": {
         "factor": 1.0,
-        "name": "BYTE_00ff8465",
+        "name": "RPM_Idle_Error_Scaled",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[RPM]"
     },
     "ff8467": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8467",
+        "factor": 20.0,
+        "name": "ICV_PostCrank_Time",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[ms]"
     },
     "ff846c": {
         "factor": 1.0,
-        "name": "BYTE_00ff846c",
+        "name": "ICV_Added_Min_Duty",
         "off": 0.0,
         "type": "byte",
         "unit": ""
@@ -763,11 +763,11 @@
         "unit": ""
     },
     "ff8476": {
-        "factor": 1.0,
-        "name": "Engine_Timing_Advance_CYL1",
-        "off": 0.0,
+        "factor": 0.75,
+        "name": "Engine_Ignition_Advance_CYL1",
+        "off": -22.5,
         "type": "byte",
-        "unit": ""
+        "unit": "[°]"
     },
     "ff8478": {
         "factor": 1.0,
@@ -865,28 +865,28 @@
         "name": "Engine_Throttle_Angle",
         "off": 0.0,
         "type": "byte",
-        "unit": "[deg]"
+        "unit": "[°]"
     },
     "ff8499": {
         "factor": 0.89854375,
-        "name": "Throttle_Angle_Min",
+        "name": "Throttle_Angle_Idle",
         "off": 0.0,
         "type": "byte",
-        "unit": "[deg]"
+        "unit": "[°]"
     },
     "ff849a": {
         "factor": 0.89854375,
         "name": "Throttle_Angle_WOT",
         "off": 0.0,
         "type": "byte",
-        "unit": "[deg]"
+        "unit": "[°]"
     },
     "ff84a6": {
-        "factor": 1.0,
-        "name": "BYTE_00ff84a6",
+        "factor": 2.0,
+        "name": "Cranking_Timer",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[ms]"
     },
     "ff84a7": {
         "factor": 1.0,
@@ -910,39 +910,39 @@
         "unit": ""
     },
     "ff84aa": {
-        "factor": 1.0,
-        "name": "BYTE_00ff84aa",
+        "factor": 0.15625,
+        "name": "Manifold_Drying_Delay",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[ms]"
     },
     "ff84b0": {
         "factor": 1.0,
         "name": "Injection_Correction",
-        "off": -127,
+        "off": -128.0,
         "type": "byte",
-        "unit": "[Tooth]"
+        "unit": "[ms]"
     },
     "ff84b1": {
         "factor": 1.0,
-        "name": "Injection_Length",
+        "name": "Injector_Latency",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[ms]"
     },
     "ff84b2": {
         "factor": 1.0,
-        "name": "BYTE_00ff84b2",
-        "off": 0.0,
+        "name": "Injection_Target",
+        "off": -128.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[ms]"
     },
     "ff84bc": {
         "factor": 1.0,
-        "name": "BYTE_00ff84bc",
-        "off": 0.0,
+        "name": "Injection_Cold_Enrich",
+        "off": -128.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[ms]"
     },
     "ff84c0": {
         "factor": 1.0,
@@ -960,14 +960,14 @@
     },
     "ff84ca": {
         "factor": 1.0,
-        "name": "WORD_00ff84ca",
+        "name": "Injector_Crank_Period",
         "off": 0.0,
         "type": "word",
-        "unit": ""
+        "unit": "[ms]"
     },
     "ff84da": {
         "factor": 1.0,
-        "name": "WORD_00ff84da",
+        "name": "Injector_Crank_Virtual",
         "off": 0.0,
         "type": "word",
         "unit": ""
@@ -1044,45 +1044,45 @@
     },
     "ff84f9": {
         "factor": 1.0,
-        "name": "BYTE_00ff84f9",
+        "name": "Lambda_Base_PGain",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff84fa": {
         "factor": 1.0,
-        "name": "BYTE_00ff84fa",
+        "name": "Lambda_Base_IGain",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff84fb": {
         "factor": 1.0,
-        "name": "BYTE_00ff84fb",
+        "name": "Lambda_Base_DGain",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff8503": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8503",
+        "factor": 0.715,
+        "name": "Lambda_Load_Thresh",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[kg/h]"
     },
     "ff8517": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8517",
+        "factor": 10.0,
+        "name": "Lambda_Crossing_Delay",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[ms]"
     },
     "ff8520": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8520",
+        "factor": 0.715,
+        "name": "Lambda_Load_Thresh2",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[kg/h]"
     },
     "ff8537": {
         "factor": 1.0,
@@ -1092,11 +1092,11 @@
         "unit": ""
     },
     "ff853d": {
-        "factor": 1.0,
-        "name": "BYTE_00ff853d",
+        "factor": 0.715,
+        "name": "EVAP_Load_Thresh",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[kg/h]"
     },
     "ff856a": {
         "factor": 1.0,
@@ -1131,21 +1131,21 @@
         "name": "Throttle_Angle_Max",
         "off": 0.0,
         "type": "byte",
-        "unit": "[deg]"
+        "unit": "[°]"
     },
     "ff8579": {
-        "factor": 1.0,
-        "name": "Engine_DISA_ON_Thresh",
+        "factor": 0.715,
+        "name": "Engine_DISA_ON_Load",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[kg/h]"
     },
     "ff857a": {
-        "factor": 1.0,
-        "name": "Engine_DISA_OFF_Thresh",
+        "factor": 0.715,
+        "name": "Engine_DISA_OFF_Load",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[kg/h]"
     },
     "ff8582": {
         "factor": 1.0,
@@ -1177,7 +1177,7 @@
     },
     "ff8586": {
         "factor": 2.0,
-        "name": "?Engine_Torque?",
+        "name": "Engine_Torque",
         "off": 0.0,
         "type": "byte",
         "unit": "[Nm]"
@@ -1218,8 +1218,8 @@
         "unit": ""
     },
     "ff858c": {
-        "factor": 1.0,
-        "name": "BYTE_00ff858c",
+        "factor": 16.0,
+        "name": "ICV_Duty_ASC",
         "off": 0.0,
         "type": "byte",
         "unit": ""
@@ -1254,10 +1254,10 @@
     },
     "ff85ce": {
         "factor": 1.0,
-        "name": "BYTE_00ff85ce",
+        "name": "ASC_Torque_Reduction",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[Nm]"
     },
     "ff85cf": {
         "factor": 1.0,
@@ -1268,21 +1268,21 @@
     },
     "ff85de": {
         "factor": 1.0,
-        "name": "Vehicle_AC_Torque_Offset",
+        "name": "Vehicle_Torque_Correction_AC",
         "off": 0.0,
         "type": "byte",
         "unit": "[Nm]"
     },
     "ff85df": {
         "factor": 1.0,
-        "name": "BYTE_00ff85df",
+        "name": "ICV_Correction_AC",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff85e0": {
         "factor": 1.0,
-        "name": "BYTE_00ff85e0",
+        "name": "ICV_Correction_No_AC",
         "off": 0.0,
         "type": "byte",
         "unit": ""
@@ -1299,21 +1299,21 @@
         "name": "Lambda1_Heating",
         "off": 0.0,
         "type": "byte",
-        "unit": "[PWM %]"
+        "unit": "[%]"
     },
     "ff85e6": {
         "factor": 0.390625,
         "name": "Lambda2_Heating",
         "off": 0.0,
         "type": "byte",
-        "unit": "[PWM %]"
+        "unit": "[%]"
     },
     "ff8603": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8603",
+        "factor": 0.715,
+        "name": "Min_Closed_Loop_Load",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[kg/h]"
     },
     "ff8604": {
         "factor": 1.0,
@@ -1345,7 +1345,7 @@
     },
     "ff8615": {
         "factor": 1.0,
-        "name": "BYTE_00ff8615",
+        "name": "Lambda_Trans_Delay_Throttle",
         "off": 0.0,
         "type": "byte",
         "unit": ""
@@ -1400,11 +1400,11 @@
         "unit": "[ms]"
     },
     "ff8658": {
-        "factor": 0.5,
-        "name": "Engine_MAF2",
+        "factor": 0.2,
+        "name": "Engine_AFR2",
         "off": 0.0,
         "type": "byte",
-        "unit": "[Kg/h]"
+        "unit": "[kg/h]"
     },
     "ff8754": {
         "factor": 1.0,
@@ -1575,39 +1575,39 @@
         "unit": ""
     },
     "ff8804": {
-        "factor": 1.0,
-        "name": "Vehicle_Cooling_Fan_Level",
+        "factor": 6.67,
+        "name": "Vehicle_AC_Fan_Level",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[%]"
     },
     "ff880e": {
-        "factor": 1.0,
-        "name": "BYTE_00ff880e",
+        "factor": 0.390625,
+        "name": "Engine_EFAN_Duty",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[%]"
     },
     "ff8812": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8812",
+        "factor": 0.390625,
+        "name": "Engine_EFAN_Duty_AC",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[%]"
     },
     "ff8813": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8813",
+        "factor": 0.390625,
+        "name": "Engine_EFAN_Duty_Temp",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[%]"
     },
     "ff8814": {
-        "factor": 1.0,
-        "name": "BYTE_00ff8814",
+        "factor": 0.390625,
+        "name": "Engine_EFAN_Duty_Speed",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[%]"
     },
     "ff883e": {
         "factor": 1.0,
@@ -1681,42 +1681,42 @@
     },
     "ff88ee": {
         "factor": 1.0,
-        "name": "BYTE_00ff88ee",
+        "name": "RPM_AntiJerk_Ratio",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff88ef": {
         "factor": 1.0,
-        "name": "BYTE_00ff88ef",
+        "name": "RPM_AntiJerk_Gain",
         "off": 0.0,
         "type": "byte",
         "unit": ""
     },
     "ff88f2": {
-        "factor": 1.0,
-        "name": "BYTE_00ff88f2",
+        "factor": 9.6,
+        "name": "RPM_AntiJerk_RPM",
         "off": 0.0,
         "type": "byte",
-        "unit": ""
+        "unit": "[RPM]"
     },
     "ff891e": {
         "factor": 1.0,
-        "name": "WORD_00ff891e",
+        "name": "SAI_Pump_Max_RunTime",
         "off": 0.0,
         "type": "word",
         "unit": ""
     },
     "ff8920": {
         "factor": 1.0,
-        "name": "WORD_00ff8920",
+        "name": "SAI_Valve_Open_Time",
         "off": 0.0,
         "type": "word",
         "unit": ""
     },
     "ff8924": {
         "factor": 1.0,
-        "name": "WORD_00ff8924",
+        "name": "SAI_Pump_Min_RunTime",
         "off": 0.0,
         "type": "word",
         "unit": ""

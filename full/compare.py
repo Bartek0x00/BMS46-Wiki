@@ -31,7 +31,7 @@ def hexdump(data: bytes, base_offset=0, width=16, highlights=None):
 
 
 def main():
-    if len(sys.argv) < 3:
+    if len(sys.argv) != 3:
         print(f"Usage: {sys.argv[0]} start_hex end_hex")
         sys.exit(1)
 

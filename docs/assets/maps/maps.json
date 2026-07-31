@@ -20,7 +20,7 @@
     "008198": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008198", 
+        "name": "EFAN_Correction_AC", 
         "partial_file_off": "0188", 
         "size_x": 10, 
         "size_z": 1, 
@@ -29,7 +29,7 @@
     "0081b6": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "000081b6", 
+        "name": "EFAN_Correction_Temp",
         "partial_file_off": "01a6", 
         "size_x": 10, 
         "size_z": 1, 
@@ -38,7 +38,7 @@
     "0081d4": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "000081d4", 
+        "name": "EFAN_Correction_Speed", 
         "partial_file_off": "01c4", 
         "size_x": 4, 
         "size_z": 1, 
@@ -74,20 +74,20 @@
     "00828a": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "Torque_Offset_AC", 
+        "name": "ICV_Correction_AC", 
         "partial_file_off": "027a", 
         "size_x": 6, 
         "size_z": 5, 
-        "summary": "Calculates Torque compensation needed based on AC level and Engine_RPM"
+        "summary": "Calculates ICV compensation needed based on AC level and Engine_RPM"
     }, 
     "0082c2": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "Torque_Offset_No_AC", 
+        "name": "ICV_Correction_No_AC", 
         "partial_file_off": "02b2", 
         "size_x": 4, 
         "size_z": 3, 
-        "summary": "Calculates Torque compensation needed when AC is not available / not equipped. It uses Intake Air Temp instead."
+        "summary": "Calculates ICV compensation needed when AC is not available / not equipped. It uses Intake Air Temp instead."
     }, 
     "0082e4": {
         "datatype": "Byte", 
@@ -200,7 +200,7 @@
     "00855a": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "0000855a", 
+        "name": "TPS_Temp_Gain", 
         "partial_file_off": "054a", 
         "size_x": 8, 
         "size_z": 1, 
@@ -209,11 +209,11 @@
     "00858a": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "Throttle_Angle_Min", 
+        "name": "Throttle_Angle_Idle", 
         "partial_file_off": "057a", 
         "size_x": 3, 
         "size_z": 1, 
-        "summary": "Indicates the minimum needed Throttle_Angle (although the factors and units are not clear) to run Normal (above Idle setting), it's based on Engine_RPM"
+        "summary": "Indicates the maximum Throttle_Angle to run IDLE, indexed by Engine_RPM"
     }, 
     "00859a": {
         "datatype": "Byte", 
@@ -222,30 +222,30 @@
         "partial_file_off": "058a", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": "IT'S NOT IMPLEMENTED/EMPTY ON ANY FIRMWARE VERSION FOR UNKNOWN REASON. Indicates the minimum Throttle_Angle (although the factors and units are not clear) to consider WOT run (above Normal)"
+        "summary": "Indicates the minimum Throttle_Angle to run WOT, indexed by Engine_RPM"
     }, 
     "0085ee": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "000085ee", 
+        "name": "Baro_Correction_Throttle_Min", 
         "partial_file_off": "05de", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": "Maybe low limit for Throttle_Angle? (only temporary result / dummy)"
+        "summary": "Lowest Throttle Angle indexed by Engine_RPM at which Baro Correction coefficient can be calibrated"
     }, 
     "008604": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008604", 
+        "name": "Baro_Correction_Throttle_Max", 
         "partial_file_off": "05f4", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": "Maybe high limit for Throttle_Angle? (only temporary result / dummy)"
+        "summary": "Highest Throttle Angle indexed by Engine_RPM at which Baro Correction coefficient can be calibrated"
     }, 
     "00861a": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "IAT_Correction", 
+        "name": "Throttle_Correction_IAT", 
         "partial_file_off": "060a", 
         "size_x": 4, 
         "size_z": 1, 
@@ -254,11 +254,11 @@
     "00862c": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "MAF_Throttle_Correction", 
+        "name": "Throttle_Correction_AFR", 
         "partial_file_off": "061c", 
         "size_x": 6, 
         "size_z": 6, 
-        "summary": "Throttle_Angle corrected with Engine_MAF2 to produce Throttle_Percentage2"
+        "summary": "Throttle_Angle corrected with Engine_AFR to produce Throttle_Percentage2"
     }, 
     "00866a": {
         "datatype": "Byte", 
@@ -371,7 +371,7 @@
     "00882e": {
         "datatype": "Word", 
         "dim": "2D", 
-        "name": "0000882e", 
+        "name": "ICV_Correction_AFR", 
         "partial_file_off": "081e", 
         "size_x": 18, 
         "size_z": 1, 
@@ -380,7 +380,7 @@
     "008880": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008880", 
+        "name": "ICV_Correction_Voltage", 
         "partial_file_off": "0870", 
         "size_x": 5, 
         "size_z": 1, 
@@ -398,16 +398,16 @@
     "0088b6": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "000088b6", 
+        "name": "ICV_Neutral_Min_Duty", 
         "partial_file_off": "08a6", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Minimum ICV Duty needed to uphold stable RPM without any gear selected"
     }, 
     "0088c8": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "000088c8", 
+        "name": "ICV_Base_Duty", 
         "partial_file_off": "08b8", 
         "size_x": 4, 
         "size_z": 1, 
@@ -416,25 +416,25 @@
     "0088da": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "000088da", 
+        "name": "ICV_InGear_Duty", 
         "partial_file_off": "08ca", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "ICV Base Duty when the gearbox is in gear"
     }, 
     "0088ec": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "000088ec", 
+        "name": "ICV_InGear_AC_Duty", 
         "partial_file_off": "08dc", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "ICV Base Duty when the gearbox is in gear and AC compressor is activated"
     }, 
     "0088fe": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "000088fe", 
+        "name": "ICV_RPM_Slew_Rate", 
         "partial_file_off": "08ee", 
         "size_x": 4, 
         "size_z": 1, 
@@ -443,34 +443,34 @@
     "008914": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008914", 
+        "name": "ICV_Crank_Max_RPM", 
         "partial_file_off": "0904", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Max Engine_RPM at which ICV subsystem recognizes cranking"
     }, 
     "00892a": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "0000892a", 
+        "name": "ICV_Crank_Coolant", 
         "partial_file_off": "091a", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "ICV PWM Duty Correction when cranking indexed by Engine_Coolant_Temp"
     }, 
     "008940": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008940", 
+        "name": "ICV_Crank_RPM", 
         "partial_file_off": "0930", 
         "size_x": 3, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "ICV PWM Duty Correction when cranking indexed by Engine_RPM"
     }, 
     "008950": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "00008950", 
+        "name": "ICV_Cutoff_Duty", 
         "partial_file_off": "0940", 
         "size_x": 4, 
         "size_z": 6, 
@@ -479,20 +479,20 @@
     "008980": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "00008980", 
+        "name": "ICV_Warm", 
         "partial_file_off": "0970", 
         "size_x": 6, 
         "size_z": 7, 
-        "summary": ""
+        "summary": "ICV PWM Duty Correction when engine is `warm` (not cranking)"
     }, 
     "0089c6": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "000089c6", 
+        "name": "ICV_Correction_Speed", 
         "partial_file_off": "09b6", 
         "size_x": 5, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "ICV Correction when the vehicle is moving (slightly higher than when stationary)"
     }, 
     "0089da": {
         "datatype": "Byte", 
@@ -506,34 +506,34 @@
     "0089fc": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "000089fc", 
+        "name": "ICV_Gear_Duty_Base", 
         "partial_file_off": "09ec", 
         "size_x": 7, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "ICV Duty when gear is selected"
     }, 
     "008a14": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008a14", 
+        "name": "ICV_Gear_Slew_Neutral", 
         "partial_file_off": "0a04", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "ICV Slew rate when no gear is selected"
     }, 
     "008a2a": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008a2a", 
+        "name": "ICV_Gear_Slew_InGear", 
         "partial_file_off": "0a1a", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "ICV Slew rate when a gear is selected"
     }, 
     "008a40": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008a40", 
+        "name": "ICV_EFAN_Duty", 
         "partial_file_off": "0a30", 
         "size_x": 4, 
         "size_z": 1, 
@@ -542,7 +542,7 @@
     "008a62": {
         "datatype": "Word", 
         "dim": "2D", 
-        "name": "00008a62", 
+        "name": "ICV_Base_PGain", 
         "partial_file_off": "0a52", 
         "size_x": 4, 
         "size_z": 1, 
@@ -551,7 +551,7 @@
     "008a7c": {
         "datatype": "Word", 
         "dim": "2D", 
-        "name": "00008a7c", 
+        "name": "ICV_Base_IGain_StepUp", 
         "partial_file_off": "0a6c", 
         "size_x": 4, 
         "size_z": 1, 
@@ -560,7 +560,7 @@
     "008a96": {
         "datatype": "Word", 
         "dim": "2D", 
-        "name": "00008a96", 
+        "name": "ICV_Base_IGain_StepDown", 
         "partial_file_off": "0a86", 
         "size_x": 4, 
         "size_z": 1, 
@@ -569,7 +569,7 @@
     "008ab0": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008ab0", 
+        "name": "ICV_Base_DGain_Falling", 
         "partial_file_off": "0aa0", 
         "size_x": 4, 
         "size_z": 1, 
@@ -578,7 +578,7 @@
     "008ac2": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008ac2", 
+        "name": "ICV_Base_DGain_Rising", 
         "partial_file_off": "0ab2", 
         "size_x": 4, 
         "size_z": 1, 
@@ -587,7 +587,7 @@
     "008ad4": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008ad4", 
+        "name": "ICV_Overrun_Min_Load", 
         "partial_file_off": "0ac4", 
         "size_x": 4, 
         "size_z": 1, 
@@ -596,7 +596,7 @@
     "008ae6": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008ae6", 
+        "name": "ICV_Crank_HoldOff_Time", 
         "partial_file_off": "0ad6", 
         "size_x": 4, 
         "size_z": 1, 
@@ -605,7 +605,7 @@
     "008b0c": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008b0c", 
+        "name": "ICV_PostCrank_HoldOff_Time", 
         "partial_file_off": "0afc", 
         "size_x": 6, 
         "size_z": 1, 
@@ -614,7 +614,7 @@
     "008b22": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008b22", 
+        "name": "Ignition_Idle_Trim_Rising", 
         "partial_file_off": "0b12", 
         "size_x": 4, 
         "size_z": 1, 
@@ -623,7 +623,7 @@
     "008b34": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008b34", 
+        "name": "Ignition_Idle_Trim_Falling", 
         "partial_file_off": "0b24", 
         "size_x": 4, 
         "size_z": 1, 
@@ -632,7 +632,7 @@
     "008b4a": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008b4a", 
+        "name": "ICV_Added_Min_Duty", 
         "partial_file_off": "0b3a", 
         "size_x": 6, 
         "size_z": 1, 
@@ -713,11 +713,11 @@
     "008c0c": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008c0c", 
+        "name": "Crank_End_RPM_Threshold", 
         "partial_file_off": "0bfc", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Output is the minimum Engine_RPM indexed by Coolant_Temp at which ECU ends Cranking phase and recognizes the engine as running"
     }, 
     "008c22": {
         "datatype": "Byte", 
@@ -740,11 +740,11 @@
     "008c4a": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00008c4a", 
+        "name": "Manifold_Drying_Delay", 
         "partial_file_off": "0c3a", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "The time it takes after the engine starts running to dry intake manifold walls that were wetted on early cranking stage"
     }, 
     "008c5c": {
         "datatype": "Byte", 
@@ -938,7 +938,7 @@
     "008f62": {
         "datatype": "Word", 
         "dim": "2D", 
-        "name": "00008f62", 
+        "name": "MAF_Filter_Idle", 
         "partial_file_off": "0f52", 
         "size_x": 10, 
         "size_z": 1, 
@@ -947,7 +947,7 @@
     "008f94": {
         "datatype": "Word", 
         "dim": "2D", 
-        "name": "00008f94", 
+        "name": "MAF_Filter_Normal", 
         "partial_file_off": "0f84", 
         "size_x": 6, 
         "size_z": 1, 
@@ -983,7 +983,7 @@
     "009036": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00009036", 
+        "name": "MAF_Crank_Load", 
         "partial_file_off": "1026", 
         "size_x": 4, 
         "size_z": 1, 
@@ -1001,7 +1001,7 @@
     "009058": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "Injection_Partial", 
+        "name": "MAF_Correction", 
         "partial_file_off": "1048", 
         "size_x": 12, 
         "size_z": 12, 
@@ -1010,7 +1010,7 @@
     "00910e": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "0000910e", 
+        "name": "MAF_Correction_IAT", 
         "partial_file_off": "10fe", 
         "size_x": 3, 
         "size_z": 1, 
@@ -1019,7 +1019,7 @@
     "00912c": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "0000912c", 
+        "name": "MAF_Limp_Mode", 
         "partial_file_off": "111c", 
         "size_x": 6, 
         "size_z": 8, 
@@ -1028,7 +1028,7 @@
     "00918e": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "0000918e", 
+        "name": "Lambda_OL_Load_Threshold", 
         "partial_file_off": "117e", 
         "size_x": 6, 
         "size_z": 1, 
@@ -1037,7 +1037,7 @@
     "0091a4": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "000091a4", 
+        "name": "Lambda_IGain", 
         "partial_file_off": "1194", 
         "size_x": 10, 
         "size_z": 6, 
@@ -1046,7 +1046,7 @@
     "0091fe": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "000091fe", 
+        "name": "Lambda_PGain", 
         "partial_file_off": "11ee", 
         "size_x": 10, 
         "size_z": 6, 
@@ -1055,7 +1055,7 @@
     "009258": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "00009258", 
+        "name": "Lambda_DGain", 
         "partial_file_off": "1248", 
         "size_x": 10, 
         "size_z": 6, 
@@ -1064,7 +1064,7 @@
     "0092c8": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "000092c8", 
+        "name": "Lambda_Load_Threshold", 
         "partial_file_off": "12b8", 
         "size_x": 4, 
         "size_z": 1, 
@@ -1073,7 +1073,7 @@
     "0092da": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "000092da", 
+        "name": "Lambda_Crossing_Delay", 
         "partial_file_off": "12ca", 
         "size_x": 6, 
         "size_z": 6, 
@@ -1091,7 +1091,7 @@
     "009374": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00009374", 
+        "name": "EVAP_Load_Threshold", 
         "partial_file_off": "1364", 
         "size_x": 6, 
         "size_z": 1, 
@@ -1100,25 +1100,25 @@
     "009394": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00009394", 
+        "name": "Injection_DryWall_Priming", 
         "partial_file_off": "1384", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Injector Priming high-time multiplier when Manifold is dry"
     }, 
     "0093a6": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "000093a6", 
+        "name": "Injection_WetWall_Priming", 
         "partial_file_off": "1396", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Injector Priming high-time multiplier (reducer) when Manifold is already wet"
     }, 
     "0093b8": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "Injection_Full_Throttle", 
+        "name": "Injection_WOT", 
         "partial_file_off": "13a8", 
         "size_x": 16, 
         "size_z": 1, 
@@ -1127,25 +1127,25 @@
     "0093e2": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "000093e2", 
+        "name": "Injection_Idle_Coolant", 
         "partial_file_off": "13d2", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Injection target on Idle indexed by Engine_Coolant_Temp, for some reason hard coded on every firmware"
     }, 
     "0093f8": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "000093f8", 
+        "name": "Injection_Cold_Enrichment", 
         "partial_file_off": "13e8", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Injection correction indexed by Engine_Coolant_Temp"
     }, 
     "00940e": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "Correction_Injection_Length", 
+        "name": "Injector_Latency", 
         "partial_file_off": "13fe", 
         "size_x": 5, 
         "size_z": 1, 
@@ -1154,7 +1154,7 @@
     "009422": {
         "datatype": "Word", 
         "dim": "2D", 
-        "name": "00009422", 
+        "name": "Injector_Crank_Period", 
         "partial_file_off": "1412", 
         "size_x": 10, 
         "size_z": 1, 
@@ -1163,7 +1163,7 @@
     "009454": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "Injection_Partial_Throttle", 
+        "name": "Injection_Normal", 
         "partial_file_off": "1444", 
         "size_x": 16, 
         "size_z": 12, 
@@ -1172,7 +1172,7 @@
     "00953e": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "Injection_Closed_Throttle", 
+        "name": "Injection_Idle", 
         "partial_file_off": "152e", 
         "size_x": 6, 
         "size_z": 3, 
@@ -1190,7 +1190,7 @@
     "0095c6": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "000095c6", 
+        "name": "Injection_Idle_No_ICV", 
         "partial_file_off": "15b6", 
         "size_x": 8, 
         "size_z": 1, 
@@ -1316,7 +1316,7 @@
     "0097ca": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "000097ca", 
+        "name": "Min_Closed_Loop_Load", 
         "partial_file_off": "17ba", 
         "size_x": 4, 
         "size_z": 1, 
@@ -1361,11 +1361,11 @@
     "009882": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00009882", 
+        "name": "Lambda_Trans_Delay_Throttle", 
         "partial_file_off": "1872", 
         "size_x": 5, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Throttle based correction of delay of exhaust gas propagation to the Lambda sensor"
     }, 
     "009896": {
         "datatype": "Byte", 
@@ -1388,7 +1388,7 @@
     "0098da": {
         "datatype": "Word", 
         "dim": "2D", 
-        "name": "000098da", 
+        "name": "SAI_Pump_Max_RunTime", 
         "partial_file_off": "18ca", 
         "size_x": 8, 
         "size_z": 1, 
@@ -1397,7 +1397,7 @@
     "009904": {
         "datatype": "Word", 
         "dim": "2D", 
-        "name": "00009904", 
+        "name": "SAI_Pump_Min_RunTime", 
         "partial_file_off": "18f4", 
         "size_x": 8, 
         "size_z": 1, 
@@ -1406,7 +1406,7 @@
     "00992e": {
         "datatype": "Word", 
         "dim": "2D", 
-        "name": "0000992e", 
+        "name": "SAI_Valve_Open_Time", 
         "partial_file_off": "191e", 
         "size_x": 4, 
         "size_z": 1, 
@@ -1469,25 +1469,25 @@
     "009a10": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00009a10", 
+        "name": "RPM_AntiJerk_RPM", 
         "partial_file_off": "1a00", 
         "size_x": 16, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Transient RPM AntiJerk smoothing (Torque Reduction) based on RPM"
     }, 
     "009a3a": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00009a3a", 
+        "name": "RPM_AntiJerk_Speed", 
         "partial_file_off": "1a2a", 
         "size_x": 5, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Transient RPM AntiJerk smoothing (Torque Reduction) based on Vehicle_Speed"
     }, 
     "009a62": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "00009a62", 
+        "name": "Ignition_Efficiency", 
         "partial_file_off": "1a52", 
         "size_x": 11, 
         "size_z": 1, 
@@ -1532,7 +1532,7 @@
     "009ae0": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "MAF", 
+        "name": "Torque", 
         "partial_file_off": "1ad0", 
         "size_x": 11, 
         "size_z": 10, 
@@ -1586,11 +1586,11 @@
     "009d22": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "00009d22", 
+        "name": "ICV_Duty_ASC", 
         "partial_file_off": "1d12", 
         "size_x": 6, 
         "size_z": 6, 
-        "summary": ""
+        "summary": "ICV PWM correction based on ASC requested Torque reduction"
     }, 
     "009d60": {
         "datatype": "Byte", 
@@ -1946,7 +1946,7 @@
     "00a444": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "0000a444", 
+        "name": "Deceleration_Delay", 
         "partial_file_off": "2434", 
         "size_x": 4, 
         "size_z": 1, 
@@ -1964,7 +1964,7 @@
     "00a468": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "0000a468", 
+        "name": "Fuel_Cut_Deceleration", 
         "partial_file_off": "2458", 
         "size_x": 4, 
         "size_z": 1, 
@@ -1982,61 +1982,61 @@
     "00a4a2": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "0000a4a2", 
+        "name": "Ignition_Idle_No_ICV", 
         "partial_file_off": "2492", 
         "size_x": 8, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Ignition correction at idle engine speeds when ICV is unavailable (Ignition based RPM control)"
     }, 
     "00a4bc": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "0000a4bc", 
+        "name": "Ignition_IAT", 
         "partial_file_off": "24ac", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Ignition correction for IAT when no ... is present (otherwise Ignition_IAT = 30)"
     }, 
     "00a4d2": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "0000a4d2", 
+        "name": "Ignition_Coolant_Temp", 
         "partial_file_off": "24c2", 
         "size_x": 6, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Ignition correction based on Coolant Temp"
     }, 
     "00a4e8": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "0000a4e8", 
+        "name": "Ignition_Crank_Temp", 
         "partial_file_off": "24d8", 
         "size_x": 3, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Ignition correction based on Coolant_Temp when cranking the engine. This map may have rounding issues"
     }, 
     "00a4f8": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "0000a4f8", 
+        "name": "Ignition_Crank_RPM", 
         "partial_file_off": "24e8", 
         "size_x": 3, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Ignition correction based on Engine_RPM when cranking the engine. This map may have rounding issues"
     }, 
     "00a508": {
         "datatype": "Byte", 
         "dim": "2D", 
-        "name": "0000a508", 
+        "name": "Ignition_Edge", 
         "partial_file_off": "24f8", 
         "size_x": 4, 
         "size_z": 1, 
-        "summary": ""
+        "summary": "Ignition correction at edge Engine_RPM, maybe for electric latency. This map may have rounding issues"
     }, 
     "00a51a": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "Ignition_Advance_High", 
+        "name": "Ignition_WOT", 
         "partial_file_off": "250a", 
         "size_x": 16, 
         "size_z": 6, 
@@ -2045,7 +2045,7 @@
     "00a59e": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "0000a59e", 
+        "name": "Ignition_Normal", 
         "partial_file_off": "258e", 
         "size_x": 16, 
         "size_z": 14, 
@@ -2054,47 +2054,47 @@
     "00a6aa": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "0000a6aa", 
+        "name": "Ignition_WOT_IAT", 
         "partial_file_off": "269a", 
         "size_x": 12, 
         "size_z": 4, 
-        "summary": ""
+        "summary": "Ignition correction at WOT throttle that gets multiplied by Ignition_IAT. This map may have rounding issues"
     }, 
     "00a6f8": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "0000a6f8", 
+        "name": "Ignition_Normal_IAT", 
         "partial_file_off": "26e8", 
         "size_x": 12, 
         "size_z": 9, 
-        "summary": ""
+        "summary": "Ignition correction at Normal throttle that gets multiplied by Ignition_IAT. This map may have rounding issues"
     }, 
     "00a788": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "0000a788", 
+        "name": "Ignition_WOT_Coolant", 
         "partial_file_off": "2778", 
         "size_x": 10, 
         "size_z": 3, 
-        "summary": ""
+        "summary": "Ignition correction at WOT throttle that gets multiplied by Ignition_Coolant_Temp. This map may have rounding issues"
     }, 
     "00a7c2": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "0000a7c2", 
+        "name": "Ignition_Normal_Coolant", 
         "partial_file_off": "27b2", 
         "size_x": 10, 
         "size_z": 7, 
-        "summary": ""
+        "summary": "Ignition correction at Normal throttle that gets multiplied by Ignition_Coolant_Temp. This map may have rounding issues"
     }, 
     "00a828": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "Ignition_Advance_Normal", 
+        "name": "Ignition_Knock_Prevention", 
         "partial_file_off": "2818", 
         "size_x": 16, 
         "size_z": 14, 
-        "summary": ""
+        "summary": "Ignition map used when Knock DTC was already triggered"
     }, 
     "00a934": {
         "datatype": "Byte", 
@@ -2108,11 +2108,11 @@
     "00a9b0": {
         "datatype": "Byte", 
         "dim": "3D", 
-        "name": "0000a9b0", 
+        "name": "Ignition_Idle", 
         "partial_file_off": "29a0", 
         "size_x": 8, 
         "size_z": 3, 
-        "summary": ""
+        "summary": "Ignition correction at idle engine speeds (RPM controlled with ICV)"
     }, 
     "00ae62": {
         "datatype": "Byte", 
@@ -2135,7 +2135,7 @@
     "015130": {
         "datatype": "Word", 
         "dim": "2D", 
-        "name": "in_LJURR_16", 
+        "name": "Radiator_Temp", 
         "partial_file_off": "", 
         "size_x": 11, 
         "size_z": 1, 
